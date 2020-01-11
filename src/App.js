@@ -25,7 +25,7 @@ class App extends React.Component {
                 <h1>Home</h1>
               </Route>
             </Switch>
-          </div>
+          </div>g
         </Router>
     );
   }
