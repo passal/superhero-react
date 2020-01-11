@@ -7,26 +7,20 @@ import {
 } from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
-import SignIn from "./pages/SignIn";
+import SignUp from './pages/signUp';
+import SignIn from './pages/signIn';
+import UserMenu from './pages/userMenu';
 
 class App extends React.Component {
   render() {
     return (
-        <Router>
-          <div className="App">
-            <Switch>
-              <Route path="/sign-in">
-                <SignIn/>
-              </Route>
-              <Route path="/users">
-                <h1>Users</h1>
-              </Route>
-              <Route path="/">
-                <h1>Home</h1>
-              </Route>
-            </Switch>
-          </div>g
-        </Router>
+            <Router>
+                <Switch>
+                    <Route exact path="/" ><SignUp /></Route>
+                    <Route path="/signIn"><SignIn /></Route>
+                    <Route path="/userMenu"><UserMenu /></Route>
+                </Switch>
+            </Router>
     );
   }
 }
