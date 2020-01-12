@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Dropzone from "../dropzone/Dropzone";
 import "./Upload.css";
 import Progress from "../progress/Progress";
+import classes from "../SignIn";
 class Upload extends Component {
     constructor(props) {
         super(props);
@@ -122,6 +123,7 @@ class Upload extends Component {
 
     render() {
         return (
+            <div>
             <div className="Upload">
                 <span className="Title">Upload Files</span>
                 <div className="Content">
@@ -144,6 +146,8 @@ class Upload extends Component {
                 </div>
                 <div className="Actions">{this.renderActions()}</div>
             </div>
+            </div>
+
         );
     }
 }

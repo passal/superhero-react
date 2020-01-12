@@ -9,7 +9,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import logo from "../images/super-hero-logo.png";
+import logo from "../../images/super-hero-logo.png";
 
 function Copyright() {
     return (
