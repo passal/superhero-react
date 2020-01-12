@@ -8,6 +8,7 @@ import {
 import logo from './logo.svg';
 import './App.css';
 import SignIn from "./pages/SignIn";
+import InsertRecipe from "./pages/insertRecipe";
 
 class App extends React.Component {
   render() {
@@ -21,11 +22,17 @@ class App extends React.Component {
               <Route path="/users">
                 <h1>Users</h1>
               </Route>
+              <Route path="/insert-recipe">
+                <InsertRecipe withPrice={true}/>
+              </Route>
+              <Route path="/creat-shopping-cart">
+                <InsertRecipe withPrice={false}/>
+              </Route>
               <Route path="/">
                 <h1>Home</h1>
               </Route>
             </Switch>
-          </div>g
+          </div>
         </Router>
     );
   }

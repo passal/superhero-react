@@ -48,7 +48,7 @@ class SignIn extends React.Component {
         return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline/>
-                <div className={classes.dpassal12}></div>
+                <div className={classes.dpassal}></div>
                 <div className={classes.paper}>
                     <img src={logo} alt="logo" className={classes.avatar}/>
                     <Grid container>
