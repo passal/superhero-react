@@ -23,7 +23,11 @@ class App extends React.Component {
                 <h1>Users</h1>
               </Route>
               <Route path="/upload">
-                <Upload/>
+                <div className="App">
+                  <div className="Card">
+                    <Upload />
+                  </div>
+                </div>
               </Route>
               <Route path="/">
                 <h1>Home</h1>
