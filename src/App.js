@@ -7,7 +7,9 @@ import {
 } from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
-import SignIn from "./pages/SignIn";
+import SignUp from './pages/signUp';
+import SignIn from './pages/signIn';
+import UserMenu from './pages/userMenu';
 import Upload from "./pages/upload/Upload";
 
 class App extends React.Component {
@@ -16,7 +18,8 @@ class App extends React.Component {
         <Router>
           <div className="App">
             <Switch>
-              <Route path="/sign-in">
+              <Route exact path="/" ><SignUp /></Route>
+              <Route path="/signIn">
                 <SignIn/>
               </Route>
               <Route path="/users">
@@ -29,8 +32,7 @@ class App extends React.Component {
                   </div>
                 </div>
               </Route>
-              <Route path="/">
-                <h1>Home</h1>
+              <Route path="/userMenu"><UserMenu /></Route>
               </Route>
             </Switch>
           </div>
