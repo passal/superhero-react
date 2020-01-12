@@ -8,6 +8,7 @@ import {
 import logo from './logo.svg';
 import './App.css';
 import SignIn from "./pages/SignIn";
+import Upload from "./pages/upload/Upload";
 
 class App extends React.Component {
   render() {
@@ -21,11 +22,14 @@ class App extends React.Component {
               <Route path="/users">
                 <h1>Users</h1>
               </Route>
+              <Route path="/upload">
+                <Upload/>
+              </Route>
               <Route path="/">
                 <h1>Home</h1>
               </Route>
             </Switch>
-          </div>g
+          </div>
         </Router>
     );
   }
