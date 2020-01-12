@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        background: 'lightskyblue',
     },
     avatar: {
         width: '380px',
@@ -49,6 +50,12 @@ const useStyles = makeStyles(theme => ({
     selectEmpty: {
         marginTop: theme.spacing(2),
     },
+    contain: {
+        backgroundImage: `url(${"https://images.unsplash.com/photo-1516594798947-e65505dbb29d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+        backgroundSize: 'cover',
+    }
 }));
 
 export default function SignUp() {
@@ -69,7 +76,8 @@ export default function SignUp() {
     const areas = ["Tel Aviv Center", "Tel Aviv Old North", "Florentin", "Givataim"];
 
     return (
-        <Container component="main" maxWidth="xs">
+        <div className={classes.contain}>
+        <Container component="main" maxWidth="xs" >
             <CssBaseline />
             <div className={classes.paper}>
                 <img src={logo} alt="logo" className={classes.avatar}/>
@@ -168,5 +176,6 @@ export default function SignUp() {
                 <Copyright />
             </Box>
         </Container>
+            </div>
     );
 }
