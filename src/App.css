@@ -1,6 +1,8 @@
 .App {
   text-align: center;
   background-color: rgb(206, 213, 223);
+  background: linear-gradient(to right, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
+
   min-height: 100vh;
   display: flex;
   flex-direction: column;
