@@ -1,5 +1,5 @@
 import React from 'react';
-import Products from "../insertRecipe/components/Products";
+import Products from "../insertReceipt/components/Products";
 import {withStyles} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";

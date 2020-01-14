@@ -1,5 +1,5 @@
 import React from 'react';
-import RecipeForm from "./components/RecipeForm";
+import ReceiptForm from "./components/ReceiptForm";
 import Products from "./components/Products";
 import {withStyles} from "@material-ui/core/styles";
 import  logo from "../SignIn/big-logo.png";

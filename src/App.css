@@ -30,9 +30,10 @@
   background: linear-gradient(to right, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
   padding: 32px;
   width: auto;
+  height: auto;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.11),
   0 5px 15px 0 rgba(0, 0, 0, 0.08);
   box-sizing: revert;
