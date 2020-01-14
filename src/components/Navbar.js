@@ -29,7 +29,17 @@ class Navbar extends Component {
                         </li>
                         <li className='nav-item'>
                             <NavLink exact to='/' className='nav-link'>
-                                Upload Recipe
+                                Upload Receipt
+                            </NavLink>
+                        </li>
+                        <li className='nav-item'>
+                            <NavLink exact to='/' className='nav-link'>
+                                Fill Receipt
+                            </NavLink>
+                        </li>
+                        <li className='nav-item'>
+                            <NavLink exact to='/' className='nav-link'>
+                                Build a Cart
                             </NavLink>
                         </li>
                         <li className='nav-item'>
