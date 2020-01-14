@@ -2,7 +2,7 @@
 import React from 'react';
 import { styled } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import '../insertRecipe.css';
+import '../insertReceipt.css';
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 

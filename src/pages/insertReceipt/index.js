@@ -6,7 +6,7 @@ import  logo from "../SignIn/big-logo.png";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 
-class InsertRecipe extends React.Component {
+class InsertReceipt extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -83,4 +83,4 @@ export default withStyles(theme => ({
     },
 
 
-}))(InsertRecipe);
+}))(InsertReceipt);

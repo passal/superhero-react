@@ -12,8 +12,8 @@ import SignIn from './pages/SignIn';
 import UserMenu from './pages/userMenu/userMenu';
 import Upload from "./pages/upload/Upload";
 import SignUp from "./pages/SignUp/signUp";
-import InsertRecipe from "./pages/insertReceipt";
-import CreatShoppingCart from "./pages/CreateShoppingCart";
+import InsertReceipt from "./pages/insertReceipt";
+import CreateShoppingCart from "./pages/CreateShoppingCart";
 import Home from "./pages/home/Home";
 import { Layout } from './components/Layout';
 import { NavigationBar } from './components/NavigationBar';
@@ -27,7 +27,8 @@ class App extends React.Component {
             <NavigationBar />
             <Jumbotron />
             <Layout>
-            <div className="Card">
+              <div>
+            <div className='Card'>
             <Switch>
               <Route exact path="/" ></Route>
               <Route path="/signIn">
@@ -44,20 +45,21 @@ class App extends React.Component {
                 </div>
               </Route>
               <Route path="/userMenu"><UserMenu /></Route>
-              <Route path="/Home" component={Home}>
+              <Route path="/Signup"><SignUp /></Route>
                 <Route path="/userMenu"><UserMenu /></Route>
                 <Route path="/Home" component={Home}></Route>
-                <Route path="/insert-recipe">
-                  <InsertRecipe withPrice={true}/>
+                <Route path="/insert-Receipt">
+                  <InsertReceipt withPrice={true}/>
                 </Route>
-                <Route path="/creat-shopping-cart">
-                  <CreatShoppingCart />
+                <Route path="/create-shopping-cart">
+                  <CreateShoppingCart />
                 </Route>
-              </Route>
             </Switch>
           </div>
+              </div>
             </Layout>
         </Router>
+
           </React.Fragment>
 
     );
