@@ -23,22 +23,22 @@ class Navbar extends Component {
                 <div className='collapse navbar-collapse' id='navbarNav'>
                     <ul className='navbar-nav'>
                         <li className='nav-item'>
-                            <NavLink exact to='/' className='nav-link'>
+                            <NavLink exact to='/Home' className='nav-link'>
                                 Home
                             </NavLink>
                         </li>
                         <li className='nav-item'>
-                            <NavLink exact to='/' className='nav-link'>
+                            <NavLink exact to='/upload' className='nav-link'>
                                 Upload Receipt
                             </NavLink>
                         </li>
                         <li className='nav-item'>
-                            <NavLink exact to='/' className='nav-link'>
+                            <NavLink exact to='/insert-Receipt' className='nav-link'>
                                 Fill Receipt
                             </NavLink>
                         </li>
                         <li className='nav-item'>
-                            <NavLink exact to='/' className='nav-link'>
+                            <NavLink exact to='/create-shopping-cart' Build a CartclassName='nav-link'>
                                 Build a Cart
                             </NavLink>
                         </li>

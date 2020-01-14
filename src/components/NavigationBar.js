@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link, NavLink} from 'react-router-dom';
 import { Nav, Navbar } from 'react-bootstrap';
 import styled from 'styled-components';
 
@@ -24,7 +24,7 @@ export const NavigationBar = () => (
                 <Nav className="ml-auto">
                     <Nav.Item>
                         <Nav.Link>
-                            <Link to="/">Home</Link>
+                            <Link to="/Home">Home</Link>
                         </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
@@ -34,7 +34,17 @@ export const NavigationBar = () => (
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link>
-                            <Link to="/">Upload recite</Link>
+                            <Link to="/upload">Upload Receipt</Link>
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link>
+                            <Link to="/insert-Receipt">Fill Receipt</Link>
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link>
+                            <Link to='/create-shopping-cart'> Build a Cart</Link>
                         </Nav.Link>
                     </Nav.Item>
                 </Nav>
@@ -42,3 +52,4 @@ export const NavigationBar = () => (
         </Navbar>
     </Styles >
 )
+
