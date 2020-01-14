@@ -8,8 +8,8 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 
 const MyButton = styled(Button)({
     color: '#fff',
-    backgroundColor: "blue",
-    borderColor: "blue",
+    backgroundColor: '#20639B',
+    borderColor: "#20639B",
     marginRight: '10px'
 });
 
@@ -108,10 +108,11 @@ class ProductTable extends React.Component {
                 <table id="table" className={"table table-bordered"}>
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Quantity</th>
+                        <th className={"text"}>Name</th>
+                        <th className={"text"}>Quantity</th>
                         {this.props.withPrice &&
-                        <th>Price</th>}
+                        <th className={"text"}>Price</th>}
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -161,8 +162,8 @@ class ProductRow extends React.Component {
                     },
                 }}/>
                 }
-                <td className="del-cell">
-                    <input type="button" onClick={this.onDelEvent.bind(this)} value="X" className="del-btn"/>
+                <td>
+                    <input type="button" onClick={this.onDelEvent.bind(this)} value="X" className="del-btn" id="delete"/>
                 </td>
             </tr>
         );

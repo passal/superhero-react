@@ -29,11 +29,14 @@ class InsertRecipe extends React.Component {
             <Container component="main" >
                 <CssBaseline/>
                 <div className={classes.paper}>
+                    <h1 className={classes.headline}>Insert Receipt</h1>
+                    <div className={classes.body}>
                     <div className={classes.img}>
                         <img src={logo} alt="logo" className={classes.avatar}/>
                     </div>
                     <div className={classes.form}>
                         <Products withPrice ={this.props.withPrice}/>
+                    </div>
                     </div>
                 </div>
            </Container>
@@ -45,25 +48,38 @@ export default withStyles(theme => ({
     paper: {
         marginTop: theme.spacing(4),
         display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'start',
+        flexDirection: 'column',
+        alignItems: 'center',
         justifyContent:'center',
-
     },
     form: {
         width: 'auto',
-        marginTop: theme.spacing(1),
         flexGrow:2,
+        height:'550px',
+        padding:'10px',
+        overflow:'scroll',
+        border: '1px solid #20639B'
     },
     img:{
         width: 'auto',
         flexGrow:1,
+        height:'550px',
+        padding:'10px',
+        marginRight:'10px',
+        border: '1px solid #20639B'
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
     avatar: {
         height: '260px'
+    },
+    body:{
+        display:'flex',
+    },
+    headline:{
+        color:'red',
+        paddingBottom:'30px'
     },
 
 
