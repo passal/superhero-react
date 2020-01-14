@@ -123,7 +123,7 @@ class Upload extends Component {
 
     render() {
         return (
-            <div>
+            <div className="Upload">
             <div className="Upload">
                 <span className="Title">Upload Files</span>
                 <div className="Content">

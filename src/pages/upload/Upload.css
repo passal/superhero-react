@@ -1,10 +1,23 @@
 .Upload {
     display: flex;
+    min-width: 400px;
     flex-direction: column;
     flex: 1;
     align-items: flex-start;
     text-align: left;
     overflow: hidden;
+    background-image: url(../../images/dopi.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    /*background-size: 400px;*/
+    background-position: center center;
+    -webkit-background-size: 400px;
+    -moz-background-size: 400px;
+    -o-background-size: 400px;
+    color: white;
+    background-attachment: fixed;
+    min-height: 100%;
+
 }
 
 .Content {
@@ -13,6 +26,8 @@
     padding-top: 16px;
     box-sizing: border-box;
     width: 100%;
+    background-position: center center;
+
 }
 
 .Files {
