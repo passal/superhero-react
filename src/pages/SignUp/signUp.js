@@ -8,15 +8,16 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import logo from "../images/big-logo.png";
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from "@material-ui/core/FormControl";
+import Select from '@material-ui/core/Select';
+import logo from "../../images/big-logo.png";
 
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
+            {'Copyright © Super-Hero '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>
@@ -29,6 +30,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        background: 'lightskyblue',
     },
     avatar: {
         width: '380px',
@@ -41,13 +43,41 @@ const useStyles = makeStyles(theme => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 380,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+    contain: {
+        backgroundImage: `url(${"https://images.unsplash.com/photo-1516594798947-e65505dbb29d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+        backgroundSize: 'cover',
+    }
 }));
 
 export default function SignUp() {
     const classes = useStyles();
+    const [area, setArea] = React.useState('');
+    const inputLabel = React.useRef(null);
+    const [labelWidth, setLabelWidth] = React.useState(0);
+    React.useEffect(() => {
+        setLabelWidth(inputLabel.current.offsetWidth);
+    }, []);
+
+    const handleChange = event => {
+        setArea(event.target.value);
+    };
+
+
+
+    const areas = ["Tel Aviv Center", "Tel Aviv Old North", "Florentin", "Givataim"];
 
     return (
-        <Container component="main" maxWidth="xs">
+        <div className={classes.contain}>
+        <Container component="main" maxWidth="xs" >
             <CssBaseline />
             <div className={classes.paper}>
                 <img src={logo} alt="logo" className={classes.avatar}/>
@@ -106,6 +136,23 @@ export default function SignUp() {
                                 autoComplete="current-password"
                             />
                         </Grid>
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel ref={inputLabel} id="select-area-label">
+                                Area *
+                            </InputLabel>
+                            <Select
+                                labelId="select-area-label"
+                                id="select-area"
+                                value={area}
+                                onChange={handleChange}
+                                labelWidth={labelWidth}
+                                autoWidth
+                            >
+                                {areas.map(function(area, index){
+                                    return <MenuItem value={ index }>{area}</MenuItem>;
+                                })}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Button
                         type="submit"
@@ -129,7 +176,6 @@ export default function SignUp() {
                 <Copyright />
             </Box>
         </Container>
+            </div>
     );
 }
-
-
