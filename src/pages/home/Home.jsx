@@ -13,11 +13,6 @@ class Home extends Component {
                         <h2>welcome to home </h2>
                         <p>this is how to build a website</p>
                     </Jumbotron>
-                    <Link to={"/about"}>
-                        <Button bsStyle={"primary"}> About </Button>
-                    </Link>
-
-
                 </Container>
             </div>
         );

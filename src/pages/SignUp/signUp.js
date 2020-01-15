@@ -12,25 +12,24 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from "@material-ui/core/FormControl";
 import Select from '@material-ui/core/Select';
-import logo from "../../images/big-logo.png";
+import Copyright from "../../components/Copyright";
+import { createMuiTheme } from '@material-ui/core/styles';
+import ThemeProvider from "@material-ui/styles/ThemeProvider";
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © Super-Hero '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
+const theme = createMuiTheme({
+    palette: {
+        primary: {500: "#313746"},
+    },
+    status: {
+        danger: 'red',
+    },
+});
 const useStyles = makeStyles(theme => ({
     paper: {
         marginTop: theme.spacing(4),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        background: 'lightskyblue',
     },
     avatar: {
         width: '380px',
@@ -76,14 +75,13 @@ export default function SignUp() {
     const areas = ["Tel Aviv Center", "Tel Aviv Old North", "Florentin", "Givataim"];
 
     return (
-        <div className={classes.contain}>
+        <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs" >
             <CssBaseline />
             <div className={classes.paper}>
-                <img src={logo} alt="logo" className={classes.avatar}/>
                 <Grid container>
                     <Grid container justify="flex-start">
-                        <Typography component="h1" variant="h5">
+                        <Typography component="h1" variant="h5" color="Primary">
                             Sign Up
                         </Typography>
                     </Grid>
@@ -176,6 +174,6 @@ export default function SignUp() {
                 <Copyright />
             </Box>
         </Container>
-            </div>
+        </ThemeProvider>
     );
 }

@@ -12,6 +12,7 @@ import SignIn from "./pages/SignIn";
 import InsertRecipe from "./pages/insertRecipe";
 import CreatShoppingCart from "./pages/CreatShoppingCart";
 import UserMenu from "./pages/userMenu/userMenu";
+import CartResult from "./pages/cartResult/cartResult";
 import Upload from "./pages/upload/Upload";
 import SignUp from "./pages/SignUp/signUp";
 import Home from "./pages/home/Home";
@@ -29,11 +30,11 @@ class App extends React.Component {
         <Layout>
           <div>
             <Switch>
-              <Route path="/sign-in">
+              <Route path="/signIn">
                 <SignIn/>
               </Route>
-              <Route path="/users">
-                <h1>Users</h1>
+              <Route path="/signUp">
+                <SignUp/>
               </Route>
               <Route path="/upload">
                 <div>
@@ -52,6 +53,7 @@ class App extends React.Component {
               <Route path="/creat-shopping-cart">
                 <CreatShoppingCart />
               </Route>
+              <Route path="/cartResult" component={CartResult}></Route>
               <Route path="/">
                 <h1>Home</h1>
               </Route>
