@@ -3,9 +3,6 @@ import Products from "../insertRecipe/components/Products";
 import {withStyles} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import InputAdornment from "@material-ui/core/InputAdornment";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -16,6 +13,9 @@ class CreatShoppingCart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            maxsplitAmount: 0,
+            maximalDistanceFromLocation: 0,
+            Stores: [],
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -53,7 +53,7 @@ class CreatShoppingCart extends React.Component {
                                 <Col sm={6}>
                                     <InputGroup>
                                         <InputGroup.Prepend>
-                                            <InputGroup.Text id="inputGroupPrepend">Kg</InputGroup.Text>
+                                            <InputGroup.Text id="inputGroupPrepend">Km</InputGroup.Text>
                                         </InputGroup.Prepend>
                                         <Form.Control
                                             type="text"
