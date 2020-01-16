@@ -21,7 +21,7 @@ server.get("/signin", (req,res) => {
         if(err){
             console.log(err);
         }
-        res.send(rows);
+        res.status(200).send(rows);
     });
 });
 
@@ -34,13 +34,14 @@ server.post("/register", (req, res) => {
         if (err) {
             console.log(err)
         } else if (rows.length) {
-            res.sendStatus(400);
+            res.status(400).send("That email address is already registered");
         } else { //register user
             let sql = "INSERT INTO User (username,password,email,credits) VALUES(?,?,?,2);";
             let params = [req.body.username, req.body.password, req.body.email];
-            sqlConnection.query(sql, params, (err, rows) => {
+            sqlConnection.query(sql, params, (err) => {
                 if (err) {
                     console.log(err);
+                    res.sendStatus(400);
                 }
                 res.sendStatus(200);
             });
@@ -57,25 +58,37 @@ server.post("/OCR" , (req,res) => {
 //get the cheapest basket!
 server.post("/getBasket", (req, res) => {
     let products = Object.keys(req.body.products);
-    let pid, sid, index;
+    let pid, sid, index, sidIndex;
     products = products.map(v => parseInt(v)); //parse to ints
     let shops = req.body.shops;
     getBasket.createPriceMatrix(shops, products, (priceMatrix) => {
         getBasket.findBestBasket(shops, products, req.body.maxSplits, priceMatrix, (bestBasket, bestBasketPrice) => {
             //make the basket into a json
             let resultObject = {};
+            resultObject["basket"] = {};
             //for each sid, create an array  in the object
             for (let shopIndex = 0; shopIndex < shops.length; shopIndex++) {
-                resultObject[shops[shopIndex]] = [];
+                resultObject["basket"][shops[shopIndex]] = [];
             }
 
             for (let basketIndex = 0; basketIndex < bestBasket.length; basketIndex++) {
                 pid = products[basketIndex]; //get product pid
                 index = shops[bestBasket[basketIndex]].toString();
-                resultObject[index].push(pid); //insert pid to the relevant shop
+                resultObject["basket"][index].push(pid); //insert pid to the relevant shop
             }
-            resultObject["price"] = bestBasketPrice;
+            //now lets sum the price in each shop (not including amounts)
+            resultObject["shopPrice"] = {};
+            for (let shopIndex = 0; shopIndex < shops.length; shopIndex++) {
+                resultObject["shopPrice"][shops[shopIndex]] = 0;
+            }
+            for(let i=0;  i<bestBasket.length; i++){
+                pid = products[i];
+                sidIndex = bestBasket[i];
+                sid = shops[sidIndex];
+                resultObject["shopPrice"][sid.toString()] += req.body.products[pid]*priceMatrix[i][sidIndex];
+            }
             //Now to add prices if product's amount is >1.
+            resultObject["price"] = bestBasketPrice;
             for (let i = 0; i < products.length; i++) {
                 pid = products[i];
                 sid = bestBasket[i];
@@ -127,5 +140,18 @@ server.get("/OCR", (req,res) => {
             console.log(err);
         }
         res.send(rows);
+    });
+});
+
+
+//get shops by deliverzone
+server.get("/shopsByDev", (req,res) => {
+    let sql = "SELECT * FROM shopzone WHERE shopzone.did = ?;";
+    let get = [req.query.did];
+    sqlConnection.query(sql, get,  (err, rows) => {
+        if(err){
+            console.log(err);
+        }
+        res.status(200).send(rows);
     });
 });
