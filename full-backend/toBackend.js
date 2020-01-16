@@ -127,6 +127,7 @@ const earnCreds = (id) => {
 //signUser("itaiz1", 1234);
 
 
+
 /*
 let receipt = {
     "sid": 1,
@@ -152,6 +153,8 @@ example response for that:
   shopPrice: { '1': 13, '2': 34, '3': 0 },          //sid: total price in that sid
   price: 47
 }
-
  */
 
+
+//payCreds(4); //4 is user id
+//EarnCreds(4);
