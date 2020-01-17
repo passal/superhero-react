@@ -2,7 +2,7 @@ import React from 'react';
 import ReceiptForm from "./components/ReceiptForm";
 import Products from "./components/Products";
 import {withStyles} from "@material-ui/core/styles";
-import  logo from "../SignIn/big-logo.png";
+import  logo from "../../images/big-logo.png";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 

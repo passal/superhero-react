@@ -2,6 +2,9 @@ import React from 'react';
 import {Link, NavLink} from 'react-router-dom';
 import { Nav, Navbar } from 'react-bootstrap';
 import styled from 'styled-components';
+import ShoppingCartOutlinedIcon from '@material-ui/icons/ShoppingCartOutlined';
+import EmojiPeopleOutlinedIcon from '@material-ui/icons/EmojiPeopleOutlined';
+import logo from '../images/super-hero-logo.png';
 
 const Styles = styled.div`
   .navbar {
@@ -24,7 +27,7 @@ export const NavigationBar = () => (
                 <Nav className="ml-auto">
                     <Nav.Item>
                         <Nav.Link>
-                            <Link to="/Home">Home</Link>
+                            <Link to="/userMenu">Home</Link>
                         </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
@@ -45,6 +48,11 @@ export const NavigationBar = () => (
                     <Nav.Item>
                         <Nav.Link>
                             <Link to='/create-shopping-cart'> Build a Cart</Link>
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link>
+                            <Link to='/signIn'><b>Log Out</b></Link>
                         </Nav.Link>
                     </Nav.Item>
                 </Nav>

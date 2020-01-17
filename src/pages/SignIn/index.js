@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from "./big-logo.png";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
@@ -8,9 +7,19 @@ import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import Box from "@material-ui/core/Box";
 import {withStyles} from "@material-ui/core/styles";
-import Copyright from "./components/Copyright";
+import Copyright from "../../components/Copyright";
 import Typography from "@material-ui/core/Typography";
+import { createMuiTheme } from '@material-ui/core/styles';
+import ThemeProvider from "@material-ui/styles/ThemeProvider";
 
+const theme = createMuiTheme({
+    palette: {
+        primary: {500: "#313746"},
+    },
+    status: {
+        danger: 'red',
+    },
+});
 class SignIn extends React.Component {
     constructor(props) {
         super(props);
@@ -46,14 +55,13 @@ class SignIn extends React.Component {
         const { classes } = this.props;
 
         return (
+            <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline/>
-                <div className={classes.dpassal}></div>
                 <div className={classes.paper}>
-                    <img src={logo} alt="logo" className={classes.avatar}/>
                     <Grid container>
                         <Grid container justify="flex-start">
-                            <Typography component="h1" variant="h5">
+                            <Typography component="h1" variant="h5" color="Primary">
                                 Sign In
                             </Typography>
                         </Grid>
@@ -95,7 +103,7 @@ class SignIn extends React.Component {
                         </Button>
                         <Grid container>
                             <Grid container justify="flex-end">
-                                <Link href="/" variant="body2">
+                                <Link href="/signUp" variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
@@ -106,6 +114,7 @@ class SignIn extends React.Component {
                     <Copyright/>
                 </Box>
             </Container>
+            </ThemeProvider>
         );
     }
 }
@@ -128,7 +137,4 @@ export default withStyles(theme => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
-//     dPassal: {
-//         backgroundColor: 'red'
-// }
 }))(SignIn);
