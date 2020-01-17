@@ -53,10 +53,8 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function Dashboard() {
+export default function UserMenu() {
     const classes = useStyles();
-
-    var user = {credits: 10, name: "Michael"};
 
     return (
         <ThemeProvider theme={theme}>

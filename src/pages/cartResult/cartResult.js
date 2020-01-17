@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from "@material-ui/core/Button";
@@ -14,6 +13,8 @@ import Copyright from "../../components/Copyright";
 import { createMuiTheme } from '@material-ui/core/styles';
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
 import shoppingCartPhoto from "../../images/shoppingCart.jpg";
+import {useState } from 'react';
+
 const theme = createMuiTheme({
     palette: {
         primary: {main: "#313746"},
@@ -40,7 +41,7 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
     },
     cardMedia: {
-        paddingTop: '56.25%',
+        paddingTop: '30%',
         display: 'flex',
         justifyContent: 'center',
     },
@@ -54,16 +55,11 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#313746',
         paddingTop: '6px',
         paddingBottom: '6px',
-    },
-    actionCard: {
-        paddingTop: '6px',
-        paddingBottom: '6px',
-        display: 'flex',
-        justifyContent: 'center',
     }
 }));
 
-export default function Dashboard() {
+
+export default function CartResult() {
     const classes = useStyles();
 
     var result =
@@ -78,11 +74,16 @@ export default function Dashboard() {
             unrecommendedGroceries: [{grocery: "cream cheese", price: 6}, {grocery: "milk", price: 10}, {grocery: "tomatoes", price: 4}, {grocery: "cucumbers", price: 4}],
                 price: 18, totalPrice: 42}
         ];
-    for (var i=0; i<result.length; i++){
-        result[i]['seeFullCart'] = false;
+
+    const [seeFullCart, changeCartState] = useState(false);
+    const handleClick = () => {
+        changeCartState(!seeFullCart)
     }
-    console.log(result)
-    var buttonOpen = "See full cart";
+    let overallPrice = 0;
+    for (var i=0; i<result.length; i++){
+        overallPrice+=result[i].price;
+    }
+    var buttonOpen = "See full carts";
     var buttonClose = "Close";
 
     return (
@@ -92,6 +93,9 @@ export default function Dashboard() {
                 <Container maxWidth="md">
                     <Typography variant="h4" color="Primary">
                         Here's your optimal buying solution!
+                    </Typography>
+                    <Typography variant="h5" color="primary">
+                        Overall Price: {overallPrice} ₪
                     </Typography>
                 </Container>
                 <Container className={classes.cardGrid} maxWidth="md">
@@ -109,34 +113,34 @@ export default function Dashboard() {
                                     <CardContent className={classes.cardContent}>
                                         {store.groceries.map(function(grocery, index){
                                                 return(
-                                                    <Typography value={index}>
-                                                        {grocery.grocery}: {grocery.price} ILS
+                                                    <Typography value={index} color="Primary">
+                                                        {grocery.grocery}: {grocery.price} ₪
                                                     </Typography>
                                                 );
                                         })}
-                                        {store.seeFullCart && store.unrecommendedGroceries.map(function(grocery, index){
+                                        {seeFullCart && store.unrecommendedGroceries.map(function(grocery, index){
                                             return(
                                                 <Typography value={index} color="textSecondary">
-                                                    {grocery.grocery}: {grocery.price} ILS
+                                                    {grocery.grocery}: {grocery.price} ₪
                                                 </Typography>
                                             );
                                         })}
                                     </CardContent>
                                     <CardContent className={classes.cardFooter}>
                                         <Typography value={index} variant="body1" color="secondary">
-                                                Overall: {store.seeFullCart ? store.totalPrice : store.price} ILS
+                                                Overall: {seeFullCart ? store.totalPrice : store.price} ₪
                                         </Typography>
                                     </CardContent>
-                                    <CardActions className={classes.actionCard}>
-                                        <Button size="medium" color="primary" onClick={store.seeFullCart=!store.seeFullCart}>
-                                            {store.seeFullCart ? buttonClose : buttonOpen}
-                                        </Button>
-                                    </CardActions>
                                 </Card>
                             </Grid>
                         );
                     })}
                 </Container>
+                <Box align='center'>
+                    <Button size="medium" variant="contained" color="primary" onClick={() => changeCartState(handleClick)}>
+                        {seeFullCart ? buttonClose : buttonOpen}
+                    </Button>
+                </Box>
                 <Box pt={4} >
                     <Copyright />
                 </Box>
