@@ -1,5 +1,5 @@
 import React from 'react';
-import Products from "../insertRecipe/components/Products";
+import Products from "../insertReceipt/components/Products";
 import {withStyles} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -9,7 +9,7 @@ import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 
-class CreatShoppingCart extends React.Component {
+class CreateShoppingCart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -48,7 +48,7 @@ class CreatShoppingCart extends React.Component {
             <Container component="main" >
                 <CssBaseline/>
                 <div className={classes.paper}>
-                    <h1 className={classes.headline}>Creat Shopping Cart</h1>
+                    <h1 className={classes.headline}>Create Shopping Cart</h1>
                     <div className={classes.body}>
                     <div  className={classes.img}>
                         <Form>
@@ -168,4 +168,4 @@ export default withStyles(theme => ({
         paddingBottom: '10px'
     }
 
-}))(CreatShoppingCart);
+}))(CreateShoppingCart);

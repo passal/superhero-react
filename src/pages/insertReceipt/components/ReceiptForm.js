@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function RecipeForm() {
+export default function ReceiptForm() {
     const classes = useStyles();
     // const [groceries, setGroceries] = useState([{item:"",price:""}]);
     return (
