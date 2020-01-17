@@ -9,14 +9,13 @@ import {
 } from "react-router-dom";
 import './App.css';
 import SignIn from "./pages/SignIn";
-import InsertRecipe from "./pages/insertRecipe";
-import CreatShoppingCart from "./pages/CreatShoppingCart";
 import UserMenu from "./pages/userMenu/userMenu";
 import CartResult from "./pages/cartResult/cartResult";
 import Upload from "./pages/upload/Upload";
 import SignUp from "./pages/SignUp/signUp";
 import {LandingPage} from "./pages/landingPage/landingPage";
-import Home from "./pages/home/Home";
+import InsertReceipt from "./pages/insertReceipt";
+import CreateShoppingCart from "./pages/CreateShoppingCart";
 import { Layout } from './components/Layout';
 import { NavigationBar } from './components/NavigationBar';
 import { Jumbotron } from './components/Jumbotron';
@@ -73,10 +72,10 @@ class App extends React.Component {
             </Route>
             <Route path="/userMenu"><UserMenu/></Route>
             <Route path="/insert-recipe">
-              <InsertRecipe withPrice={true}/>
+              <InsertReceipt withPrice={true}/>
             </Route>
             <Route path="/creat-shopping-cart">
-              <CreatShoppingCart/>
+              <CreateShoppingCart/>
             </Route>
             <Route path="/cartResult" component={CartResult}></Route>
             <Route path="/">
