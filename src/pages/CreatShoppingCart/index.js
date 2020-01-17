@@ -13,23 +13,37 @@ class CreatShoppingCart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            maxsplitAmount: 0,
+            maxSplitAmount: 0,
             maximalDistanceFromLocation: 0,
-            Stores: [],
+            shufersal: false,
+            tivTaam:false,
+            ramiLevi:false,
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeStores = this.handleChangeStores(this);
     }
 
     handleChange(arg) {
         return (e) => {
+            console.log('val',e.target.value);
             this.setState({
-                [arg]: e.target.value
+                [arg]: e.target.value,
             })
         }
     }
+    handleChangeStores(e) {
+        console.log( "name",e.target);
+            this.setState(prevState => ({
+                [e.target.name]: !prevState.e.target.name
+            }));
+    };
+
 
     render() {
         const { classes } = this.props;
+        // console.log("Shufersal" , this.state.shufersal)
+        // console.log("Tiv Taam" , this.state.tivTaam)
+        // console.log("Rami levi" , this.state.ramiLevi)
         return (
             <Container component="main" >
                 <CssBaseline/>
@@ -43,7 +57,7 @@ class CreatShoppingCart extends React.Component {
                                     Maximal Splits Amount
                                 </Form.Label>
                                 <Col sm={6}>
-                                    <Form.Control type="email"  />
+                                    <Form.Control onChange={this.handleChange('maxSplitAmount') } />
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} className={classes.input} controlId="formHorizontalPassword">
@@ -58,6 +72,7 @@ class CreatShoppingCart extends React.Component {
                                         <Form.Control
                                             type="text"
                                             aria-describedby="inputGroupPrepend"
+                                            onChange={this.handleChange("maximalDistanceFromLocation") }
                                         />
                                     </InputGroup>
                                 </Col>
@@ -66,13 +81,13 @@ class CreatShoppingCart extends React.Component {
                                 <Form.Label as="legend" column sm={5} className={classes.font}>Filter by Store</Form.Label>
                                 <Col sm={6} className={classes.checkBox}>
                                     <Row>
-                                    <Form.Check type="checkbox" label="Rami Levi" />
+                                    <Form.Check as ='input' type="checkbox"  name ="ramiLevi" onChange={this.handleChangeStores} label="Rami Levi" />
                                     </Row>
                                     <Row>
-                                    <Form.Check type="checkbox" label="Shufersal" />
+                                    <Form.Check  as ='input' type="checkbox"    name ="shufersal" onChange={this.handleChangeStores} label="Shufersal" />
                                     </Row>
                                     <Row>
-                                    <Form.Check type="checkbox" label="Tiv Taam" />
+                                    <Form.Check  as ='input'  name="tivTaam" onChange={this.handleChangeStores} type="checkbox" label="Tiv Taam" />
                                     </Row>
                                 </Col>
                             </Form.Group>
