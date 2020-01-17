@@ -27,8 +27,8 @@ class App extends React.Component {
             <NavigationBar />
             <Jumbotron />
             <Layout>
-              <div>
-            <div className='Card'>
+              <div className="App">
+            {/*<div className='Card'>*/}
             <Switch>
               <Route exact path="/" ></Route>
               <Route path="/signIn">
@@ -55,7 +55,7 @@ class App extends React.Component {
                   <CreateShoppingCart />
                 </Route>
             </Switch>
-          </div>
+          {/*</div>*/}
               </div>
             </Layout>
         </Router>

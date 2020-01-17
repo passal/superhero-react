@@ -1,6 +1,6 @@
 .Dropzone {
-    height: 200px;
-    width: 200px;
+    height: 300px;
+    width: 300px;
     background: linear-gradient(to right, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
     border: 2px dashed rgb(187, 186, 186);
     border-radius: 50%;
