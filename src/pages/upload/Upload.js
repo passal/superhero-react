@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Dropzone from "../dropzone/Dropzone";
 import "./Upload.css";
 import Progress from "../progress/Progress";
+import {SplitButton, MenuItem, Row, Form, Col} from 'react-bootstrap';
 import classes from "../SignIn";
+import Button from "react-bootstrap/esm/Button";
 class Upload extends Component {
     constructor(props) {
         super(props);
@@ -123,29 +125,61 @@ class Upload extends Component {
 
     render() {
         return (
-            <div className="Upload">
-            <div className="Upload">
-                <span className="Title">Upload Files</span>
-                <div className="Content">
-                    <div>
-                        <Dropzone
-                            onFilesAdded={this.onFilesAdded}
-                            disabled={this.state.uploading || this.state.successfullUploaded}
-                        />
-                    </div>
-                    <div className="Files">
-                        {this.state.files.map(file => {
-                            return (
-                                <div key={file.name} className="Row">
-                                    <span className="Filename">{file.name}</span>
-                                    {this.renderProgress(file)}
-                                </div>
-                            );
-                        })}
-                    </div>
+            <div className="Botton" >
+                <div className="TopSpace">
+                    <Form >
+                        <Form.Group as={Row} controlId="formHorizontalEmail">
+                            <Form.Label column sm={2}>
+                                Total Price:
+                            </Form.Label>
+                            <Col sm={10}>
+                                <Form.Control type="Price" placeholder="Total Price" />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} controlId="formGridState">
+                            <Form.Label as="legend" column sm={2} >Store</Form.Label>
+                            <Col sm={10} className={classes.checkBox}>
+                                <Row>
+                                    <Form.Check type="checkbox" label="Rami Levi" />
+                                </Row>
+                                <Row>
+                                    <Form.Check type="checkbox" label="Shufersal" />
+                                </Row>
+                                <Row>
+                                    <Form.Check type="checkbox" label="Tiv Taam" />
+                                </Row>
+                            </Col>
+                        </Form.Group>
+
+
+                        <Form.Group as={Row}>
+
+                        </Form.Group>
+                    </Form>
                 </div>
-                <div className="Actions">{this.renderActions()}</div>
-            </div>
+                <div className="Upload">
+                    <span className="Title">Upload Files</span>
+                    <div className="Content">
+                        <div>
+                            <Dropzone
+                                onFilesAdded={this.onFilesAdded}
+                                disabled={this.state.uploading || this.state.successfullUploaded}
+                            />
+                        </div>
+                        <div className="Files">
+                            {this.state.files.map(file => {
+                                return (
+                                    <div key={file.name} className="Row">
+                                        <span className="Filename">{file.name}</span>
+                                        {this.renderProgress(file)}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                    <div className="Actions">{this.renderActions()}</div>
+                </div>
+
             </div>
 
         );
