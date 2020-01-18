@@ -1,19 +1,47 @@
 const express = require('express');
 const sqlConnection = require("./database");
+const bodyParser = require('body-parser');
+const path = require("path");
+const multer = require("multer");
 const OCR = require("./products");
 const getBasket = require("./getBasket");
 const server = express();
 const port = 3000;
-const FOLDER_PATH = 'C:\\Users\\tomer\\WebstormProjects\\superhero3\\receipt_uploads\\';
-const cors = require('cors')
+const FOLDER_PATH = 'C:\\Users\\itaizur\\WebstormProjects\\itailocal\\images\\';
 
-
-//npm install --save body-parser
-const bodyParser = require('body-parser');
 server.use( bodyParser.json() );       // to support JSON-encoded bodies
-server.use(cors())
+
+//for image upload and save
+const storage = multer.diskStorage({
+    destination: FOLDER_PATH,
+    filename: function(req, file, cb){
+        cb(null,"IMAGE-" + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits:{fileSize: 1000000},
+}).single("myImage");
+
 
 server.listen(port, () => console.log("Server listening to port 3000"));
+/*
+server.post("postOCRProducts", (req, res) =>{
+    upload(req, res, (err) => {
+        console.log("Request ---", req.body);
+        console.log("Request file ---", req.file);//Here you get file.
+        /*Now do where ever you want to do*/
+  /*      if(!err) {
+            return res.sendStatus(200);
+        }
+    });
+});
+
+   */
+
+
+
 
 //sign in (query for name\password, return result)
 server.get("/signin", (req,res) => {
@@ -38,8 +66,8 @@ server.post("/register", (req, res) => {
         } else if (rows.length) {
             res.status(400).send("That email address is already registered");
         } else { //register user
-            let sql = "INSERT INTO User (username,password,email,credits) VALUES(?,?,?,2);";
-            let params = [req.body.username, req.body.password, req.body.email];
+            let sql = "INSERT INTO User (username,password,email,credits,did) VALUES(?,?,?,2,?);";
+            let params = [req.body.username, req.body.password, req.body.email,req.body.did];
             sqlConnection.query(sql, params, (err) => {
                 if (err) {
                     console.log(err);
@@ -128,7 +156,11 @@ server.post("/uploadReceipt", (req, res) => {
                 if (err2) {
                     console.log(err2);
                 }
-                res.sendStatus(200);
+                let sql3 = "UPDATE User SET credits = credits+1 WHERE id = ?;";
+                let params3 = [req.body.id];
+                sqlConnection.query(sql3, params3, (err, rows3) => {
+                    res.sendStatus(200);
+                });
             });
         });
     });
@@ -148,12 +180,66 @@ server.get("/OCR", (req,res) => {
 
 //get shops by deliverzone
 server.get("/shopsByDev", (req,res) => {
-    let sql = "SELECT * FROM shopzone WHERE shopzone.did = ?;";
+    let sql = "SELECT sid FROM shopzone WHERE shopzone.did = ?;";
     let get = [req.query.did];
     sqlConnection.query(sql, get,  (err, rows) => {
         if(err){
             console.log(err);
         }
         res.status(200).send(rows);
+    });
+});
+
+//get credits for given user
+server.get("/checkCreds", (req,res) => {
+    let sql = "SELECT credits FROM User WHERE User.id = ?;";
+    let get = [req.query.id];
+    sqlConnection.query(sql, get,  (err, rows) => {
+        if(err){
+            console.log(err);
+        }
+        res.status(200).send(rows);
+    });
+});
+
+//mark receipt as filled
+server.post("/markRec", (req, res) => {
+    let sql = "UPDATE Receipt SET filled = TRUE WHERE id = ?;";
+    let params = [req.body.id];
+    sqlConnection.query(sql, params, (err, rows) => {
+        if (err) {
+            console.log(err);
+        }
+        res.sendStatus(200);
+    });
+});
+
+
+
+//add 1 credit to given user
+server.post("/earnCredits", (req, res) => {
+    let addCreds = "UPDATE User SET credits = credits+1 WHERE id = ?";
+    let post = req.body.id;
+    sqlConnection.query(addCreds, post, (err, rows) => {
+        if (err) {
+            console.log(err)
+        }
+        else{
+            res.status(200).send(rows);
+        }
+    });
+});
+
+//reduce 2 credit from given user
+server.post("/payCredits", (req, res) => {
+    let payCreds = "UPDATE User SET credits = credits-2 WHERE id = ?";
+    let post = req.body.id;
+    sqlConnection.query(payCreds, post, (err, rows) => {
+        if (err) {
+            console.log(err)
+        }
+        else{
+            res.status(200).send(rows);
+        }
     });
 });
