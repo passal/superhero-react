@@ -2,6 +2,7 @@ const express = require('express');
 const sqlConnection = require("./database");
 const bodyParser = require('body-parser');
 const path = require("path");
+const cors = require("cors");
 const multer = require("multer");
 const OCR = require("./products");
 const getBasket = require("./getBasket");
@@ -241,5 +242,16 @@ server.post("/payCredits", (req, res) => {
         else{
             res.status(200).send(rows);
         }
+    });
+});
+
+//get all delivery Zones
+server.get("/allZones", (req,res) => {
+    let sql = "SELECT * FROM deliveryzone;";
+    sqlConnection.query(sql,  (err, rows) => {
+        if(err){
+            console.log(err);
+        }
+        res.status(200).send(rows);
     });
 });
