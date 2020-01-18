@@ -178,6 +178,18 @@ const fillReceipt = (receipt, uid) => {
 
 /* -------- general functions --------*/
 
+//get all delivery zones
+const getAllZones = () => {
+    let fullUrl = urlBase +  "/allZones";
+    axios.get(fullUrl).then((response) =>{
+        console.log(response.data);
+        if((response.data).length===0){
+            //error
+            console.log("No Zones inserted");
+        }
+    });
+};
+
 //get shops in give delivery zone
 const getShops = (area) => {
     let did = zoneToId[area];
