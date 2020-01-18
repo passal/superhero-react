@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useHistory } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
@@ -20,104 +22,89 @@ const theme = createMuiTheme({
         danger: 'red',
     },
 });
-class SignIn extends React.Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            email: '',
-            password: ''
-        };
+const SignIn = ({ classes, setCurrentUser }) => {
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const history = useHistory();
 
-        this.handleChange = this.handleChange.bind(this);
-        this.signIn = this.signIn.bind(this);
-    }
+    const signIn = () => {
+        const fullUrl = `http://localhost:3000/signin`;
 
-    signIn() {
-        const { email, password } = this.state;
-
-        // axios.post('/signin', { email, password }).then((response) => {
-        //     if (!response.user) {
-        //
-        //     }
-        // })
-    }
-
-    handleChange(arg) {
-        return (e) => {
-            this.setState({
-                [arg]: e.target.value
-            })
-        }
-    }
-
-    render() {
-        const { classes } = this.props;
-
-        return (
-            <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <div className={classes.paper}>
+        axios.post(fullUrl, { username, password }).then((response) =>{
+            const user = response.data[0];
+            console.log("user:",user);
+            if(!user){
+                return alert('Wrong Credentials!')
+            }
+            console.log("Connected succesfully");
+            setCurrentUser(user);
+            history.push('/');
+        });
+    };
+    return (
+        <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs">
+            <CssBaseline/>
+            <div className={classes.paper}>
+                <Grid container>
+                    <Grid container justify="flex-start">
+                        <Typography component="h1" variant="h5" color="Primary">
+                            Sign In
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <form className={classes.form} noValidate>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="username"
+                        label="Username"
+                        name="username"
+                        autoComplete="username"
+                        autoFocus
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={signIn}
+                    >
+                        Sign In
+                    </Button>
                     <Grid container>
-                        <Grid container justify="flex-start">
-                            <Typography component="h1" variant="h5" color="Primary">
-                                Sign In
-                            </Typography>
+                        <Grid container justify="flex-end">
+                            <Link href="/signUp" variant="body2">
+                                {"Don't have an account? Sign Up"}
+                            </Link>
                         </Grid>
                     </Grid>
-                    <form className={classes.form} noValidate>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                            onChange={this.handleChange('email')}
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            onChange={this.handleChange('password')}
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={this.signIn}
-                        >
-                            Sign In
-                        </Button>
-                        <Grid container>
-                            <Grid container justify="flex-end">
-                                <Link href="/signUp" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </form>
-                </div>
-                <Box mt={8}>
-                    <Copyright/>
-                </Box>
-            </Container>
-            </ThemeProvider>
-        );
-    }
-}
+                </form>
+            </div>
+            <Box mt={8}>
+                <Copyright/>
+            </Box>
+        </Container>
+        </ThemeProvider>
+    );
+};
 
 export default withStyles(theme => ({
     paper: {

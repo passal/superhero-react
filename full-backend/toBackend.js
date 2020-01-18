@@ -117,7 +117,7 @@ const uploadImage = (file) => {
 };
 
 //upload receipt information, like the shop and the price (not the file itself)
-const uploadReceipt = (shop,sum,uid) => {
+const uploadReceipt = (shop, sum, uid) => {
     let shopId = shopToId[shop];
     axios.post(urlBase + "/uploadReceipt", {
         sid:shopId,
@@ -178,7 +178,7 @@ const getShops = (area) => {
     let fullUrl = urlBase +  "/shopsByDev?did=" + did;
     axios.get(fullUrl).then((response) =>{
         let shops = [];
-        for(let i=0; i<response.data.length; i++){
+        for(let i=0; i < response.data.length; i++){
             shop = Object.keys(shopToId).find(key => shopToId[key] == response.data[i]["sid"]);
             shops.push(shop);
         }

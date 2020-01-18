@@ -26,34 +26,22 @@ export const NavigationBar = () => (
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
                     <Nav.Item>
-                        <Nav.Link>
-                            <Link to="/userMenu">Home</Link>
-                        </Nav.Link>
+                        <Link to="/userMenu">Home</Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link>
-                            <Link to="/about">About</Link>
-                        </Nav.Link>
+                        <Link to="/about">About</Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link>
-                            <Link to="/upload">Upload Receipt</Link>
-                        </Nav.Link>
+                        <Link to="/upload">Upload Receipt</Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link>
-                            <Link to="/insert-Receipt">Fill Receipt</Link>
-                        </Nav.Link>
+                        <Link to="/insert-Receipt">Fill Receipt</Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link>
-                            <Link to='/create-shopping-cart'> Build a Cart</Link>
-                        </Nav.Link>
+                        <Link to='/create-shopping-cart'> Build a Cart</Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link>
-                            <Link to='/signIn'><b>Log Out</b></Link>
-                        </Nav.Link>
+                        <Link to='/signIn'><b>Log In</b></Link>
                     </Nav.Item>
                 </Nav>
             </Navbar.Collapse>

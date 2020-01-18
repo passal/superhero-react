@@ -8,16 +8,14 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
+import axios from 'axios';
 
 class CreateShoppingCart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             maxSplitAmount: 0,
-            maximalDistanceFromLocation: 0,
-            shufersal: false,
-            tivTaam:false,
-            ramiLevi:false,
+            maximalDistanceFromLocation: 0
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeStores = this.handleChangeStores(this);
@@ -25,25 +23,50 @@ class CreateShoppingCart extends React.Component {
 
     handleChange(arg) {
         return (e) => {
-            console.log('val',e.target.value);
             this.setState({
                 [arg]: e.target.value,
             })
         }
     }
+
     handleChangeStores(e) {
-        console.log( "name",e.target);
-            this.setState(prevState => ({
-                [e.target.name]: !prevState.e.target.name
-            }));
+        if (this.state.shops.includes(e.target.name)) {
+            this.setState({
+                shops: this.state.shops.slice(this.state.shops.indexOf(e.target.name), 1)
+            });
+        }
     };
 
+    // handleSubmit() {
+    //     const uid = this.props.currentUser.id;
+    //     let result = {
+    //         "basket": {},
+    //         "shopPrice": {},
+    //         "price": 0
+    //     };
+    //     let shopsId = [];
+    //     mapShopsToId(this.state.shops, shopsId);
+    //     let productsId = {};
+    //     mapProductToId(this.products, productsId);
+    //     axios.post(urlBase + "/getBasket", {
+    //         "maxSplits": this.state.maxSplitAmount,
+    //         "shops": shopsId,
+    //         "products": productsId
+    //     },{
+    //         headers:{
+    //             "Accept": "application/json",
+    //             "Content-Type": "application/json"
+    //         }
+    //     }).then( (response) => {
+    //         payCreds(uid);
+    //         mapBasketResultToName(response.data, result);
+    //         console.log(result);
+    //     });
+    // }
 
     render() {
         const { classes } = this.props;
-        // console.log("Shufersal" , this.state.shufersal)
-        // console.log("Tiv Taam" , this.state.tivTaam)
-        // console.log("Rami levi" , this.state.ramiLevi)
+
         return (
             <Container component="main" >
                 <CssBaseline/>
@@ -80,20 +103,22 @@ class CreateShoppingCart extends React.Component {
                             <Form.Group as={Row} controlId="formGridState">
                                 <Form.Label as="legend" column sm={5} className={classes.font}>Filter by Store</Form.Label>
                                 <Col sm={6} className={classes.checkBox}>
-                                    <Row>
-                                    <Form.Check as ='input' type="checkbox"  name ="ramiLevi" onChange={this.handleChangeStores} label="Rami Levi" />
-                                    </Row>
-                                    <Row>
-                                    <Form.Check  as ='input' type="checkbox"    name ="shufersal" onChange={this.handleChangeStores} label="Shufersal" />
-                                    </Row>
-                                    <Row>
-                                    <Form.Check  as ='input'  name="tivTaam" onChange={this.handleChangeStores} type="checkbox" label="Tiv Taam" />
-                                    </Row>
+                                    {["SuperYoda",
+                                    "Shufersal Ramat Aviv",
+                                    "SuperYoda Tel-Aviv",
+                                    "SuperYoda East Tel-Aviv",
+                                    "Shufersal Ramat-Gan",
+                                    "SuperYoda South",
+                                    "Rami Levy TLV Center"].map((shop) => (
+                                        <Row>
+                                            <Form.Check as ='input' type="checkbox" name={shop} onChange={this.handleChangeStores} label={shop} />
+                                        </Row>
+                                    ))}
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row}>
                                 <Col sm={{ span: 10, offset: 0}} className={classes.buttonDiv}>
-                                    <Button className={classes.button} type="submit">Find The Cheapest Shopping Cart</Button>
+                                    <Button className={classes.button} onClick={this.handleSubmit} type="submit">Find The Cheapest Shopping Cart</Button>
                                 </Col>
                             </Form.Group>
                         </Form>

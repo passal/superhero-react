@@ -25,7 +25,7 @@ const Styles = styled.div`
   }
 `;
 
-export const Jumbotron = () => (
+export const Jumbotron = (props) => (
     <Styles>
         <Jumbo fluid className="jumbo">
             <div className="overlay"></div>

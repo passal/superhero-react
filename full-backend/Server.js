@@ -9,7 +9,7 @@ const getBasket = require("./getBasket");
 
 const server = express();
 const port = 3000;
-const FOLDER_PATH = 'C:\\Users\\itaizur\\WebstormProjects\\itailocal\\images\\';
+const FOLDER_PATH = 'C:\\Users\\Doron\\Projects\\superhero-react\\';
 
 server.use( bodyParser.json() );       // to support JSON-encoded bodies
 server.use(cors());
@@ -46,9 +46,9 @@ server.post("postOCRProducts", (req, res) =>{
 
 
 //sign in (query for name\password, return result)
-server.get("/signin", (req,res) => {
+server.post("/signin", (req,res) => {
     let sql = "SELECT * FROM User WHERE User.username = ? AND User.password = ?;";
-    let get = [req.query.username, req.query.password];
+    let get = [req.body.username, req.body.password];
     sqlConnection.query(sql, get,  (err, rows) => {
         if(err){
             console.log(err);
