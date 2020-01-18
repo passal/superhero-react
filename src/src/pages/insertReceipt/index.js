@@ -1,19 +1,69 @@
 import React from 'react';
-import ReceiptForm from "./components/ReceiptForm";
 import Products from "./components/Products";
 import {withStyles} from "@material-ui/core/styles";
-import  logo from "../../images/big-logo.png";
+// import  logo from "../SignIn/big-logo.png";
+// import receipt from "../SignIn/recipt_example.jpg"
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
+import axios from 'axios';
+const urlBase = "http://localhost:3000";
+
+const earnCreds = (id) => {
+    axios.post(urlBase + "/earnCredits", {
+        id: id
+    }, {
+        headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    }).then((response) => {
+        console.log(response.status);
+    }).catch((error) => {
+        console.log((error.response.data)); //this will return a message from the server on the error
+    })
+};
+
+const fillReceipt = (receipt, uid) => {
+
+    axios.post(urlBase + "/OCR", receipt, {
+        headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    }).then((response) => {
+        earnCreds(uid);
+        markRec(receipt.rid);
+        console.log(response.status);
+    }).catch((error) => {
+        console.log((error.response.data)); //this will return a message from the server on the error
+    })
+};
+
+const markRec = (id) => {
+    axios.post(urlBase + "/markRec", {
+        id: id
+    }, {
+        headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    }).then((response) => {
+        console.log(response.status);
+    }).catch((error) => {
+        console.log((error.response.data)); //this will return a message from the server on the error
+    })
+};
 
 class InsertReceipt extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            products:[],
         };
-
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
+
 
     handleChange(arg) {
         return (e) => {
@@ -23,9 +73,30 @@ class InsertReceipt extends React.Component {
         }
     }
 
+    handleSubmit(products) {
+        //console.log(this.serializeProducts(products))
+        return (e) => {
+            this.setState({
+                products: this.serializeProducts(products),
+            })
+            const receipt = {
+                "shop":"SuperYuda",
+                "products": this.serializeProducts(products),
+            }
+            fillReceipt(receipt,this.props.currentUser.id);
+
+        }
+    }
+
+    serializeProducts(products) {
+        return products.reduce((acc, product) => ({
+            ...acc,
+            [product.name]: parseInt(product.qty)*parseInt(product.price)
+        }), {})
+    }
+
     render() {
         const { classes } = this.props;
-        console.log(this.state);
         return (
             <Container component="main" >
                 <CssBaseline/>
@@ -33,14 +104,14 @@ class InsertReceipt extends React.Component {
                     <h1 className={classes.headline}>Insert Receipt</h1>
                     <div className={classes.body}>
                         <div className={classes.img}>
-                            <img src={logo} alt="logo" className={classes.avatar}/>
+                            {/*<img src={receipt} alt="logo" className={classes.avatar}/>*/}
                         </div>
                         <div className={classes.form}>
-                            <Products withPrice ={this.props.withPrice}/>
+                            <Products withPrice ={true} handleSubmit={this.handleSubmit} />
                         </div>
                     </div>
                 </div>
-           </Container>
+            </Container>
         );
     }
 }
@@ -73,13 +144,14 @@ export default withStyles(theme => ({
         margin: theme.spacing(3, 0, 2),
     },
     avatar: {
-        height: '260px'
+        minWidth: "100%",
+        maxHeight: "100%",
     },
     body:{
         display:'flex',
     },
     headline:{
-        color:'red',
+        color:'#20639B',
         paddingBottom:'30px'
     },
 

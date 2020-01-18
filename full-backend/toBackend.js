@@ -287,3 +287,5 @@ function mapBasketResultToName(idObj, nameObj){
         }
     }
 }
+
+signUser(shir,123);

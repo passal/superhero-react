@@ -100,14 +100,14 @@ class Products extends React.Component {
 
     handleAddEvent(evt) {
         var id = (+ new Date() + Math.floor(Math.random() * 999999)).toString(36);
-        var product = this.props.withPrice == true ?
+        var product = this.props.withPrice == true?
             {
                 id: id,
                 name: "",
                 price: "",
                 qty: 0
             }
-         :
+            :
             {
                 id: id,
                 name: "",
@@ -116,6 +116,7 @@ class Products extends React.Component {
         ;
         this.state.products.push(product);
         this.setState(this.state.products);
+        console.log("products",this.state.products)
     }
 
     handleProductTable(evt) {
@@ -135,7 +136,7 @@ class Products extends React.Component {
             }
             return product;
         });
-        this.setState({products: newProducts});
+        this.setState({products:newProducts});
     };
     handleProductTableName(evt,value) {
         const id = evt.target.id.split('-')[0]
@@ -147,56 +148,31 @@ class Products extends React.Component {
 
         var products = this.state.products.slice();
         var newProducts = products.map(function(product) {
-                if ( product.id == item.id) {
-                    product['name'] = item.value;
-                }
+            if ( product.id == item.id) {
+                product['name'] = item.value;
+            }
             return product;
         });
         this.setState({products:newProducts});
     };
 
     render() {
-        console.log(this.state.products)
         return (
             <div>
-                <ProductTable  withPrice ={this.props.withPrice} onProductTableUpdate={this.handleProductTable.bind(this)} onProductTableUpdateName={this.handleProductTableName.bind(this)} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} products={this.state.products} filterText={this.state.filterText}/>
+                <ProductTable  withPrice ={this.props.withPrice} onProductTableUpdate={this.handleProductTable.bind(this)} onProductTableUpdateName={this.handleProductTableName.bind(this)} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} products={this.state.products} handleSubmit={this.props.handleSubmit} filterText={this.state.filterText}/>
             </div>
         );
     }
 }
 export default Products;
 
-const PRODUCT_NAME_TO_ID = {
-    "Milk (1 Liter bottle)": 1,
-    "Eggs": 2,
-    "Ground Beef (Kilograms)": 3,
-    "Water (1.5 Liter bottle)": 4,
-    "Cream Cheese (250 Grams cup)": 5,
-    "Bread (1 Loaf)": 6,
-    "Potatoes (Kilograms)": 7,
-    "Tomatoes (Kilograms)": 8,
-    "Pasta (500 Grams pack)": 9,
-    "Rice (400 Grams pack)": 10,
-    "Apples (Kilograms)": 11,
-    "Canned Tuna (4 pack)": 12,
-    "Soy milk (1 Liter bottle)": 13,
-    "Pringles (600 Grams can)": 14,
-    "Bamba (70 Grams pack)": 15,
-    "Bamba (200 Grams pack)": 16
-};
+
 
 class ProductTable extends React.Component {
-    serializeProducts(products) {
-        return products.reduce((acc, product) => ({
-            ...acc,
-            [product.name]: product.price
-        }), {})
-    }
 
-    handleSubmit = () => {
+    handleClickOpen = () => {
         if(this.props.withPrice == true){
             console.log('submit products',this.props.products)
-
             // if(checkTotalPrice()){
             //call server with product table (this.props.product)
             //     this.setState({
@@ -209,9 +185,9 @@ class ProductTable extends React.Component {
             //         popTitle:'Please check your cart',
             //         popContent:'The total price of the products in the cart is incorrect '
             //     })
+
+
             // }
-
-
             this.setState( {isOpen: true});
         }
         else{
@@ -228,41 +204,42 @@ class ProductTable extends React.Component {
             isOpen: false,
             popTitle:'Thank you!',
             popContent:'You earn 1 point'
-        };
 
-        this.handleSubmit = this.handleSubmit.bind(this);
+        }
+        this.handleClickOpen = this.handleClickOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
     }
 
-    render() {
-        const onProductTableUpdate = this.props.onProductTableUpdate;
-        const onProductTableUpdateName = this.props.onProductTableUpdateName;
-        const rowDel = this.props.onRowDel;
-        const withPrice =this.props.withPrice;
 
+    render() {
+        var onProductTableUpdate = this.props.onProductTableUpdate;
+        var onProductTableUpdateName = this.props.onProductTableUpdateName;
+        var rowDel = this.props.onRowDel;
+        var withPrice =this.props.withPrice
+        var product = this.props.products.map(function(product) {
+            return (<ProductRow withPrice ={withPrice} onProductTableUpdate={onProductTableUpdate} onProductTableUpdateName={onProductTableUpdateName} product={product} onDelEvent={rowDel.bind(this)} key={product.id}/>)
+        });
         return (
             <div>
                 <div className={"insertTable"}>
-                <table id="table" className={"table table-bordered"}>
-                    <thead>
-                    <tr>
-                        <th className={"text"}>Product Name</th>
-                        <th className={"text"}>Quantity</th>
-                        {this.props.withPrice &&
-                        <th className={"text"}>Price</th>}
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {this.props.products.map(function(product) {
-                            return (<ProductRow withPrice ={withPrice} onProductTableUpdate={onProductTableUpdate} onProductTableUpdateName={onProductTableUpdateName} product={product} onDelEvent={rowDel.bind(this)} key={product.id}/>)
-                        })}
-                    </tbody>
-                </table>
+                    <table id="table" className={"table table-bordered"}>
+                        <thead>
+                        <tr>
+                            <th className={"text"}>Product Name</th>
+                            <th className={"text"}>Quantity</th>
+                            {this.props.withPrice &&
+                            <th className={"text"}>Price</th>}
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {product}
+                        </tbody>
+                    </table>
                 </div>
                 <div>
                     <MyButton type="button" onClick={this.props.onRowAdd} >Add Product </MyButton>
-                    <MyButton type="button"  onClick={this.handleSubmit} >Submit</MyButton>
+                    <MyButton type="button"  onClick={this.props.handleSubmit(this.props.products)} >Submit</MyButton>
                     <Dialog onClose={this.handleClose} aria-labelledby="customized-dialog-title" open={this.state.isOpen}>
                         <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
                             {this.state.popTitle}
@@ -292,12 +269,31 @@ class ProductRow extends React.Component {
     }
 
     render() {
+        const ProductOptions = [
+            "Milk (1 Liter bottle)",
+            "Eggs",
+            "Ground Beef (Kilograms)",
+            "Water (1.5 Liter bottle)",
+            "Cream Cheese (250 Grams cup)",
+            "Bread (1 Loaf)",
+            "Potatoes (Kilograms)",
+            "Tomatoes (Kilograms)",
+            "Pasta (500 Grams pack)",
+            "Rice (400 Grams pack)",
+            "Apples (Kilograms)",
+            "Canned Tuna (4 pack)",
+            "Soy milk (1 Liter bottle)",
+            "Pringles (600 Grams can)",
+            "Bamba (70 Grams pack)",
+            "Bamba (200 Grams pack)",
+
+        ];
         return (
             <tr className="eachRow">
                 <td>
                     <Autocomplete
                         id={this.props.product.id}
-                        options={Object.keys(PRODUCT_NAME_TO_ID)}
+                        options={ProductOptions}
                         name ="name"
                         style={{ width: 300 }}
                         onInputChange={this.props.onProductTableUpdateName}
@@ -305,14 +301,7 @@ class ProductRow extends React.Component {
                             <TextField   {...params}  placeholder="Product Name " variant="outlined" fullWidth />
                         )}
                     />
-                {/*<TextField*/}
-                {/*    id={this.props.product.id}*/}
-                {/*    variant="outlined"*/}
-                {/*    name ="name"*/}
-                {/*    onChange={this.props.onProductTableUpdate}*/}
-                {/*    placeholder="Product Name"*/}
-                {/*/>*/}
-                    </td>
+                </td>
                 <td>
                     <TextField
                         id={this.props.product.id}
@@ -322,16 +311,18 @@ class ProductRow extends React.Component {
                         placeholder="Quantity"
                     />
                 </td>
+                {this.props.withPrice &&
                 <td>
                     <TextField
                         id={this.props.product.id}
                         variant="outlined"
-                        name ="price"
+                        name="price"
                         onChange={this.props.onProductTableUpdate}
                         placeholder="Price"
                         inputProps={{startAdornment: <InputAdornment position="start">$</InputAdornment>,}}
                     />
                 </td>
+                }
                 <td>
                     <input type="button" onClick={this.onDelEvent.bind(this)} value="X" className="del-btn" id="delete"/>
                 </td>
@@ -340,45 +331,3 @@ class ProductRow extends React.Component {
 
     }
 }
-class EditableCell extends React.Component {
-
-    render() {
-        const ProductOptions = [
-            { title: 'Tomato' },
-            { title: 'Water' },
-            { title: 'Milk' },
-            { title: 'Butter' },
-            { title: 'Onion' },
-            { title: 'Flour' },
-            { title: 'Salt' },
-        ];
-        return (
-            <td>
-                {/*{this.props.isName == true?(*/}
-                {/*<Autocomplete*/}
-                {/*    id={this.props.cellData.id}*/}
-                {/*    options={ProductOptions}*/}
-                {/*    name ={this.props.cellData.type}*/}
-                {/*    getOptionLabel={option => option.title}*/}
-                {/*    style={{ width: 300 }}*/}
-                {/*    onInputChange={this.props.onProductTableUpdate}*/}
-                {/*    renderInput={(params) => (*/}
-                {/*        <TextField   {...params}  placeholder={this.props.cellData.placeHolder} variant="outlined" fullWidth />*/}
-                {/*    )}*/}
-                {/*/>):(*/}
-                {/*<TextField*/}
-                {/*    id={this.props.cellData.id}*/}
-                {/*    InputProps={this.props.cellData.inputProps}*/}
-                {/*    variant="outlined"*/}
-                {/*    name ={this.props.cellData.type}*/}
-                {/*    onChange={this.props.onProductTableUpdate}*/}
-                {/*    placeholder={this.props.cellData.placeHolder}*/}
-                {/*/>*/}
-                {/*/!*)*!/*/}
-            </td>
-        );
-
-    }
-
-}
-

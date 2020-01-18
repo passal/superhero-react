@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function CartResult() {
+export default function CartResult(props) {
     const classes = useStyles();
 
     var result =
@@ -85,14 +85,14 @@ export default function CartResult() {
     }
     var buttonOpen = "See full carts";
     var buttonClose = "Close";
-
+    console.log("from cart result",props.Result);
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             <main>
                 <Container maxWidth="md">
                     <Typography variant="h4" color="Primary">
-                        Here's your optimal buying solution!
+                        Here's your optimal buying solution! {props.Result.length}
                     </Typography>
                     <Typography variant="h5" color="primary">
                         Overall Price: {overallPrice} ₪

@@ -28,20 +28,35 @@ const SignIn = ({ classes, setCurrentUser }) => {
     const [username, setUsername] = useState('');
     const history = useHistory();
 
-    const signIn = () => {
-        const fullUrl = `http://localhost:3000/signin`;
+    const urlBase = "http://localhost:3000";
 
-        axios.post(fullUrl, { username, password }).then((response) =>{
-            const user = response.data[0];
-            console.log("user:",user);
-            if(!user){
-                return alert('Wrong Credentials!')
+    const signIn = () => {
+        let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;
+        console.log("full path",fullUrl)
+        axios.get(fullUrl).then((response) =>{
+            console.log(response.data);
+
+            if((response.data).length===0){
+                //wrong username\pass
+                console.log("wrong username or password dudes!");
             }
-            console.log("Connected succesfully");
-            setCurrentUser(user);
-            history.push('/');
         });
     };
+
+    // const signIn = () => {
+    //     const fullUrl = `http://localhost:3000/signin`;
+    //
+    //     axios.post(fullUrl, { username, password }).then((response) =>{
+    //         const user = response.data[0];
+    //         console.log("user:",user);
+    //         if(!user){
+    //             return alert('Wrong Credentials!')
+    //         }
+    //         console.log("Connected succesfully");
+    //         setCurrentUser(user);
+    //         history.push('/upload');
+    //     });
+    // };
     return (
         <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">

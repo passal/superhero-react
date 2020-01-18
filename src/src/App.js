@@ -1,7 +1,7 @@
 import React, {useState, Fragment} from 'react';
 import 'bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch, useHistory, withRouter} from "react-router-dom";
 import './App.css';
 import SignIn from "./pages/SignIn";
 import UserMenu from "./pages/userMenu/userMenu";
@@ -15,11 +15,29 @@ import {Layout} from './components/Layout';
 import {NavigationBar} from './components/NavigationBar';
 import {Jumbotron} from './components/Jumbotron';
 
-function App() {
-    const [currentUser, setCurrentUser] = useState({});
+function App(props) {
+
+    const[result,setResult] = useState({});
+    const [currentUser, setCurrentUser] = useState(
+        {
+            id: 4,
+            username: 'someone',
+            password: '1234',
+            email: 'gmail.con',
+            credits: 2,
+            area: 'Tel-Aviv North',
+        }
+    );
     const isConnected = !!currentUser.id;
+
+
+    const updateResult = (result) => {
+        setResult(result);
+        return;
+    };
     console.log("isConnected ", isConnected)
     console.log("currentUser",currentUser)
+    console.log("resultsss",result);
     return (
         <React.Fragment>
             <Router>
@@ -46,7 +64,7 @@ function App() {
                                 <div>
                                     <div className="App">
                                         <div className="Card">
-                                            <Upload currentUser={currentUser}/>
+                                            <Upload currentUser={currentUser} history={props.history} />
                                         </div>
                                     </div>
                                 </div>
@@ -56,9 +74,9 @@ function App() {
                                 <InsertReceipt currentUser={currentUser} withPrice={true}/>
                             </Route>
                             <Route path="/create-shopping-cart">
-                                <CreateShoppingCart currentUser={currentUser}/>
+                                <CreateShoppingCart updateResult={updateResult}currentUser={currentUser}/>
                             </Route>
-                            <Route path="/cartResult" component={CartResult}></Route>
+                            <Route path="/cartResult"> <CartResult Result={result}/></Route>
                         </div>
                     </Fragment>
                 </Switch>
@@ -67,4 +85,4 @@ function App() {
     );
 }
 
-export default App;
+export default withRouter(App);

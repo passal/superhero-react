@@ -16,8 +16,10 @@ import Select from '@material-ui/core/Select';
 import Copyright from "../../components/Copyright";
 import { createMuiTheme } from '@material-ui/core/styles';
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
+import {useHistory} from "react-router-dom";
 
 const registerUser = (username, password, email) => {
+
     axios.post("http://localhost:3000/register", {
         username: username,
         password: password,
@@ -76,6 +78,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignUp() {
+    const history = useHistory();
     const classes = useStyles();
     const [area, setArea] = React.useState('');
     const inputLabel = React.useRef(null);
@@ -94,6 +97,8 @@ export default function SignUp() {
 
     const handleSubmit = () => {
         registerUser(username, password, email);
+        history.push('/upload');
+
     };
 
     const areas = ["Tel Aviv Center", "Tel Aviv Old North", "Florentin", "Givataim"];
