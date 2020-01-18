@@ -78,11 +78,7 @@ const signUser = (username, password) => {
 
 //get the best basket!
 const getBestBasket = (shops, products, maxSplits, uid) => {
-    let result = {
-        "basket": {},
-        "shopPrice": {},
-        "price": 0
-    };
+    let result = [];
     let shopsId = [];
     mapShopsToId(shops, shopsId);
     let productsId = {};
@@ -98,6 +94,7 @@ const getBestBasket = (shops, products, maxSplits, uid) => {
         }
     }).then( (response) => {
         payCreds(uid);
+        console.log(response.data);
         mapBasketResultToName(response.data, result);
         console.log(result);
     });
@@ -290,23 +287,27 @@ function mapProductToId(products, productsId){
     }
 }
 
-function mapBasketResultToName(idObj, nameObj){
-    nameObj["price"] = idObj["price"];
-    let temp = Object.keys(idObj["basket"]);
-    let shopName,  prodId, prodName;
-    for(let i=0; i<temp.length; i++){
-        if(idObj["shopPrice"][temp[i]]===0) continue;
-        shopName = Object.keys(shopToId).find(key => shopToId[key] == temp[i]);
-        nameObj["basket"][shopName] = idObj["basket"][temp[i]];
-        nameObj["shopPrice"][shopName] = idObj["shopPrice"][temp[i]];
-        for(let j=0; j<(nameObj["basket"][shopName]).length; j++){
-            prodId = nameObj["basket"][shopName][j];
+function mapBasketResultToName(idObj, result){
+    let storeName,  prodId, prodName;
+    let stores = Object.keys(idObj["basket"]);
+    for(let i=0; i<stores.length; i++){
+        if(idObj["shopPrice"][stores[i]]===0) continue;
+        let shopObj = {
+            "store": "",
+            "price": 0,
+            "products": []
+        };
+        storeName = Object.keys(shopToId).find(key => shopToId[key] == stores[i]);
+        shopObj["store"] = storeName;
+        shopObj["price"] = idObj["shopPrice"][stores[i]];
+        for(let j=0; j<(idObj["basket"][stores[i]]).length; j++){
+            prodId = idObj["basket"][stores[i]][j];
             prodName = Object.keys(productToId).find(key => productToId[key] == prodId);
-            nameObj["basket"][shopName][j] = prodName;
+            shopObj["products"].push(prodName);
         }
+        result.push(shopObj);
     }
 }
-
 
 //get all prices for given shops and products
 const getAllPrices = (shops, products) => {
@@ -333,4 +334,8 @@ const getAllPrices = (shops, products) => {
         //console.log(console.log(JSON.stringify(response.data, null, 4)));
     });
 };
+
+
+
+
 
