@@ -1,13 +1,52 @@
 const axios = require("axios");
 const urlBase = "http://localhost:3000";
 
+let shopToId = {
+    "SuperYoda": 1,
+    "Shufersal Ramat Aviv": 2,
+    "SuperYoda Tel-Aviv": 3,
+    "SuperYoda East Tel-Aviv": 4,
+    "Shufersal Ramat-Gan": 5,
+    "SuperYoda South": 6,
+    "Rami Levy TLV Center": 7
+};
 
+let zoneToId = {
+    "Tel-Aviv North": 1,
+    "Tel-Aviv East": 2,
+    "Tel-Aviv South": 3,
+    "Tel-Aviv West": 4,
+    "Tel-Aviv Center": 5,
+    "Ramat-Gan": 6
+};
+
+let productToId = {
+    "Milk (1 Liter bottle)": 1,
+    "Eggs": 2,
+    "Ground Beef (Kilograms)": 3,
+    "Water (1.5 Liter bottle)": 4,
+    "Cream Cheese (250 Grams cup)": 5,
+    "Bread (1 Loaf)": 6,
+    "Potatoes (Kilograms)": 7,
+    "Tomatoes (Kilograms)": 8,
+    "Pasta (500 Grams pack)": 9,
+    "Rice (400 Grams pack)": 10,
+    "Apples (Kilograms)": 11,
+    "Canned Tuna (4 pack)": 12,
+    "Soy milk (1 Liter bottle)": 13,
+    "Pringles (600 Grams can)": 14,
+    "Bamba (70 Grams pack)": 15,
+    "Bamba (200 Grams pack)": 16
+};
+
+/* ---------- register and sign in --------- */
 //register new user
-const registerUser = (username, password, email) => {
+const registerUser = (username, password, email, did) => {
   axios.post(urlBase + "/register", {
       username: username,
       password: password,
-      email: email
+      email: email,
+      did:did
   }, {
       headers:{
           "Accept": "application/json",
@@ -32,38 +71,59 @@ const signUser = (username, password) => {
     });
 };
 
+/* ----------- basket related --------------- */
 
 //get the best basket!
-const getBestBasket = (shops, products, maxSplits) => {
-  axios.post(urlBase + "/getBasket", {
-      "maxSplits": maxSplits,
-      "shops": shops,
-      "products": products
-  },{
-      headers:{
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-      }
-  }).then( (response) => {
-    console.log(response.data);
-    });
-};
-
-//get random unfilled receipt
-const getUnfilledRec = () => {
-    let fullUrl = urlBase +  "/OCR";
-    axios.get(fullUrl).then((response) =>{
-        console.log(response.data);
-        if((response.data).length===0){
-            //error
-            console.log("All receipts are currently full");
+const getBestBasket = (shops, products, maxSplits, uid) => {
+    let result = {
+        "basket": {},
+        "shopPrice": {},
+        "price": 0
+    };
+    let shopsId = [];
+    mapShopsToId(shops, shopsId);
+    let productsId = {};
+    mapProductToId(products, productsId);
+    axios.post(urlBase + "/getBasket", {
+        "maxSplits": maxSplits,
+        "shops": shopsId,
+        "products": productsId
+    },{
+        headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json"
         }
+    }).then( (response) => {
+        payCreds(uid);
+        mapBasketResultToName(response.data, result);
+        console.log(result);
     });
 };
 
-//fill a receipt (OCR)
-const fillReceipt = (receipt) => {
-    axios.post(urlBase + "/OCR", receipt, {
+/* ------- upload receipt related ------- */
+
+///THIS NEEDS TO BE TESTED !!!!!!!!!!!!!!!!!!!!!!!!
+const uploadImage = (file) => {
+    axios.post("/uploadImage", {
+        file: file
+    }, {
+        headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    }).then((response) =>{
+        console.log(response.status);
+    })
+};
+
+//upload receipt information, like the shop and the price (not the file itself)
+const uploadReceipt = (shop,sum,uid) => {
+    let shopId = shopToId[shop];
+    axios.post(urlBase + "/uploadReceipt", {
+        sid:shopId,
+        sum:sum,
+        id:uid
+    } , {
         headers:{
             "Accept": "application/json",
             "Content-Type": "application/json"
@@ -75,11 +135,53 @@ const fillReceipt = (receipt) => {
     })
 };
 
+
+/* -------- fill receipt and OCR related ----- */
+
+//get random unfilled receipt data (not file!)
+const getUnfilledRec = () => {
+    let fullUrl = urlBase +  "/OCR";
+    axios.get(fullUrl).then((response) =>{
+        response.data[0]["shop"] = Object.keys(shopToId).find(key => shopToId[key] == response.data[0]["sid"]);
+        delete response.data[0]["sid"];
+        console.log(response.data[0]);
+        if((response.data).length===0){
+            //error
+            console.log("All out receipts are filled");
+        }
+    });
+};
+
+//fill a receipt (OCR) - send prices and shit
+const fillReceipt = (receipt, uid) => {
+    axios.post(urlBase + "/OCR", receipt, {
+        headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    }).then((response) => {
+        earnCreds(uid);
+        markRec(receipt.rid);
+        console.log(response.status);
+    }).catch((error) => {
+        console.log((error.response.data)); //this will return a message from the server on the error
+    })
+};
+
+/* -------- general functions --------*/
+
 //get shops in give delivery zone
-const getShops = (did) => {
+const getShops = (area) => {
+    let did = zoneToId[area];
+    let shop;
     let fullUrl = urlBase +  "/shopsByDev?did=" + did;
     axios.get(fullUrl).then((response) =>{
-        console.log(response.data);
+        let shops = [];
+        for(let i=0; i<response.data.length; i++){
+            shop = Object.keys(shopToId).find(key => shopToId[key] == response.data[i]["sid"]);
+            shops.push(shop);
+        }
+        console.log(shops);
         if((response.data).length===0){
             //error or no shops found
             console.log("no shops in this area");
@@ -87,6 +189,36 @@ const getShops = (did) => {
     });
 };
 
+//get credits from user
+const getCredits = (id) => {
+    let fullUrl = urlBase +  "/checkCreds?id=" + id;
+    axios.get(fullUrl).then((response) =>{
+        console.log(response.data[0]["credits"]);  //this is the number of credits as int
+        if((response.data).length===0){
+            //error or no shops found
+            console.log("user not found");
+        }
+    });
+};
+
+
+
+/* ------------- internal functions ------------------ */
+//mark a receipt as full
+const markRec = (id) => {
+    axios.post(urlBase + "/markRec", {
+        id: id
+    }, {
+        headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    }).then((response) => {
+        console.log(response.status);
+    }).catch((error) => {
+        console.log((error.response.data)); //this will return a message from the server on the error
+    })
+};
 
 //reduce 2 credits from user for building a new cart
 const payCreds = (id) => {
@@ -121,40 +253,38 @@ const earnCreds = (id) => {
     })
 };
 
-//for testing
-
-//registerUser("itaiz6", 1234, "myemail6@superherio");
-//signUser("itaiz1", 1234);
-
-
-
-/*
-let receipt = {
-    "sid": 1,
-    "products": {      //pid: price user entered
-        1:10,
-        2:6
-    }
-};
-fillReceipt(receipt); */
-
-
-/*
-let prods = {
-    "1": 2,
-    "2": 1,
-    "3": 1
-};
-getBestBasket([1,2,3],  prods, 2);
-
-example response for that:
-{
-  basket: { '1': [ 2 ], '2': [ 1, 3 ], '3': [] },  //sid: [pid1, pid2]
-  shopPrice: { '1': 13, '2': 34, '3': 0 },          //sid: total price in that sid
-  price: 47
+/* ---------mapping functions ------------------------- */
+function mapShopsToId(shopsName, shopsId){
+    let id;
+    shopsName.forEach(name => {
+        id = shopToId[name];
+        shopsId.push(id);
+    })
 }
- */
 
+function mapProductToId(products, productsId){
+    let id;
+    for(let prod in products){
+        if(products.hasOwnProperty(prod)){
+            id = productToId[prod];
+            productsId[id] = products[prod];
+        }
+    }
+}
 
-//payCreds(4); //4 is user id
-//EarnCreds(4);
+function mapBasketResultToName(idObj, nameObj){
+    nameObj["price"] = idObj["price"];
+    let temp = Object.keys(idObj["basket"]);
+    let shopName,  prodId, prodName;
+    for(let i=0; i<temp.length; i++){
+        if(idObj["shopPrice"][temp[i]]===0) continue;
+        shopName = Object.keys(shopToId).find(key => shopToId[key] == temp[i]);
+        nameObj["basket"][shopName] = idObj["basket"][temp[i]];
+        nameObj["shopPrice"][shopName] = idObj["shopPrice"][temp[i]];
+        for(let j=0; j<(nameObj["basket"][shopName]).length; j++){
+            prodId = nameObj["basket"][shopName][j];
+            prodName = Object.keys(productToId).find(key => productToId[key] == prodId);
+            nameObj["basket"][shopName][j] = prodName;
+        }
+    }
+}
