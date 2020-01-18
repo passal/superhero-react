@@ -41,8 +41,9 @@ let productToId = {
 
 /* ---------- register and sign in --------- */
 //register new user
-const registerUser = (username, password, email, did) => {
-  axios.post(urlBase + "/register", {
+const registerUser = (username, password, email, area) => {
+    let did = zoneToId[area];
+    axios.post(urlBase + "/register", {
       username: username,
       password: password,
       email: email,
@@ -63,6 +64,8 @@ const registerUser = (username, password, email, did) => {
 const signUser = (username, password) => {
     let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;
     axios.get(fullUrl).then((response) =>{
+        response.data[0]["area"] = Object.keys(zoneToId).find(key => zoneToId[key] == response.data[0]["did"]);
+        delete response.data[0]["did"];
         console.log(response.data);
         if((response.data).length===0){
             //wrong username\pass
@@ -102,7 +105,7 @@ const getBestBasket = (shops, products, maxSplits, uid) => {
 
 /* ------- upload receipt related ------- */
 
-///THIS NEEDS TO BE TESTED !!!!!!!!!!!!!!!!!!!!!!!!
+///THIS isn't working !!!!!!!!!!!!!!!!!!!!!!!!
 const uploadImage = (file) => {
     axios.post("/uploadImage", {
         file: file
@@ -154,7 +157,12 @@ const getUnfilledRec = () => {
 
 //fill a receipt (OCR) - send prices and shit
 const fillReceipt = (receipt, uid) => {
-    axios.post(urlBase + "/OCR", receipt, {
+    let receiptIds = {};
+    receiptIds["sid"] = shopToId[receipt["shop"]];
+    receiptIds["products"] = {};
+    mapProductToId(receipt["products"], receiptIds["products"]);
+    console.log(receiptIds);
+    axios.post(urlBase + "/OCR", receiptIds, {
         headers:{
             "Accept": "application/json",
             "Content-Type": "application/json"
@@ -169,6 +177,18 @@ const fillReceipt = (receipt, uid) => {
 };
 
 /* -------- general functions --------*/
+
+//get all delivery zones
+const getAllZones = () => {
+    let fullUrl = urlBase +  "/allZones";
+    axios.get(fullUrl).then((response) =>{
+        console.log(response.data);
+        if((response.data).length===0){
+            //error
+            console.log("No Zones inserted");
+        }
+    });
+};
 
 //get shops in give delivery zone
 const getShops = (area) => {
@@ -200,8 +220,6 @@ const getCredits = (id) => {
         }
     });
 };
-
-
 
 /* ------------- internal functions ------------------ */
 //mark a receipt as full

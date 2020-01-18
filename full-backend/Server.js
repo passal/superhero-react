@@ -243,3 +243,14 @@ server.post("/payCredits", (req, res) => {
         }
     });
 });
+
+//get all delivery Zones
+server.get("/allZones", (req,res) => {
+    let sql = "SELECT * FROM deliveryzone;";
+    sqlConnection.query(sql,  (err, rows) => {
+        if(err){
+            console.log(err);
+        }
+        res.status(200).send(rows);
+    });
+});
