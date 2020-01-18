@@ -3,6 +3,7 @@ import {Jumbotron as Jumbo, Container, Button} from 'react-bootstrap';
 import styled from 'styled-components';
 import homeImage from '../../images/vegetables-stall-868110.jpg';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
+import Copyright from "../../components/Copyright";
 
 
 const Styles = styled.div`
@@ -56,6 +57,9 @@ const Styles = styled.div`
     font-size: 25px;
     z-index: 100;
   }
+  .footer{
+    padding-top: 58%;
+  }
 `;
 
 export const LandingPage = () => (
@@ -76,5 +80,8 @@ export const LandingPage = () => (
                 </Button>
             </Container>
         </Jumbo>
+        <Container className="footer">
+            <Copyright/>
+        </Container>
     </Styles>
 )
