@@ -154,8 +154,12 @@ const getUnfilledRec = () => {
 
 //fill a receipt (OCR) - send prices and shit
 const fillReceipt = (receipt, uid) => {
-    
-    axios.post(urlBase + "/OCR", receipt, {
+    let receiptIds = {};
+    receiptIds["sid"] = shopToId[receipt["shop"]];
+    receiptIds["products"] = {};
+    mapProductToId(receipt["products"], receiptIds["products"]);
+    console.log(receiptIds);
+    axios.post(urlBase + "/OCR", receiptIds, {
         headers:{
             "Accept": "application/json",
             "Content-Type": "application/json"
@@ -287,3 +291,4 @@ function mapBasketResultToName(idObj, nameObj){
         }
     }
 }
+
