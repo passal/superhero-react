@@ -21,7 +21,7 @@ import { NavigationBar } from './components/NavigationBar';
 import { Jumbotron } from './components/Jumbotron';
 
 var user = null;
-var connected = true;
+var connected = false;
 
 class App extends React.Component {
   user = {credits: 10, name: "Michael"};
@@ -30,7 +30,7 @@ class App extends React.Component {
   <React.Fragment>
     {!connected &&
     <Router>
-      <NavigationBar user={null}/>
+      <NavigationBar {...this.props} user={user}/>
         <div>
           <Switch>
             <Route path="/signIn">
@@ -40,7 +40,7 @@ class App extends React.Component {
               </Layout>
             </Route>
             <Route path="/signUp">
-              <Jumbotron user={user}/>
+              <Jumbotron {...this.props} user={user}/>
               <Layout>
                 <SignUp/>
               </Layout>
@@ -54,8 +54,8 @@ class App extends React.Component {
     }
     {connected &&
     <Router>
-      <NavigationBar user={user}/>
-      <Jumbotron user={user}/>
+      <NavigationBar {...this.props} user={user}/>
+      <Jumbotron {...this.props} user={user}/>
       <Layout>
         <div>
           <Switch>

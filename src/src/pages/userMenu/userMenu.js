@@ -81,7 +81,7 @@ export default function UserMenu() {
                         </Link>
                     </Grid>
                     <Grid>
-                        <Link underline='none' component={RouterLink} to='/translateReceipt'>
+                        <Link underline='none' component={RouterLink} to='/insert-receipt'>
                             <Card className={classes.card}>
                                 <CardMedia className={classes.cardMedia} image={translateReceiptPhoto}
                                            title="translateReceipt">
@@ -95,7 +95,7 @@ export default function UserMenu() {
                         </Link>
                     </Grid>
                     <Grid>
-                        <Link underline='none' component={RouterLink} to='/shoppingCart'>
+                        <Link underline='none' component={RouterLink} to='/create-shopping-cart'>
                             <Card className={classes.card}>
                                 <CardMedia className={classes.cardMedia} image={shoppingCartPhoto}
                                            title="createShoppingCart">
