@@ -2,15 +2,17 @@ const express = require('express');
 const sqlConnection = require("./database");
 const bodyParser = require('body-parser');
 const path = require("path");
+const cors = require("cors");
 const multer = require("multer");
 const OCR = require("./products");
 const getBasket = require("./getBasket");
+
 const server = express();
 const port = 3000;
 const FOLDER_PATH = 'C:\\Users\\itaizur\\WebstormProjects\\itailocal\\images\\';
 
 server.use( bodyParser.json() );       // to support JSON-encoded bodies
-
+server.use(cors());
 //for image upload and save
 const storage = multer.diskStorage({
     destination: FOLDER_PATH,
