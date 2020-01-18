@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -15,6 +16,23 @@ import Select from '@material-ui/core/Select';
 import Copyright from "../../components/Copyright";
 import { createMuiTheme } from '@material-ui/core/styles';
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
+
+const registerUser = (username, password, email) => {
+    axios.post("http://localhost:3000/register", {
+        username: username,
+        password: password,
+        email: email
+    }, {
+        headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    }).then((response) => {
+        console.log(response.status);
+    }).catch((error) => {
+        console.log((error.response.data)); //this will return a message from the server on the error
+    })
+};
 
 const theme = createMuiTheme({
     palette: {
@@ -62,6 +80,10 @@ export default function SignUp() {
     const [area, setArea] = React.useState('');
     const inputLabel = React.useRef(null);
     const [labelWidth, setLabelWidth] = React.useState(0);
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
     React.useEffect(() => {
         setLabelWidth(inputLabel.current.offsetWidth);
     }, []);
@@ -70,7 +92,9 @@ export default function SignUp() {
         setArea(event.target.value);
     };
 
-
+    const handleSubmit = () => {
+        registerUser(username, password, email);
+    };
 
     const areas = ["Tel Aviv Center", "Tel Aviv Old North", "Florentin", "Givataim"];
 
@@ -90,25 +114,15 @@ export default function SignUp() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                autoComplete="fname"
-                                name="firstName"
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="firstName"
-                                label="First Name"
-                                autoFocus
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="lname"
+                                id="username"
+                                label="User Name"
+                                name="useName"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                autoComplete="username"
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -118,6 +132,8 @@ export default function SignUp() {
                                 fullWidth
                                 id="email"
                                 label="Email Address"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 name="email"
                                 autoComplete="email"
                             />
@@ -131,6 +147,8 @@ export default function SignUp() {
                                 label="Password"
                                 type="password"
                                 id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 autoComplete="current-password"
                             />
                         </Grid>
@@ -158,6 +176,7 @@ export default function SignUp() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={handleSubmit}
                     >
                         Sign Up
                     </Button>

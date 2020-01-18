@@ -23,8 +23,6 @@ import { Jumbotron } from './components/Jumbotron';
 var user = null;
 var connected = false;
 
-
-
 class App extends React.Component {
   user = {credits: 10, name: "Michael"};
   render() {
@@ -74,7 +72,7 @@ class App extends React.Component {
             <Route path="/insert-receipt">
               <InsertReceipt withPrice={true}/>
             </Route>
-            <Route path="/creat-shopping-cart">
+            <Route path="/create-shopping-cart">
               <CreateShoppingCart/>
             </Route>
             <Route path="/cartResult" component={CartResult}></Route>

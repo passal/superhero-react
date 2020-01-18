@@ -100,7 +100,7 @@ class Products extends React.Component {
 
     handleAddEvent(evt) {
         var id = (+ new Date() + Math.floor(Math.random() * 999999)).toString(36);
-        var product = this.props.withPrice == true?
+        var product = this.props.withPrice == true ?
             {
                 id: id,
                 name: "",
@@ -156,6 +156,7 @@ class Products extends React.Component {
     };
 
     render() {
+        console.log(this.state.products)
         return (
             <div>
                 <ProductTable  withPrice ={this.props.withPrice} onProductTableUpdate={this.handleProductTable.bind(this)} onProductTableUpdateName={this.handleProductTableName.bind(this)} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} products={this.state.products} filterText={this.state.filterText}/>

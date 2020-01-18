@@ -25,18 +25,19 @@ class InsertReceipt extends React.Component {
 
     render() {
         const { classes } = this.props;
+        console.log(this.state);
         return (
             <Container component="main" >
                 <CssBaseline/>
                 <div className={classes.paper}>
                     <h1 className={classes.headline}>Insert Receipt</h1>
                     <div className={classes.body}>
-                    <div className={classes.img}>
-                        <img src={logo} alt="logo" className={classes.avatar}/>
-                    </div>
-                    <div className={classes.form}>
-                        <Products withPrice ={this.props.withPrice}/>
-                    </div>
+                        <div className={classes.img}>
+                            <img src={logo} alt="logo" className={classes.avatar}/>
+                        </div>
+                        <div className={classes.form}>
+                            <Products withPrice ={this.props.withPrice}/>
+                        </div>
                     </div>
                 </div>
            </Container>

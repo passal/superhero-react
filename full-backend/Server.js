@@ -5,11 +5,13 @@ const getBasket = require("./getBasket");
 const server = express();
 const port = 3000;
 const FOLDER_PATH = 'C:\\Users\\tomer\\WebstormProjects\\superhero3\\receipt_uploads\\';
+const cors = require('cors')
+
 
 //npm install --save body-parser
 const bodyParser = require('body-parser');
 server.use( bodyParser.json() );       // to support JSON-encoded bodies
-
+server.use(cors())
 
 server.listen(port, () => console.log("Server listening to port 3000"));
 
