@@ -1,23 +1,9 @@
 import React from 'react';
-import {Jumbotron as Jumbo, Container, Navbar} from 'react-bootstrap';
+import {Jumbotron as Jumbo, Container, Button} from 'react-bootstrap';
 import styled from 'styled-components';
-import Button from "@material-ui/core/Button";
-import homeImage from '../../images/homeImage2.jpg';
+import homeImage from '../../images/vegetables-stall-868110.jpg';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
-// import {Link as RouterLink} from 'react-router-dom';
-import Link from '@material-ui/core/Link'
-import {createMuiTheme} from "@material-ui/core/styles";
 
-const theme = createMuiTheme({
-    palette: {
-        primary: {main: "#313746"},
-        secondary: {main: '#ffffff'},
-        textSecondary: {main: '#70757a'}
-    },
-    status: {
-        danger: 'red',
-    },
-});
 
 const Styles = styled.div`
   .jumbo {
@@ -35,7 +21,7 @@ const Styles = styled.div`
     -o-background-size: cover; 
     background-size: cover;
     color: #efefef;
-    position: relative;
+    position: absolute;
   }
   .overlay {
     background-color: #000;
@@ -64,6 +50,12 @@ const Styles = styled.div`
     width:55px;
     height:55px;
   }
+  .button{
+    background-color: #313746;
+    color: #fff;
+    font-size: 25px;
+    z-index: 100;
+  }
 `;
 
 export const LandingPage = () => (
@@ -79,11 +71,9 @@ export const LandingPage = () => (
                         Upload receipts, and fill their information to earn credits</h3>
                 </Container>
                 <br/>
-                <Link  to='/signUp'>
-                    <Button size="large" variant="contained" color="primary">
-                        Sign up for free
-                    </Button>
-                </Link>
+                <Button size="large" variant="contained" href="/signUp" className="button">
+                    Sign up for free
+                </Button>
             </Container>
         </Jumbo>
     </Styles>
