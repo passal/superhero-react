@@ -41,8 +41,9 @@ let productToId = {
 
 /* ---------- register and sign in --------- */
 //register new user
-const registerUser = (username, password, email, did) => {
-  axios.post(urlBase + "/register", {
+const registerUser = (username, password, email, area) => {
+    let did = zoneToId[area];
+    axios.post(urlBase + "/register", {
       username: username,
       password: password,
       email: email,
@@ -63,6 +64,8 @@ const registerUser = (username, password, email, did) => {
 const signUser = (username, password) => {
     let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;
     axios.get(fullUrl).then((response) =>{
+        response.data[0]["area"] = Object.keys(zoneToId).find(key => zoneToId[key] == response.data[0]["did"]);
+        delete response.data[0]["did"];
         console.log(response.data);
         if((response.data).length===0){
             //wrong username\pass
@@ -291,4 +294,3 @@ function mapBasketResultToName(idObj, nameObj){
         }
     }
 }
-
