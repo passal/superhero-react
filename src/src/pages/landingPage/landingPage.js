@@ -1,7 +1,7 @@
 import React from 'react';
 import {Jumbotron as Jumbo, Container, Button} from 'react-bootstrap';
 import styled from 'styled-components';
-import homeImage from '../../images/vegetables-stall-868110.jpg';
+import homeImage from '../../images/darkenedbg.jpg';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import Copyright from "../../components/Copyright";
 
@@ -22,17 +22,6 @@ const Styles = styled.div`
     -o-background-size: cover; 
     background-size: cover;
     color: #efefef;
-    position: absolute;
-  }
-  .overlay {
-    background-color: #000;
-    opacity: 0.6;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    z-index: -1;
   }
   .content {
     margin-top: 30px;
@@ -42,6 +31,7 @@ const Styles = styled.div`
    }
   .innerContent {
     padding-right: 100px;
+    margin-left: -10px;
     z-index: 1;
   }
   .h1 {
@@ -57,15 +47,11 @@ const Styles = styled.div`
     font-size: 25px;
     z-index: 100;
   }
-  .footer{
-    padding-top: 58%;
-  }
 `;
 
 export const LandingPage = () => (
     <Styles>
         <Jumbo fluid className="jumbo">
-            <div className="overlay"></div>
             <Container className="content">
                 <h1 className="h1"><EmojiPeopleIcon className="itemIcon"/>SUPER-HERO</h1>
                 <br/>
@@ -75,13 +61,11 @@ export const LandingPage = () => (
                         Upload receipts, and fill their information to earn credits</h3>
                 </Container>
                 <br/>
-                <Button size="large" variant="contained" href="/signUp" className="button">
+                <Button variant="contained" href="/signUp" className="button">
                     Sign up for free
                 </Button>
             </Container>
         </Jumbo>
-        <Container className="footer">
-            <Copyright/>
-        </Container>
+        <Copyright/>
     </Styles>
 )
