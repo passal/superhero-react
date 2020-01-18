@@ -135,7 +135,7 @@ class Products extends React.Component {
             }
             return product;
         });
-        this.setState({products:newProducts});
+        this.setState({products: newProducts});
     };
     handleProductTableName(evt,value) {
         const id = evt.target.id.split('-')[0]
@@ -166,13 +166,37 @@ class Products extends React.Component {
 }
 export default Products;
 
-
+const PRODUCT_NAME_TO_ID = {
+    "Milk (1 Liter bottle)": 1,
+    "Eggs": 2,
+    "Ground Beef (Kilograms)": 3,
+    "Water (1.5 Liter bottle)": 4,
+    "Cream Cheese (250 Grams cup)": 5,
+    "Bread (1 Loaf)": 6,
+    "Potatoes (Kilograms)": 7,
+    "Tomatoes (Kilograms)": 8,
+    "Pasta (500 Grams pack)": 9,
+    "Rice (400 Grams pack)": 10,
+    "Apples (Kilograms)": 11,
+    "Canned Tuna (4 pack)": 12,
+    "Soy milk (1 Liter bottle)": 13,
+    "Pringles (600 Grams can)": 14,
+    "Bamba (70 Grams pack)": 15,
+    "Bamba (200 Grams pack)": 16
+};
 
 class ProductTable extends React.Component {
+    serializeProducts(products) {
+        return products.reduce((acc, product) => ({
+            ...acc,
+            [product.name]: product.price
+        }), {})
+    }
 
-    handleClickOpen = () => {
+    handleSubmit = () => {
         if(this.props.withPrice == true){
             console.log('submit products',this.props.products)
+
             // if(checkTotalPrice()){
             //call server with product table (this.props.product)
             //     this.setState({
@@ -185,9 +209,9 @@ class ProductTable extends React.Component {
             //         popTitle:'Please check your cart',
             //         popContent:'The total price of the products in the cart is incorrect '
             //     })
-
-
             // }
+
+
             this.setState( {isOpen: true});
         }
         else{
@@ -204,21 +228,18 @@ class ProductTable extends React.Component {
             isOpen: false,
             popTitle:'Thank you!',
             popContent:'You earn 1 point'
+        };
 
-    }
-        this.handleClickOpen = this.handleClickOpen.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClose = this.handleClose.bind(this);
     }
 
-
     render() {
-        var onProductTableUpdate = this.props.onProductTableUpdate;
-        var onProductTableUpdateName = this.props.onProductTableUpdateName;
-        var rowDel = this.props.onRowDel;
-        var withPrice =this.props.withPrice
-        var product = this.props.products.map(function(product) {
-            return (<ProductRow withPrice ={withPrice} onProductTableUpdate={onProductTableUpdate} onProductTableUpdateName={onProductTableUpdateName} product={product} onDelEvent={rowDel.bind(this)} key={product.id}/>)
-        });
+        const onProductTableUpdate = this.props.onProductTableUpdate;
+        const onProductTableUpdateName = this.props.onProductTableUpdateName;
+        const rowDel = this.props.onRowDel;
+        const withPrice =this.props.withPrice;
+
         return (
             <div>
                 <div className={"insertTable"}>
@@ -233,13 +254,15 @@ class ProductTable extends React.Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {product}
+                        {this.props.products.map(function(product) {
+                            return (<ProductRow withPrice ={withPrice} onProductTableUpdate={onProductTableUpdate} onProductTableUpdateName={onProductTableUpdateName} product={product} onDelEvent={rowDel.bind(this)} key={product.id}/>)
+                        })}
                     </tbody>
                 </table>
                 </div>
                 <div>
                     <MyButton type="button" onClick={this.props.onRowAdd} >Add Product </MyButton>
-                    <MyButton type="button"  onClick={this.handleClickOpen} >Submit</MyButton>
+                    <MyButton type="button"  onClick={this.handleSubmit} >Submit</MyButton>
                     <Dialog onClose={this.handleClose} aria-labelledby="customized-dialog-title" open={this.state.isOpen}>
                         <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
                             {this.state.popTitle}
@@ -269,23 +292,13 @@ class ProductRow extends React.Component {
     }
 
     render() {
-        const ProductOptions = [
-            { title: 'Tomato' },
-            { title: 'Water' },
-            { title: 'Milk' },
-            { title: 'Butter' },
-            { title: 'Onion' },
-            { title: 'Flour' },
-            { title: 'Salt' },
-        ];
         return (
             <tr className="eachRow">
                 <td>
                     <Autocomplete
                         id={this.props.product.id}
-                        options={ProductOptions}
+                        options={Object.keys(PRODUCT_NAME_TO_ID)}
                         name ="name"
-                        getOptionLabel={option => option.title}
                         style={{ width: 300 }}
                         onInputChange={this.props.onProductTableUpdateName}
                         renderInput={(params) => (

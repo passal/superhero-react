@@ -1,25 +1,6 @@
 const axios = require("axios");
 const urlBase = "http://localhost:3000";
 
-
-//register new user
-const registerUser = (username, password, email) => {
-  axios.post(urlBase + "/register", {
-      username: username,
-      password: password,
-      email: email
-  }, {
-      headers:{
-          "Accept": "application/json",
-          "Content-Type": "application/json"
-      }
-  }).then((response) => {
-      console.log(response.status);
-  }).catch((error) => {
-      console.log((error.response.data)); //this will return a message from the server on the error
-  })
-};
-
 //sign user in
 const signUser = (username, password) => {
     let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;

@@ -11,7 +11,7 @@ import './App.css';
 import SignIn from "./pages/SignIn";
 import UserMenu from "./pages/userMenu/userMenu";
 import CartResult from "./pages/cartResult/cartResult";
-import Upload from "./pages/upload/Upload";
+import Upload from "./pages/Upload/Upload";
 import SignUp from "./pages/SignUp/signUp";
 import {LandingPage} from "./pages/landingPage/landingPage";
 import InsertReceipt from "./pages/insertReceipt";
@@ -21,7 +21,7 @@ import { NavigationBar } from './components/NavigationBar';
 import { Jumbotron } from './components/Jumbotron';
 
 var user = null;
-var connected = false;
+var connected = true;
 
 class App extends React.Component {
   user = {credits: 10, name: "Michael"};
