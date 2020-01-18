@@ -61,7 +61,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function CartResult(props) {
     const classes = useStyles();
-
+    const resulti = JSON.parse(localStorage.getItem("cartResult"));
+    console.log("hello",resulti);
     var result =
         [
             {store: "Rami Levi", groceries: [{grocery: "tomatoes", price: 3}, {grocery: "cucumbers", price: 4}],

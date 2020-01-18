@@ -179,8 +179,8 @@ const getBestBasket = (shops, products, maxSplits, uid,updateResult) => {
         mapBasketResultToName(response.data, result);
         console.log(result);
         console.log(response.data);
-        updateResult(result);
-        console.log("props shhiiiireriuhsduirfsdhuifhsdhfi",CreateShoppingCart.props);
+        localStorage.setItem('cartResult', JSON.stringify(result));
+        window.location = '/cartResult';
     });
 };
 

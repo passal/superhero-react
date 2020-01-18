@@ -6,7 +6,6 @@ import {SplitButton, Row, Form, Col} from 'react-bootstrap';
 import classes from "../SignIn";
 
 class Upload extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -32,7 +31,7 @@ class Upload extends Component {
 
     clickHandler(e){
         console.log("hey my hame is shir");
-        this.props.history.push('/usermenu');
+        console.log(this.state)
     }
 
     handleChange(arg) {

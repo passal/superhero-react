@@ -26,19 +26,21 @@ const theme = createMuiTheme({
 const SignIn = ({ classes, setCurrentUser }) => {
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
-    const history = useHistory();
 
     const urlBase = "http://localhost:3000";
 
     const signIn = () => {
         let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;
         console.log("full path",fullUrl)
-        axios.get(fullUrl).then((response) =>{
+        axios.post(fullUrl, {username, password}).then((response) =>{
             console.log(response.data);
 
             if((response.data).length===0){
                 //wrong username\pass
-                console.log("wrong username or password dudes!");
+                alert("wrong username or password dudes!");
+            } else {
+                localStorage.setItem('currentUser', JSON.stringify(response.data[0]));
+                window.location = '/userMenu';
             }
         });
     };

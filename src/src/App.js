@@ -18,16 +18,17 @@ import {Jumbotron} from './components/Jumbotron';
 function App(props) {
 
     const[result,setResult] = useState({});
-    const [currentUser, setCurrentUser] = useState(
-        {
-            id: 4,
-            username: 'someone',
-            password: '1234',
-            email: 'gmail.con',
-            credits: 2,
-            area: 'Tel-Aviv North',
-        }
-    );
+    // const [currentUser, setCurrentUser] = useState(
+    //     {
+    //         id: 4,
+    //         username: 'someone',
+    //         password: '1234',
+    //         email: 'gmail.con',
+    //         credits: 2,
+    //         area: 'Tel-Aviv North',
+    //     }
+    // );
+    const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
     const isConnected = !!currentUser.id;
 
 
@@ -46,13 +47,13 @@ function App(props) {
                         <NavigationBar user={null}/>
                         <Jumbotron user={currentUser}/>
                         <div>
-                            <Route exact path="/">
+                            <Route  exact path="/">
                                 <LandingPage/>
                             </Route>
                             <Route path="/sign-in">
                                 {/*<Jumbotron user={currentUser}/>*/}
                                 <Layout>
-                                    <SignIn setCurrentUser={setCurrentUser}/>
+                                    <SignIn/>
                                 </Layout>
                             </Route>
                             <Route path="/signUp">
