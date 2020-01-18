@@ -306,3 +306,31 @@ function mapBasketResultToName(idObj, nameObj){
         }
     }
 }
+
+
+//get all prices for given shops and products
+const getAllPrices = (shops, products) => {
+    let shopsId = [];
+    mapShopsToId(shops, shopsId);
+    let productsId = {};
+    mapProductToId(products, productsId);
+    axios.post(urlBase + "/allPrices", {
+        "shops": shopsId,
+        "products": productsId
+    },{
+        headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    }).then( (response) => {
+        for(let i=0; i<(response.data).length; i++){
+            response.data[i]["store"] = Object.keys(shopToId).find(key => shopToId[key] == response.data[i]["store"]);
+            for(let j=0; j<(response.data[i]["prods"]).length; j++){
+                response.data[i]["prods"][j]["product"] = Object.keys(productToId).find(key => productToId[key] == response.data[i]["prods"][j]["product"]);
+            }
+        }
+        //the object is response.data, but js can't print nested objects so for printing use the below line:
+        //console.log(console.log(JSON.stringify(response.data, null, 4)));
+    });
+};
+
