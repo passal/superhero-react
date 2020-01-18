@@ -15,6 +15,7 @@ import shoppingCartPhoto from "../../images/shoppingCart.jpg";
 import Copyright from "../../components/Copyright";
 import { createMuiTheme } from '@material-ui/core/styles';
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
+import CardContent from "@material-ui/core/CardContent";
 const theme = createMuiTheme({
     palette: {
         primary: {main: "#313746"},
@@ -40,16 +41,24 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
     },
     cardMedia: {
-        height: '100%',
+        height: '80%',
         display: 'flex',
         justifyContent: 'center',
 
     },
     cardContent: {
-        paddingTop: theme.spacing(20),
+        paddingTop: theme.spacing(16),
     },
     text: {
         textDecoration: 'none'
+    },
+    cardFooter: {
+        height: '20%',
+        backgroundColor: '#313746',
+        paddingTop: '6px',
+        paddingBottom: '6px',
+        display: 'flex',
+        justifyContent: 'center',
     }
 }));
 
@@ -72,11 +81,16 @@ export default function UserMenu() {
                                 <CardMedia className={classes.cardMedia} image={uploadReceiptPhoto}
                                            title="uploadReceipt">
                                     <Grid className={classes.cardContent}>
-                                        <Typography variant="h5" color="Secondary" className={classes.text}>
-                                            Upload Receipt
+                                        <Typography variant="body1" color="Secondary" className={classes.text}>
+                                            Earn 1 credit
                                         </Typography>
                                     </Grid>
                                 </CardMedia>
+                                <CardContent className={classes.cardFooter}>
+                                    <Typography variant="h5" color="secondary">
+                                        Upload Receipt
+                                    </Typography>
+                                </CardContent>
                             </Card>
                         </Link>
                     </Grid>
@@ -86,11 +100,16 @@ export default function UserMenu() {
                                 <CardMedia className={classes.cardMedia} image={translateReceiptPhoto}
                                            title="translateReceipt">
                                     <Grid className={classes.cardContent}>
-                                        <Typography variant="h5" color="Secondary">
-                                            Insert Receipt Content
+                                        <Typography variant="body1" color="Secondary">
+                                            Earn 1 credit
                                         </Typography>
                                     </Grid>
                                 </CardMedia>
+                                <CardContent className={classes.cardFooter}>
+                                    <Typography variant="h5" color="secondary">
+                                        Fill Receipt Content
+                                    </Typography>
+                                </CardContent>
                             </Card>
                         </Link>
                     </Grid>
@@ -100,11 +119,16 @@ export default function UserMenu() {
                                 <CardMedia className={classes.cardMedia} image={shoppingCartPhoto}
                                            title="createShoppingCart">
                                     <Grid className={classes.cardContent}>
-                                        <Typography variant="h5" color="Secondary">
-                                            Create Shopping Cart
+                                        <Typography variant="body1" color="Secondary">
+                                            Use 2 credits
                                         </Typography>
                                     </Grid>
                                 </CardMedia>
+                                <CardContent className={classes.cardFooter}>
+                                    <Typography variant="h5" color="secondary">
+                                        Create Shopping Cart
+                                    </Typography>
+                                </CardContent>
                             </Card>
                         </Link>
                     </Grid>

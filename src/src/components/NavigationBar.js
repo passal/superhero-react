@@ -24,7 +24,7 @@ const Styles = styled.div`
   }
 `;
 
-var connected = false;
+var connected = true;
 
 export const NavigationBar = () => (
     <Styles>
