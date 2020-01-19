@@ -126,3 +126,7 @@ button:disabled {
     background: rgb(189, 189, 189);
     cursor: default;
 }
+
+#areaButton {
+    min-width: 150px;
+}

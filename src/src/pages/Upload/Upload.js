@@ -4,6 +4,11 @@ import "./Upload.css";
 import Progress from "../progress/Progress";
 import {SplitButton, Row, Form, Col} from 'react-bootstrap';
 import classes from "../SignIn";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import Input from "@material-ui/core/Input";
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 class Upload extends Component {
     constructor(props) {
@@ -15,6 +20,7 @@ class Upload extends Component {
             successfullUploaded: false,
             sid: "",
             sum: 0,
+            area:"",
         };
 
         this.onFilesAdded = this.onFilesAdded.bind(this);
@@ -32,6 +38,9 @@ class Upload extends Component {
     clickHandler(e){
         console.log("hey my hame is shir");
         console.log(this.state)
+        // here send state to backend (area , and sum)
+        //if needed save state in local storage
+        window.location = '/userMenu';
     }
 
     handleChange(arg) {
@@ -85,39 +94,58 @@ class Upload extends Component {
     }
 
     render() {
+        const zones = ["SuperYoda",
+            "Shufersal Ramat Aviv",
+            "SuperYoda Tel-Aviv",
+            "SuperYoda East Tel-Aviv",
+            "Shufersal Ramat-Gan",
+            "SuperYoda South",
+            "Rami Levy TLV Center"];
+        const ITEM_HEIGHT = 48;
+        const ITEM_PADDING_TOP = 8;
+        const MenuProps = {
+            PaperProps: {
+                style: {
+                    maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                    width: 250
+                }
+            }
+        };
 
         return (
             <div className="Botton" >
                 <div className="TopSpace">
                     <Form >
-                        <Form.Group as={Row} controlId="formHorizontalEmail">
-                            <Form.Label column sm={2}>
+                        <Form.Group as={Row}  className={classes.input}  controlId="formHorizontalEmail">
+                            <Form.Label column sm={2} className={classes.font}>
                                 Total Price:
                             </Form.Label>
-                            <Col sm={10}>
+                            <Col sm={3}>
                                 <Form.Control onChange={this.handleChange("sum")} type="Price" placeholder="Total Price" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="formGridState">
-                            <Form.Label as="legend" column sm={2} >Store</Form.Label>
-                            <Col sm={10} className={classes.checkBox}>
-                                {["SuperYoda",
-                                  "Shufersal Ramat Aviv",
-                                  "SuperYoda Tel-Aviv",
-                                  "SuperYoda East Tel-Aviv",
-                                  "Shufersal Ramat-Gan",
-                                  "SuperYoda South",
-                                  "Rami Levy TLV Center"].map((supermarket) => (
-                                    <Row>
-                                        <Form.Check type="checkbox" label={supermarket} />
-                                    </Row>
-                                ))}
+                            <Form.Label as="legend" column sm={2} className={classes.font}>Select Area</Form.Label>
+                            <Col sm={3}>
+                                <FormControl className={classes.formControl}>
+                                    <Select
+                                        labelId="demo-mutiple-checkbox-label"
+                                        id="areaButton"
+                                        value={this.state.area}
+                                        onChange={this.handleChange("area")}
+                                        input={<Input />}
+                                        MenuProps={MenuProps}
+                                    >
+                                        {zones.map(name => (
+                                            <MenuItem key={name} value={name}>
+                                                <ListItemText primary={name} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Col>
                         </Form.Group>
-
-
                         <Form.Group as={Row}>
-
                         </Form.Group>
                     </Form>
                 </div>

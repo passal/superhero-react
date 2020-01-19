@@ -174,11 +174,11 @@ class ProductTable extends React.Component {
         if(this.props.withPrice == true){
             console.log('submit products',this.props.products)
             // if(checkTotalPrice()){
-            //call server with product table (this.props.product)
             //     this.setState({
             //         popTitle:'Thank you!',
             //         popContent:'You earn 1 point'
             //     })
+            //call hundler
             // }
             // else{
             //     this.setState({
@@ -192,8 +192,17 @@ class ProductTable extends React.Component {
         }
         else{
             console.log('submit products',this.props.products)
+            //    if(user.getPoints() < 2){
+            //        this.setState({
+            //            //         popTitle:'You dont have enough points',
+            //            //         popContent:'Please earn more points and try again '
+            //            //     })
+            // }
+            // else{
+            // call hundler}
         }
     };
+
     handleClose = () => {
         this.setState( {isOpen: false});
     };
