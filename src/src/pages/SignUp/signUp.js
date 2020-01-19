@@ -16,6 +16,19 @@ import Select from '@material-ui/core/Select';
 import Copyright from "../../components/Copyright";
 import { createMuiTheme } from '@material-ui/core/styles';
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
+const urlBase = "http://localhost:3000";
+
+//get all delivery zones
+const getAllZones = () => {
+    let fullUrl = urlBase +  "/allZones";
+    axios.get(fullUrl).then((response) =>{
+        return response.data;
+        if((response.data).length===0){
+            //error
+            console.log("No Zones inserted");
+        }
+    });
+};
 
 const registerUser = (username, password, email) => {
     axios.post("http://localhost:3000/register", {
@@ -96,7 +109,7 @@ export default function SignUp() {
         registerUser(username, password, email);
     };
 
-    const areas = ["Tel Aviv Center", "Tel Aviv Old North", "Florentin", "Givataim"];
+    const areas = getAllZones();
 
     return (
         <ThemeProvider theme={theme}>
@@ -112,7 +125,7 @@ export default function SignUp() {
                 </Grid>
                 <form className={classes.form} noValidate>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12}>
                             <TextField
                                 variant="outlined"
                                 required
@@ -165,7 +178,7 @@ export default function SignUp() {
                                 autoWidth
                             >
                                 {areas.map(function(area, index){
-                                    return <MenuItem value={ index }>{area}</MenuItem>;
+                                    return <MenuItem value={ index }>{area.name}</MenuItem>;
                                 })}
                             </Select>
                         </FormControl>

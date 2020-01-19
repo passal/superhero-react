@@ -22,7 +22,7 @@ var result = [{store: 'Shufersal Ramat Aviv', products: [ 'Milk (1 Liter bottle)
 
 function App() {
   const [currentUser, setCurrentUser] =
-      useState(user);
+      useState(null);
   const isConnected = currentUser!=null;
   const [userCartResult, setUserCartResult] = useState(result);
   console.log("isConnected ", isConnected)
