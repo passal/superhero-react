@@ -7,8 +7,8 @@ const multer = require("multer");
 const OCR = require("./products");
 const getBasket = require("./getBasket");
 const server = express();
-const port = 3000;
-const FOLDER_PATH = 'C:\\Users\\itaizur\\WebstormProjects\\itailocal\\images\\';
+const port = 5000;
+const FOLDER_PATH = 'C:\\Users\\Doron\\Projects\\superhero-react';
 let basketResult;
 
 server.use( bodyParser.json() );       // to support JSON-encoded bodies
