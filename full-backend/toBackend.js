@@ -78,7 +78,6 @@ const signUser = (username, password) => {
 
 //get the best basket!
 const getBestBasket = (shops, products, maxSplits, uid) => {
-    let result = [];
     let shopsId = [];
     mapShopsToId(shops, shopsId);
     let productsId = {};
@@ -94,11 +93,19 @@ const getBestBasket = (shops, products, maxSplits, uid) => {
         }
     }).then( (response) => {
         payCreds(uid);
-        console.log(response.data);
-        mapBasketResultToName(response.data, result);
-        console.log(result);
     });
 };
+
+const getBasketResult = (uid) =>{
+  axios.get(urlBase + "/getBasket").then((response) =>{
+      let result = [];
+      console.log(response.data);
+      mapBasketResultToName(response.data, result);
+      console.log(result);
+  });
+};
+
+
 
 /* ------- upload receipt related ------- */
 
@@ -334,6 +341,9 @@ const getAllPrices = (shops, products) => {
         //console.log(console.log(JSON.stringify(response.data, null, 4)));
     });
 };
+
+
+
 
 
 

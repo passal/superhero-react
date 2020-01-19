@@ -9,6 +9,7 @@ const getBasket = require("./getBasket");
 const server = express();
 const port = 3000;
 const FOLDER_PATH = 'C:\\Users\\itaizur\\WebstormProjects\\itailocal\\images\\';
+let basketResult;
 
 server.use( bodyParser.json() );       // to support JSON-encoded bodies
 
@@ -129,10 +130,15 @@ server.post("/getBasket", (req, res) => {
                     }
                 }
             }
-            res.send(resultObject);
+            basketResult = resultObject;
+            res.sendStatus(200);
         });
 
     });
+});
+
+server.get("/getBasket", (req, res) => {
+  res.status(200).send(basketResult);
 });
 
 //insert new receipt to the DB
@@ -284,31 +290,3 @@ server.post("/allPrices", (req, res) => {
     })
 });
 
-
-
-/*
-//get all prices for given products and shops
-server.post("/allPrices", (req, res) => {
-    let products = Object.keys(req.body.products);
-    let pid, sid, index, sidIndex;
-    products = products.map(v => parseInt(v)); //parse to ints
-    let shops = req.body.shops;
-    getBasket.createPriceMatrix(shops, products, (priceMatrix) => {
-        let ans = new Array(shops.length);
-        for(let i = 0; i < shops.length; i++){
-            let shop = {};
-            shop["sid"] = shops[i];
-            shop["products"] = [];
-            for(let j = 0; j < products.length;j++){
-                let prodObj = {};
-                prodObj["pid"] = products[j];
-                prodObj["price"] = priceMatrix[j][i];
-                (shop["products"]).push(prodObj);
-            }
-            ans.push(shop);
-        }
-        res.send(ans);
-    })
-});
-
-*/
