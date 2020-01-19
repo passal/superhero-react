@@ -206,7 +206,7 @@ export default function CartResult(props) {
                             </Grid>
                         );
                     })}
-{                    {seeFullCart && fullCart.map(function(store, index){
+                    {seeFullCart && fullCart.map(function(store, index){
                         return(
                             <Grid item value={index} xs={10} sm={4} md={3}>
                                 <Card className={classes.card}>
@@ -235,7 +235,7 @@ export default function CartResult(props) {
                                 </Card>
                             </Grid>
                         );
-                    })}}
+                    })}
                 </Container>
                 <Box align='center'>
                     <Button size="medium" variant="contained" color="primary" onClick={() => changeCartState(handleClick)}>
