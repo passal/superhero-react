@@ -115,7 +115,9 @@ export default function SignUp() {
 
     const handleSubmit = () => {
         registerUser(username, password, email);
-        signIn();
+        setTimeout(function(){
+            signIn();
+        },2000);
         history.push('/userMenu');
 
     };

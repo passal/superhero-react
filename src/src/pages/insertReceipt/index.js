@@ -2,7 +2,7 @@ import React from 'react';
 import Products from "./components/Products";
 import {withStyles} from "@material-ui/core/styles";
 // import  logo from "../SignIn/big-logo.png";
-// import receipt from "../SignIn/recipt_example.jpg"
+// import receipt from "../SignIn/reciptm_example.jpg"
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import axios from 'axios';

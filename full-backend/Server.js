@@ -9,7 +9,7 @@ const getBasket = require("./getBasket");
 
 const server = express();
 const port = process.env.PORT || 5000;
-const FOLDER_PATH = 'C:\\Users\\itaizur\\WebstormProjects\\superhero-react\\';
+const FOLDER_PATH = 'C:\\superhero-react\\';
 
 server.use( bodyParser.json() );       // to support JSON-encoded bodies
 server.use(cors());
