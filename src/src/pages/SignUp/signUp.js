@@ -16,8 +16,10 @@ import Select from '@material-ui/core/Select';
 import Copyright from "../../components/Copyright";
 import { createMuiTheme } from '@material-ui/core/styles';
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
+import {useHistory} from "react-router-dom";
 
 const registerUser = (username, password, email) => {
+
     axios.post("http://localhost:3000/register", {
         username: username,
         password: password,
@@ -76,6 +78,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignUp() {
+    const history = useHistory();
     const classes = useStyles();
     const [area, setArea] = React.useState('');
     const inputLabel = React.useRef(null);
@@ -92,8 +95,31 @@ export default function SignUp() {
         setArea(event.target.value);
     };
 
+    const urlBase = "http://localhost:3000";
+
+    const signIn = () => {
+        let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;
+        console.log("full path",fullUrl)
+        axios.post(fullUrl, {username, password}).then((response) =>{
+            console.log(response.data);
+
+            if((response.data).length===0){
+                //wrong username\pass
+                alert("wrong username or password dudes!");
+            } else {
+                localStorage.setItem('currentUser', JSON.stringify(response.data[0]));
+                window.location = '/userMenu';
+            }
+        });
+    };
+
     const handleSubmit = () => {
         registerUser(username, password, email);
+        setTimeout(function(){
+            signIn();
+        },2000);
+        history.push('/userMenu');
+
     };
 
     const areas = ["Tel Aviv Center", "Tel Aviv Old North", "Florentin", "Givataim"];

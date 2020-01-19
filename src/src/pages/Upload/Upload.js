@@ -12,17 +12,35 @@ class Upload extends Component {
             files: [],
             uploading: false,
             uploadProgress: {},
-            successfullUploaded: false
+            successfullUploaded: false,
+            sid: "",
+            sum: 0,
         };
 
         this.onFilesAdded = this.onFilesAdded.bind(this);
         this.renderActions = this.renderActions.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.clickHandler = this.clickHandler.bind(this);
     }
 
     onFilesAdded(files) {
         this.setState(prevState => ({
             files: prevState.files.concat(files)
         }));
+    }
+
+    clickHandler(e){
+        console.log("hey my hame is shir");
+        console.log(this.state)
+    }
+
+    handleChange(arg) {
+        return (e) => {
+            console.log("hello here i changed");
+            this.setState({
+                [arg]: e.target.value,
+            })
+        }
     }
 
     renderProgress(file) {
@@ -49,8 +67,7 @@ class Upload extends Component {
         if (this.state.successfullUploaded) {
             return (
                 <button
-                    onClick={() =>
-                        this.setState({ files: [], successfullUploaded: false })
+                    onClick={this.clickHandler
                     }
                 >
                     Clear
@@ -59,8 +76,7 @@ class Upload extends Component {
         } else {
             return (
                 <button
-                    disabled={this.state.files.length < 0 || this.state.uploading}
-                    onClick={this.uploadFiles}
+                    onClick={this.clickHandler}
                 >
                     Upload
                 </button>
@@ -69,6 +85,7 @@ class Upload extends Component {
     }
 
     render() {
+
         return (
             <div className="Botton" >
                 <div className="TopSpace">
@@ -78,7 +95,7 @@ class Upload extends Component {
                                 Total Price:
                             </Form.Label>
                             <Col sm={10}>
-                                <Form.Control type="Price" placeholder="Total Price" />
+                                <Form.Control onChange={this.handleChange("sum")} type="Price" placeholder="Total Price" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} controlId="formGridState">
@@ -118,7 +135,7 @@ class Upload extends Component {
                                 return (
                                     <div key={file.name} className="Row">
                                         <span className="Filename">{file.name}</span>
-                                        {this.renderProgress(file)}
+                                        {/*{this.renderProgress(file)}*/}
                                     </div>
                                 );
                             })}
@@ -126,7 +143,6 @@ class Upload extends Component {
                     </div>
                     <div className="Actions">{this.renderActions()}</div>
                 </div>
-
             </div>
 
         );

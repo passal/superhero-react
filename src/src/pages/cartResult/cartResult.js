@@ -14,6 +14,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
 import shoppingCartPhoto from "../../images/shoppingCart.jpg";
 import {useState } from 'react';
+import axios from 'axios';
 
 const theme = createMuiTheme({
     palette: {
@@ -37,6 +38,7 @@ const useStyles = makeStyles(theme => ({
     },
     card: {
         height: '100%',
+        width: '270px',
         display: 'flex',
         flexDirection: 'column',
     },
@@ -58,31 +60,59 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+/*
+//get all prices for given shops and products
+const getAllPrices = (shops, products) => {
+    let shopsId = [];
+    mapShopsToId(shops, shopsId);
+    let productsId = {};
+    mapProductToId(products, productsId);
+    axios.post(urlBase + "/allPrices", {
+        "shops": shopsId,
+        "products": productsId
+    },{
+        headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    }).then( (response) => {
+        for(let i=0; i<(response.data).length; i++){
+            response.data[i]["store"] = Object.keys(shopToId).find(key => shopToId[key] == response.data[i]["store"]);
+            for(let j=0; j<(response.data[i]["prods"]).length; j++){
+                response.data[i]["prods"][j]["product"] = Object.keys(productToId).find(key => productToId[key] == response.data[i]["prods"][j]["product"]);
+            }
+        }
+        //the object is response.data, but js can't print nested objects so for printing use the below line:
+        //console.log(console.log(JSON.stringify(response.data, null, 4)));
+    });
+};
+*/
 
-export default function CartResult() {
+export default function CartResult(props) {
     const classes = useStyles();
-
-    var result =
-        [
-            {store: "Rami Levi", groceries: [{grocery: "tomatoes", price: 3}, {grocery: "cucumbers", price: 4}],
-                unrecommendedGroceries: [{grocery: "olive oil", price: 22}, {grocery: "cream cheese", price: 5}, {grocery: "milk", price: 11}],
-                price: 7, totalPrice: 45},
-            {store: "Yeinot Bitan", groceries: [{grocery: "cream cheese", price: 5}, {grocery: "milk", price: 5}],
-                unrecommendedGroceries: [{grocery: "olive oil", price: 21}, {grocery: "tomatoes", price: 4}, {grocery: "cucumbers", price: 4}],
-                price: 10, totalPrice: 39},
-            {store: "Mega", groceries: [{grocery: "olive oil", price: 18}],
-            unrecommendedGroceries: [{grocery: "cream cheese", price: 6}, {grocery: "milk", price: 10}, {grocery: "tomatoes", price: 4}, {grocery: "cucumbers", price: 4}],
-                price: 18, totalPrice: 42}
-        ];
-
     const [seeFullCart, changeCartState] = useState(false);
     const handleClick = () => {
         changeCartState(!seeFullCart)
     }
     let overallPrice = 0;
-    for (var i=0; i<result.length; i++){
-        overallPrice+=result[i].price;
+    let shops = [];
+    let products = [];
+    for (var i=0; i<props.Result.length; i++){
+        overallPrice+=props.Result[i].price;
+        shops.push(props.Result[i].store);
+        for (var j=0; j<props.Result[i].products; j++){
+            products.push(props.Result[i].products[j]);
+        }
     }
+/*    const fullCart = getAllPrices(shops, products);
+
+    const sumStoreGroceries = (store) => {
+        var fullCartPrice = 0;
+        for (var i=0; i<store.groceries.length; i++){
+            fullCartPrice+=store.groceries[i].price;
+        }
+        return fullCartPrice;
+    }*/
     var buttonOpen = "See full carts";
     var buttonClose = "Close";
 
@@ -95,11 +125,11 @@ export default function CartResult() {
                         Here's your optimal buying solution!
                     </Typography>
                     <Typography variant="h5" color="primary">
-                        Overall Price: {overallPrice} ₪
+                        Overall Price: {overallPrice} $
                     </Typography>
                 </Container>
                 <Container className={classes.cardGrid} maxWidth="md">
-                    {result.map(function(store, index){
+                    {!seeFullCart && props.Result.map(function(store, index){
                         return(
                             <Grid item value={index} xs={10} sm={4} md={3}>
                                 <Card className={classes.card}>
@@ -111,30 +141,54 @@ export default function CartResult() {
                                         </Grid>
                                     </CardMedia>
                                     <CardContent className={classes.cardContent}>
-                                        {store.groceries.map(function(grocery, index){
-                                                return(
-                                                    <Typography value={index} color="Primary">
-                                                        {grocery.grocery}: {grocery.price} ₪
-                                                    </Typography>
-                                                );
-                                        })}
-                                        {seeFullCart && store.unrecommendedGroceries.map(function(grocery, index){
+                                        {store.products.map(function(product, index){
                                             return(
-                                                <Typography value={index} color="textSecondary">
-                                                    {grocery.grocery}: {grocery.price} ₪
+                                                <Typography value={index} color="Primary">
+                                                    {product}
                                                 </Typography>
                                             );
                                         })}
+
                                     </CardContent>
                                     <CardContent className={classes.cardFooter}>
                                         <Typography value={index} variant="body1" color="secondary">
-                                                Overall: {seeFullCart ? store.totalPrice : store.price} ₪
+                                            Overall: {store.price} $
                                         </Typography>
                                     </CardContent>
                                 </Card>
                             </Grid>
                         );
                     })}
+                    {/*                    {seeFullCart && fullCart.map(function(store, index){
+                        return(
+                            <Grid item value={index} xs={10} sm={4} md={3}>
+                                <Card className={classes.card}>
+                                    <CardMedia className={classes.cardMedia} image={shoppingCartPhoto} title="createShoppingCart">
+                                        <Grid>
+                                            <Typography variant="h5" color="Secondary" className={classes.text}>
+                                                {store.store}
+                                            </Typography>
+                                        </Grid>
+                                    </CardMedia>
+                                    <CardContent className={classes.cardContent}>
+                                        {store.groceries.map(function(product, index){
+                                            return(
+                                                <Typography value={index} color="Primary">
+                                                    {product.grocery}: {product.price} ₪
+                                                </Typography>
+                                            );
+                                        })}
+
+                                    </CardContent>
+                                    <CardContent className={classes.cardFooter}>
+                                        <Typography value={index} variant="body1" color="secondary">
+                                            Overall: {sumStoreGroceries(store)} $
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        );
+                    })}*/}
                 </Container>
                 <Box align='center'>
                     <Button size="medium" variant="contained" color="primary" onClick={() => changeCartState(handleClick)}>
