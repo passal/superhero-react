@@ -27,6 +27,7 @@ const theme = createMuiTheme({
     },
 });
 
+const urlBase = "http://localhost:3000";
 
 const useStyles = makeStyles(theme => ({
     cardGrid: {
@@ -60,7 +61,52 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-/*
+let shopToId = {
+    "SuperYoda": 1,
+    "Shufersal Ramat Aviv": 2,
+    "SuperYoda Tel-Aviv": 3,
+    "SuperYoda East Tel-Aviv": 4,
+    "Shufersal Ramat-Gan": 5,
+    "SuperYoda South": 6,
+    "Rami Levy TLV Center": 7
+};
+
+let productToId = {
+    "Milk (1 Liter bottle)": 1,
+    "Eggs": 2,
+    "Ground Beef (Kilograms)": 3,
+    "Water (1.5 Liter bottle)": 4,
+    "Cream Cheese (250 Grams cup)": 5,
+    "Bread (1 Loaf)": 6,
+    "Potatoes (Kilograms)": 7,
+    "Tomatoes (Kilograms)": 8,
+    "Pasta (500 Grams pack)": 9,
+    "Rice (400 Grams pack)": 10,
+    "Apples (Kilograms)": 11,
+    "Canned Tuna (4 pack)": 12,
+    "Soy milk (1 Liter bottle)": 13,
+    "Pringles (600 Grams can)": 14,
+    "Bamba (70 Grams pack)": 15,
+    "Bamba (200 Grams pack)": 16
+};
+function mapShopsToId(shopsName, shopsId){
+    let id;
+    shopsName.forEach(name => {
+        id = shopToId[name];
+        shopsId.push(id);
+    })
+}
+
+function mapProductToId(products, productsId){
+    let id;
+    for(let prod in products){
+        if(products.hasOwnProperty(prod)){
+            id = productToId[prod];
+            productsId[id] = products[prod];
+        }
+    }
+}
+
 //get all prices for given shops and products
 const getAllPrices = (shops, products) => {
     let shopsId = [];
@@ -82,11 +128,12 @@ const getAllPrices = (shops, products) => {
                 response.data[i]["prods"][j]["product"] = Object.keys(productToId).find(key => productToId[key] == response.data[i]["prods"][j]["product"]);
             }
         }
+        return response.data;
         //the object is response.data, but js can't print nested objects so for printing use the below line:
         //console.log(console.log(JSON.stringify(response.data, null, 4)));
     });
 };
-*/
+
 
 export default function CartResult(props) {
     const classes = useStyles();
@@ -104,7 +151,7 @@ export default function CartResult(props) {
             products.push(props.userCartResult[i].products[j]);
         }
     }
-    //const fullCart = getAllPrices(shops, products);
+    const fullCart = getAllPrices(shops, products);
 
     const sumStoreGroceries = (store) => {
         var fullCartPrice = 0;
@@ -159,7 +206,7 @@ export default function CartResult(props) {
                             </Grid>
                         );
                     })}
-{/*                    {seeFullCart && fullCart.map(function(store, index){
+{                    {seeFullCart && fullCart.map(function(store, index){
                         return(
                             <Grid item value={index} xs={10} sm={4} md={3}>
                                 <Card className={classes.card}>
@@ -188,7 +235,7 @@ export default function CartResult(props) {
                                 </Card>
                             </Grid>
                         );
-                    })}*/}
+                    })}}
                 </Container>
                 <Box align='center'>
                     <Button size="medium" variant="contained" color="primary" onClick={() => changeCartState(handleClick)}>
