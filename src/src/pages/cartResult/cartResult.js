@@ -97,14 +97,20 @@ export default function CartResult(props) {
     let overallPrice = 0;
     let shops = [];
     let products = [];
-    for (var i=0; i<props.Result.length; i++){
-        overallPrice+=props.Result[i].price;
-        shops.push(props.Result[i].store);
-        for (var j=0; j<props.Result[i].products; j++){
-            products.push(props.Result[i].products[j]);
+    const result = [{store: 'Shufersal Ramat Aviv', products: [ 'Milk (1 Liter bottle)', 'Ground Beef (Kilograms)' ], price: 45},
+        {store: 'SuperYoda Tel-Aviv', products: [ 'Eggs' ], price: 15}];
+    const fullCart = [
+        {store:'Shufersal Ramat Aviv', groceries: [ {grocery: 'Milk (1 Liter bottle)', price: 5}, {grocery: 'Ground Beef (Kilograms)', price:40}, {grocery:'Eggs', price: 20} ]},
+        {store: 'SuperYoda Tel-Aviv', groceries: [  {grocery: 'Milk (1 Liter bottle)', price: 10}, {grocery: 'Ground Beef (Kilograms)', price:50}, {grocery:'Eggs', price: 15} ]}
+    ];
+    for (var i=0; i<result.length; i++){
+        overallPrice+=result[i].price;
+        shops.push(result[i].store);
+        for (var j=0; j<result[i].products; j++){
+            products.push(result[i].products[j]);
         }
     }
-/*    const fullCart = getAllPrices(shops, products);
+
 
     const sumStoreGroceries = (store) => {
         var fullCartPrice = 0;
@@ -112,7 +118,7 @@ export default function CartResult(props) {
             fullCartPrice+=store.groceries[i].price;
         }
         return fullCartPrice;
-    }*/
+    }
     var buttonOpen = "See full carts";
     var buttonClose = "Close";
 
@@ -129,7 +135,7 @@ export default function CartResult(props) {
                     </Typography>
                 </Container>
                 <Container className={classes.cardGrid} maxWidth="md">
-                    {!seeFullCart && props.Result.map(function(store, index){
+                    {!seeFullCart && result.map(function(store, index){
                         return(
                             <Grid item value={index} xs={10} sm={4} md={3}>
                                 <Card className={classes.card}>
@@ -159,7 +165,7 @@ export default function CartResult(props) {
                             </Grid>
                         );
                     })}
-                    {/*                    {seeFullCart && fullCart.map(function(store, index){
+                    {seeFullCart && fullCart.map(function(store, index){
                         return(
                             <Grid item value={index} xs={10} sm={4} md={3}>
                                 <Card className={classes.card}>
@@ -188,7 +194,7 @@ export default function CartResult(props) {
                                 </Card>
                             </Grid>
                         );
-                    })}*/}
+                    })}
                 </Container>
                 <Box align='center'>
                     <Button size="medium" variant="contained" color="primary" onClick={() => changeCartState(handleClick)}>

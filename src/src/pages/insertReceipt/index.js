@@ -2,7 +2,7 @@ import React from 'react';
 import Products from "./components/Products";
 import {withStyles} from "@material-ui/core/styles";
 // import  logo from "../SignIn/big-logo.png";
-// import receipt from "../SignIn/recipt_example.jpg"
+import receipt from "../../images/1.jpg"
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import axios from 'axios';
@@ -84,7 +84,9 @@ class InsertReceipt extends React.Component {
                 "products": this.serializeProducts(products),
             }
             fillReceipt(receipt,this.props.currentUser.id);
-
+            this.props.changePoint(1);
+            localStorage.setItem('points', JSON.stringify(3));
+            window.location = '/userMenu';
         }
     }
 
@@ -104,7 +106,7 @@ class InsertReceipt extends React.Component {
                     <h1 className={classes.headline}>Insert Receipt</h1>
                     <div className={classes.body}>
                         <div className={classes.img}>
-                            {/*<img src={receipt} alt="logo" className={classes.avatar}/>*/}
+                            {<img src={receipt} alt="logo" className={classes.avatar}/>}
                         </div>
                         <div className={classes.form}>
                             <Products withPrice ={true} handleSubmit={this.handleSubmit} />

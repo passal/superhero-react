@@ -40,6 +40,7 @@ class Upload extends Component {
         console.log(this.state)
         // here send state to backend (area , and sum)
         //if needed save state in local storage
+        localStorage.setItem('points', JSON.stringify(2));
         window.location = '/userMenu';
     }
 

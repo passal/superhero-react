@@ -116,11 +116,19 @@ export default function SignUp() {
     const handleSubmit = () => {
         registerUser(username, password, email);
         signIn();
+        localStorage.setItem('points', JSON.stringify(2));
         history.push('/userMenu');
 
     };
 
-    const areas = ["Tel Aviv Center", "Tel Aviv Old North", "Florentin", "Givataim"];
+    const areas = [
+        { id: 1, name: 'Tel-Aviv North' },
+        { id: 2, name: 'Tel-Aviv East' },
+        { id: 3, name: 'Tel-Aviv South' },
+        { id: 4, name: 'Tel-Aviv West' },
+        { id: 5, name: 'Tel-Aviv Center' },
+        { id: 6, name: 'Ramat-Gan' }
+    ];
 
     return (
         <ThemeProvider theme={theme}>

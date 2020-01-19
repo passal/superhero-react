@@ -21,6 +21,13 @@ var user = {id: 4, username: "Michael", password:"1234", email:"gmail.con", cred
 function App(props) {
 
     const[result,setResult] = useState({});
+    const[points,setPoints] = useState(2);
+
+    const changePoint = (number) =>{
+        setPoints(points+number)
+    }
+
+
     //const [currentUser, setCurrentUser] = useState({);}
     const currentUser = JSON.parse(localStorage.getItem('currentUser')) || {};
     const [isConnected, setIsConnected] = useState(!!currentUser.id);
@@ -49,13 +56,13 @@ function App(props) {
                     <Switch>
                         <Fragment>
                             <Route path="/signIn">
-                                <Jumbotron currentUser={currentUser}/>
+                                <Jumbotron currentUser={currentUser} points={points}/>
                                 <Layout>
                                     <SignIn/>
                                 </Layout>
                             </Route>
                             <Route path="/signUp">
-                                <Jumbotron currentUser={currentUser}/>
+                                <Jumbotron currentUser={currentUser} points={points}/>
                                 <Layout>
                                     <SignUp/>
                                 </Layout>
@@ -71,7 +78,7 @@ function App(props) {
             {isConnected &&
             <Router>
                 <NavigationBar currentUser={currentUser} logOut={logOut}/>
-                <Jumbotron currentUser={currentUser}/>
+                <Jumbotron currentUser={currentUser} points={points}/>
                 <Layout>
                     <div>
                         <Switch>
@@ -80,17 +87,17 @@ function App(props) {
                                     <div>
                                         <div className="App">
                                             <div className="Card">
-                                                <Upload currentUser={currentUser}/>
+                                                <Upload currentUser={currentUser} changePoint={changePoint}/>
                                             </div>
                                         </div>
                                     </div>
                                 </Route>
                                 <Route path="/userMenu"><UserMenu/></Route>
                                 <Route path="/insert-receipt">
-                                    <InsertReceipt withPrice={true} currentUser={currentUser}/>
+                                    <InsertReceipt withPrice={true} currentUser={currentUser} changePoint={changePoint}/>
                                 </Route>
                                 <Route path="/create-shopping-cart">
-                                    <CreateShoppingCart updateResult={updateResult} currentUser={currentUser}/>
+                                    <CreateShoppingCart updateResult={updateResult} currentUser={currentUser} changePoint={changePoint}/>
                                 </Route>
                                 <Route path="/cartResult"><CartResult Result={result}/></Route>
                             </Fragment>

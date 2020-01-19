@@ -40,6 +40,8 @@ const SignIn = ({ classes, setCurrentUser }) => {
                 alert("wrong username or password dudes!");
             } else {
                 localStorage.setItem('currentUser', JSON.stringify(response.data[0]));
+                localStorage.setItem('points', JSON.stringify(2));
+
                 window.location = '/userMenu';
             }
         });

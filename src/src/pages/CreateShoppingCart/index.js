@@ -239,7 +239,9 @@ class CreateShoppingCart extends React.Component {
         //check for points - if not enough change state, if enough - submit
         // this.setState( {isOpen: true});
         console.log(this.state.products)
+
         getBestBasket(this.state.StoreName,this.state.products,this.state.maxSplitAmount,this.props.currentUser.id,this.props.updateResult);
+        localStorage.setItem('points', JSON.stringify(1));
         window.location.pathname = '/cartResult';
     };
     handleClose = () => {

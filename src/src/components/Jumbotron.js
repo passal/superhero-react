@@ -38,7 +38,7 @@ export const Jumbotron = (props) => (
             {!!props.currentUser.id &&
             <Container>
                 <h1>Welcome {props.currentUser.username}</h1>
-                <h5>Your credits balance: {props.currentUser.credits}</h5>
+                <h5>Your credits balance: {JSON.parse(localStorage.getItem('points'))?? 2}</h5>
             </Container>
             }
         </Jumbo>
