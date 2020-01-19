@@ -1,6 +1,6 @@
 import React from 'react';
 import Products from "../insertReceipt/components/Products";
-import {withStyles} from "@material-ui/core/styles";
+import {createMuiTheme, withStyles} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Form from "react-bootstrap/Form";
@@ -8,6 +8,16 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
+import ThemeProvider from "@material-ui/styles/ThemeProvider";
+
+const theme = createMuiTheme({
+    palette: {
+        primary: {500: "#313746"},
+    },
+    status: {
+        danger: 'red',
+    },
+});
 
 class CreateShoppingCart extends React.Component {
     constructor(props) {
@@ -45,6 +55,7 @@ class CreateShoppingCart extends React.Component {
         // console.log("Tiv Taam" , this.state.tivTaam)
         // console.log("Rami levi" , this.state.ramiLevi)
         return (
+            <ThemeProvider theme={theme}>
             <Container component="main" >
                 <CssBaseline/>
                 <div className={classes.paper}>
@@ -104,6 +115,7 @@ class CreateShoppingCart extends React.Component {
                 </div>
                 </div>
             </Container>
+            </ThemeProvider>
         );
     }
 }
@@ -122,8 +134,7 @@ export default withStyles(theme => ({
         flexGrow:2,
         height:'550px',
         padding:'10px',
-        overflow:'scroll',
-        border: '1px solid #20639B'
+        overflow:'auto',
     },
     img:{
         width: 'auto',
@@ -145,11 +156,11 @@ export default withStyles(theme => ({
         paddingTop: '100px',
     },
     button:{
-        backgroundColor: '#20639B'
+        backgroundColor: '#313746'
     },
     font:{
         fontWeight: 'bold',
-        color:'#20639B',
+        color:'#313746',
         lineHeight: 'normal',
         paddingTop: '0px'
     },
@@ -161,7 +172,7 @@ export default withStyles(theme => ({
         flexDirection:'column'
     },
     headline:{
-        color:'red',
+        color:'#313746',
         paddingBottom:'30px'
     },
     input:{

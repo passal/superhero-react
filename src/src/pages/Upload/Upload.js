@@ -4,6 +4,9 @@ import "./Upload.css";
 import Progress from "../progress/Progress";
 import {SplitButton, Row, Form, Col} from 'react-bootstrap';
 import classes from "../SignIn";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
 
 class Upload extends Component {
     constructor(props) {
@@ -12,7 +15,15 @@ class Upload extends Component {
             files: [],
             uploading: false,
             uploadProgress: {},
-            successfullUploaded: false
+            successfullUploaded: false,
+            stores: ["SuperYoda",
+                "Shufersal Ramat Aviv",
+                "SuperYoda Tel-Aviv",
+                "SuperYoda East Tel-Aviv",
+                "Shufersal Ramat-Gan",
+                "SuperYoda South",
+                "Rami Levy TLV Center"],
+            store: ""
         };
 
         this.onFilesAdded = this.onFilesAdded.bind(this);
@@ -69,9 +80,13 @@ class Upload extends Component {
     }
 
     render() {
+        //const [store, setStore] = React.useState('');
+        const handleChange = event => {
+            this.state.store = event.target.value;
+        };
         return (
             <div className="Botton" >
-                <div className="TopSpace">
+                <div>
                     <Form >
                         <Form.Group as={Row} controlId="formHorizontalEmail">
                             <Form.Label column sm={2}>
@@ -83,19 +98,17 @@ class Upload extends Component {
                         </Form.Group>
                         <Form.Group as={Row} controlId="formGridState">
                             <Form.Label as="legend" column sm={2} >Store</Form.Label>
-                            <Col sm={10} className={classes.checkBox}>
-                                {["SuperYoda",
-                                  "Shufersal Ramat Aviv",
-                                  "SuperYoda Tel-Aviv",
-                                  "SuperYoda East Tel-Aviv",
-                                  "Shufersal Ramat-Gan",
-                                  "SuperYoda South",
-                                  "Rami Levy TLV Center"].map((supermarket) => (
-                                    <Row>
-                                        <Form.Check type="checkbox" label={supermarket} />
-                                    </Row>
-                                ))}
-                            </Col>
+                            <Select
+                                labelId="select-store-label"
+                                id="select-store"
+                                value={this.state.store}
+                                onChange={handleChange}
+                                autoWidth
+                            >
+                                {this.state.stores.map(function(area, index){
+                                    return <MenuItem value={ index }>{area}</MenuItem>;
+                                })}
+                            </Select>
                         </Form.Group>
 
 

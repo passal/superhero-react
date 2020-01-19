@@ -25,14 +25,22 @@ const Styles = styled.div`
   }
 `;
 
-export const Jumbotron = () => (
+export const Jumbotron = (props) => (
     <Styles>
         <Jumbo fluid className="jumbo">
             <div className="overlay"></div>
-            <Container>
-                <h1>Welcome</h1>
-                <p>Build the Cheapest shopping cart</p>
-            </Container>
+            {props.currentUser==null &&
+                <Container>
+                    <h1>Welcome</h1>
+                    <h5>Build the Cheapest shopping cart</h5>
+                </Container>
+            }
+            {props.currentUser!=null &&
+                <Container>
+                    <h1>Welcome {props.currentUser.username}</h1>
+                    <h5>Your credits balance: {props.currentUser.credits}</h5>
+                </Container>
+            }
         </Jumbo>
     </Styles>
 )

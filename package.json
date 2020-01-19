@@ -16,6 +16,7 @@
     "express": "^4.17.1",
     "jquery": "^3.4.1",
     "mysql": "^2.17.1",
-    "react-router-dom": "^5.1.2"
+    "react-router-dom": "^5.1.2",
+    "readable-stream": "^3.5.0"
   }
 }

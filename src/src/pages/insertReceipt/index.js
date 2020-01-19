@@ -2,7 +2,7 @@ import React from 'react';
 import ReceiptForm from "./components/ReceiptForm";
 import Products from "./components/Products";
 import {withStyles} from "@material-ui/core/styles";
-import  logo from "../../images/big-logo.png";
+import receipt from "../../images/receipt.gif";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 
@@ -30,17 +30,17 @@ class InsertReceipt extends React.Component {
             <Container component="main" >
                 <CssBaseline/>
                 <div className={classes.paper}>
-                    <h1 className={classes.headline}>Insert Receipt</h1>
+                    <h1 className={classes.headline}>Fill Receipt Content</h1>
                     <div className={classes.body}>
                         <div className={classes.img}>
-                            <img src={logo} alt="logo" className={classes.avatar}/>
+                            <img src={receipt} alt="logo" className={classes.avatar}/>
                         </div>
                         <div className={classes.form}>
                             <Products withPrice ={this.props.withPrice}/>
                         </div>
                     </div>
                 </div>
-           </Container>
+            </Container>
         );
     }
 }
@@ -58,8 +58,7 @@ export default withStyles(theme => ({
         flexGrow:2,
         height:'550px',
         padding:'10px',
-        overflow:'scroll',
-        border: '1px solid #20639B'
+        overflow:'auto',
     },
     img:{
         width: 'auto',
@@ -67,19 +66,19 @@ export default withStyles(theme => ({
         height:'550px',
         padding:'10px',
         marginRight:'10px',
-        border: '1px solid #20639B'
+        border: '1px solid #313746',
+        overflow: 'auto'
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
     avatar: {
-        height: '260px'
     },
     body:{
         display:'flex',
     },
     headline:{
-        color:'red',
+        color: '#313746',
         paddingBottom:'30px'
     },
 
