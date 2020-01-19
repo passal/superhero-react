@@ -95,9 +95,28 @@ export default function SignUp() {
         setArea(event.target.value);
     };
 
+    const urlBase = "http://localhost:3000";
+
+    const signIn = () => {
+        let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;
+        console.log("full path",fullUrl)
+        axios.post(fullUrl, {username, password}).then((response) =>{
+            console.log(response.data);
+
+            if((response.data).length===0){
+                //wrong username\pass
+                alert("wrong username or password dudes!");
+            } else {
+                localStorage.setItem('currentUser', JSON.stringify(response.data[0]));
+                window.location = '/userMenu';
+            }
+        });
+    };
+
     const handleSubmit = () => {
         registerUser(username, password, email);
-        history.push('/upload');
+        signIn();
+        history.push('/userMenu');
 
     };
 

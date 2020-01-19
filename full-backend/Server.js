@@ -8,8 +8,8 @@ const OCR = require("./products");
 const getBasket = require("./getBasket");
 
 const server = express();
-const port = 3000;
-const FOLDER_PATH = 'C:\\Users\\Doron\\Projects\\superhero-react\\';
+const port = process.env.PORT || 5000;
+const FOLDER_PATH = 'C:\\Users\\itaizur\\WebstormProjects\\superhero-react\\';
 
 server.use( bodyParser.json() );       // to support JSON-encoded bodies
 server.use(cors());

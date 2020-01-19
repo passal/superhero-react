@@ -13,6 +13,7 @@
     "@material-ui/lab": "^4.0.0-alpha.39",
     "axios": "^0.19.1",
     "concurrently": "^5.0.2",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "jquery": "^3.4.1",
     "mysql": "^2.17.1",
