@@ -86,6 +86,7 @@ export default function CartResult(props) {
     }
     var buttonOpen = "See full carts";
     var buttonClose = "Close";
+    // michal here you can see that you got the data! it's working- just take it and use it where you planned to.
     console.log("from cart result",props.Result);
     return (
         <ThemeProvider theme={theme}>
