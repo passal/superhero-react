@@ -68,4 +68,4 @@ export const LandingPage = () => (
         </Jumbo>
         <Copyright/>
     </Styles>
-)
+);

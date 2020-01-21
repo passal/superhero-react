@@ -6,7 +6,7 @@ import {withStyles} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import axios from 'axios';
-const urlBase = "http://localhost:3000";
+const urlBase = "http://localhost:5000";
 
 const earnCreds = (id) => {
     axios.post(urlBase + "/earnCredits", {
@@ -78,11 +78,11 @@ class InsertReceipt extends React.Component {
         return (e) => {
             this.setState({
                 products: this.serializeProducts(products),
-            })
+            });
             const receipt = {
                 "shop":"SuperYuda",
                 "products": this.serializeProducts(products),
-            }
+            };
             fillReceipt(receipt,this.props.currentUser.id);
 
         }

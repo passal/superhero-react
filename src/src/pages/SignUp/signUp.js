@@ -20,7 +20,7 @@ import {useHistory} from "react-router-dom";
 
 const registerUser = (username, password, email) => {
 
-    axios.post("http://localhost:3000/register", {
+    axios.post("http://localhost:5000/register", {
         username: username,
         password: password,
         email: email
@@ -95,11 +95,11 @@ export default function SignUp() {
         setArea(event.target.value);
     };
 
-    const urlBase = "http://localhost:3000";
+    const urlBase = "http://localhost:5000";
 
     const signIn = () => {
         let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;
-        console.log("full path",fullUrl)
+        console.log("full path",fullUrl);
         axios.post(fullUrl, {username, password}).then((response) =>{
             console.log(response.data);
 

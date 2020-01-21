@@ -1,7 +1,7 @@
 import React, {useState, Fragment} from 'react';
 import 'bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
-import {BrowserRouter as Router, Route, Switch, useHistory, withRouter} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch, useHistory, withRouter, HashRouter} from "react-router-dom";
 import './App.css';
 import SignIn from "./pages/SignIn";
 import UserMenu from "./pages/userMenu/userMenu";
@@ -30,20 +30,20 @@ function App(props) {
         localStorage.setItem('currentUser', JSON.stringify({}));
         setIsConnected(!isConnected);
         console.log("inside logOut")
-    }
+    };
     const updateResult = (result) => {
         setResult(result);
         return;
     };
-    console.log("isConnected ", isConnected)
-    console.log("currentUser",currentUser)
+    console.log("isConnected ", isConnected);
+    console.log("currentUser",currentUser);
     console.log("resultsss",result);
 
     return (
         //
         <React.Fragment>
             {!isConnected &&
-            <Router>
+            <HashRouter>
                 <NavigationBar currentUser={currentUser} logOut={logOut}/>
                 <div>
                     <Switch>
@@ -66,10 +66,10 @@ function App(props) {
                         </Fragment>
                     </Switch>
                 </div>
-            </Router>
+            </HashRouter>
             }
             {isConnected &&
-            <Router>
+            <HashRouter>
                 <NavigationBar currentUser={currentUser} logOut={logOut}/>
                 <Jumbotron currentUser={currentUser}/>
                 <Layout>
@@ -97,7 +97,7 @@ function App(props) {
                         </Switch>
                     </div>
                 </Layout>
-            </Router>
+            </HashRouter>
             }
         </React.Fragment>
     );

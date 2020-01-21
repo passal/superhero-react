@@ -1,5 +1,5 @@
 const axios = require("axios");
-const urlBase = "http://localhost:3000";
+const urlBase = "http://localhost:5000";
 
 let shopToId = {
     "SuperYoda": 1,
@@ -341,7 +341,6 @@ const getAllPrices = (shops, products) => {
         //console.log(console.log(JSON.stringify(response.data, null, 4)));
     });
 };
-
 
 
 
