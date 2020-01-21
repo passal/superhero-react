@@ -22,7 +22,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import axios from 'axios';
-const urlBase = "http://localhost:3000";
+const urlBase = "http://localhost:5000";
 
 const styles = theme => ({
     root: {
@@ -180,7 +180,7 @@ const getBestBasket = (shops, products, maxSplits, uid,updateResult) => {
         console.log(result);
         console.log(response.data);
         localStorage.setItem('cartResult', JSON.stringify(result));
-        window.location = '/cartResult';
+        window.location = '#/cartResult';
     });
 };
 
@@ -235,7 +235,8 @@ class CreateShoppingCart extends React.Component {
         }), {})
     }
 
-    findCart = () => {
+    findCart = (e) => {
+        e.preventDefault();
         //check for points - if not enough change state, if enough - submit
         // this.setState( {isOpen: true});
         console.log(this.state.products)

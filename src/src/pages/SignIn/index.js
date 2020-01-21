@@ -27,11 +27,14 @@ const SignIn = ({ classes, setCurrentUser }) => {
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
 
-    const urlBase = "http://localhost:3000";
+    const urlBase = "http://localhost:5000";
 
-    const signIn = () => {
-        let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;
-        console.log("full path",fullUrl)
+    const signIn = (event) => {
+        event.preventDefault();
+        var self = this;
+        let fullUrl = urlBase +  "/signin"
+        // let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;
+        console.log("full path",fullUrl);
         axios.post(fullUrl, {username, password}).then((response) =>{
             console.log(response.data);
 
@@ -40,7 +43,7 @@ const SignIn = ({ classes, setCurrentUser }) => {
                 alert("wrong username or password dudes!");
             } else {
                 localStorage.setItem('currentUser', JSON.stringify(response.data[0]));
-                window.location = '/userMenu';
+                window.location = '#/userMenu';
             }
         });
     };

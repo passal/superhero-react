@@ -8,11 +8,14 @@ const OCR = require("./products");
 const getBasket = require("./getBasket");
 const server = express();
 const port = 5000;
-const FOLDER_PATH = 'C:\\Users\\Doron\\Projects\\superhero-react';
+const FOLDER_PATH = 'C:\\Users';
 let basketResult;
 
-server.use( bodyParser.json() );       // to support JSON-encoded bodies
-
+server.use(express.static('public'));
+server.use( bodyParser.json() );
+server.use(bodyParser.urlencoded({extended:false}))
+server.get("/", (req, res) => {  res.sendFile(__dirname + "/public/index.html"); });
+/* code for image handling, not tested
 //for image upload and save
 const storage = multer.diskStorage({
     destination: FOLDER_PATH,
@@ -25,7 +28,7 @@ const upload = multer({
     storage: storage,
     limits:{fileSize: 1000000},
 }).single("myImage");
-
+*/
 
 server.listen(port, () => console.log("Server listening to port 3000"));
 /*
@@ -46,9 +49,9 @@ server.post("postOCRProducts", (req, res) =>{
 
 
 //sign in (query for name\password, return result)
-server.get("/signin", (req,res) => {
+server.post("/signIn", (req,res) => {
     let sql = "SELECT * FROM User WHERE User.username = ? AND User.password = ?;";
-    let get = [req.query.username, req.query.password];
+    let get = [req.body.username, req.body.password];
     sqlConnection.query(sql, get,  (err, rows) => {
         if(err){
             console.log(err);
@@ -59,7 +62,7 @@ server.get("/signin", (req,res) => {
 
 
 //register new user, returns status 400 if already exists or 200 if registering correctly
-server.post("/register", (req, res) => {
+server.post("/signUp", (req, res) => {
     let checkIfExists = "SELECT * FROM User WHERE User.email = ?;";
     let post = req.body.email;
     sqlConnection.query(checkIfExists, post, (err, rows) => {
