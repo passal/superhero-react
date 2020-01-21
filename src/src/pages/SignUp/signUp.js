@@ -112,8 +112,7 @@ const SignUp = ({ setCurrentUser }) => {
             await registerUser(username, password, email, area);
 
             const user = await signIn(username, password);
-
-            localStorage.setItem('currentUser', JSON.stringify(user));
+            
             setCurrentUser(user);
             history.push('/userMenu');
         } catch (e) {

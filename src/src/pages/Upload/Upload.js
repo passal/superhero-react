@@ -1,152 +1,123 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
+import axios from 'axios';
+import { Select } from '@material-ui/core';
+import { Row, Form, Col } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+import MenuItem from '@material-ui/core/MenuItem';
 import Dropzone from "./dropzone/Dropzone";
-import "./Upload.css";
-import Progress from "./progress/Progress";
-import {SplitButton, Row, Form, Col} from 'react-bootstrap';
 import classes from "../SignIn";
+import "./Upload.css";
+import { SHOP_TO_ID } from '../../constants';
 
-class Upload extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            files: [],
-            uploading: false,
-            uploadProgress: {},
-            successfullUploaded: false,
-            sid: "",
-            sum: 0,
-        };
-
-        this.onFilesAdded = this.onFilesAdded.bind(this);
-        this.renderActions = this.renderActions.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.clickHandler = this.clickHandler.bind(this);
-    }
-
-    onFilesAdded(files) {
-        this.setState(prevState => ({
-            files: prevState.files.concat(files)
-        }));
-    }
-
-    clickHandler(e){
-        console.log("hey my hame is shir");
-        console.log(this.state)
-    }
-
-    handleChange(arg) {
-        return (e) => {
-            console.log("hello here i changed");
-            this.setState({
-                [arg]: e.target.value,
-            })
+const uploadReceipt = (sid, sum, uid) => {
+    return axios.post("http://localhost:5000/uploadReceipt", {
+        sid,
+        sum,
+        id: uid
+    } , {
+        headers:{
+            "Accept": "application/json",
+            "Content-Type": "application/json"
         }
-    }
+    }).then((response) => {
+        return { success: true }
+    }).catch((error) => {
+        console.log(error);
+        throw error
+    })
+};
 
-    renderProgress(file) {
-        const uploadProgress = this.state.uploadProgress[file.name];
-        if (this.state.uploading || this.state.successfullUploaded) {
-            return (
-                <div className="ProgressWrapper">
-                    <Progress progress={uploadProgress ? uploadProgress.percentage : 0} />
-                    <img
-                        className="CheckIcon"
-                        alt="done"
-                        src="baseline-check_circle_outline-24px.svg"
-                        style={{
-                            opacity:
-                                uploadProgress && uploadProgress.state === "done" ? 0.5 : 0
-                        }}
-                    />
-                </div>
-            );
+
+
+const Upload = ({currentUser, setCurrentUser}) => {
+    const history = useHistory();
+
+    const [files, setFiles] = useState([]);
+    const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState({});
+    const [successfullUploaded, setSuccessfullUploaded] = useState(false);
+    const [sid, setSid] = useState(1);
+    const [sum, setSum] = useState(0);
+
+    const onFilesAdded = (newFiles) => {
+        setFiles([...files, ...newFiles]);
+    };
+
+    const handleSubmit = async() => {
+        try {
+            await uploadReceipt(sid, sum, currentUser.id);
+
+            setCurrentUser({
+                ...currentUser,
+                credits: currentUser.credits + 1
+            });
+            history.push('/userMenu');
+        } catch (e) {
+            alert('Something went wrong');
+            console.log(e)
         }
-    }
+    };
 
-    renderActions() {
-        if (this.state.successfullUploaded) {
-            return (
-                <button
-                    onClick={this.clickHandler
-                    }
-                >
-                    Clear
-                </button>
-            );
-        } else {
-            return (
-                <button
-                    onClick={this.clickHandler}
-                >
-                    Upload
-                </button>
-            );
-        }
-    }
+    const handleClear = () => {
 
-    render() {
+    };
 
-        return (
-            <div className="Botton" >
-                <div className="TopSpace">
-                    <Form >
-                        <Form.Group as={Row} controlId="formHorizontalEmail">
-                            <Form.Label column sm={2}>
-                                Total Price:
-                            </Form.Label>
-                            <Col sm={10}>
-                                <Form.Control onChange={this.handleChange("sum")} type="Price" placeholder="Total Price" />
-                            </Col>
-                        </Form.Group>
-                        <Form.Group as={Row} controlId="formGridState">
-                            <Form.Label as="legend" column sm={2} >Store</Form.Label>
-                            <Col sm={10} className={classes.checkBox}>
-                                {["SuperYoda",
-                                  "Shufersal Ramat Aviv",
-                                  "SuperYoda Tel-Aviv",
-                                  "SuperYoda East Tel-Aviv",
-                                  "Shufersal Ramat-Gan",
-                                  "SuperYoda South",
-                                  "Rami Levy TLV Center"].map((supermarket) => (
-                                    <Row>
-                                        <Form.Check type="checkbox" label={supermarket} />
-                                    </Row>
+    return (
+        <div className="Botton" >
+            <div className="TopSpace">
+                <Form>
+                    <Form.Group as={Row} controlId="formHorizontalEmail">
+                        <Form.Label column sm={2}>
+                            Total Price:
+                        </Form.Label>
+                        <Col sm={10}>
+                            <Form.Control value={sum} onChange={(e) => setSum(e.target.value)} type="Price" placeholder="Total Price" />
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} controlId="formGridState">
+                        <Form.Label as="legend" column sm={2} >Store</Form.Label>
+                        <Col sm={10} className={classes.checkBox}>
+                            <Select value={sid} onChange={(e) => setSid(e.target.value)}>
+                                {Object.keys(SHOP_TO_ID).map((supermarket) => (
+                                    <MenuItem value={SHOP_TO_ID[supermarket]}>{supermarket}</MenuItem>
                                 ))}
-                            </Col>
-                        </Form.Group>
+                            </Select>
 
-
-                        <Form.Group as={Row}>
-
-                        </Form.Group>
-                    </Form>
-                </div>
-                <div className="Upload">
-                    <span className="Title">Upload Files</span>
-                    <div className="Content">
-                        <div>
-                            <Dropzone
-                                onFilesAdded={this.onFilesAdded}
-                                disabled={this.state.uploading || this.state.successfullUploaded}
-                            />
-                        </div>
-                        <div className="Files">
-                            {this.state.files.map(file => {
-                                return (
-                                    <div key={file.name} className="Row">
-                                        <span className="Filename">{file.name}</span>
-                                        {/*{this.renderProgress(file)}*/}
-                                    </div>
-                                );
-                            })}
-                        </div>
+                        </Col>
+                    </Form.Group>
+                </Form>
+            </div>
+            <div className="Upload">
+                <span className="Title">Upload Files</span>
+                <div className="Content">
+                    <div>
+                        <Dropzone
+                            onFilesAdded={onFilesAdded}
+                            disabled={uploading || successfullUploaded}
+                        />
                     </div>
-                    <div className="Actions">{this.renderActions()}</div>
+                    <div className="Files">
+                        {files.map(file => {
+                            return (
+                                <div key={file.name} className="Row">
+                                    <span className="Filename">{file.name}</span>
+                                    {/*{this.renderProgress(file)}*/}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+                <div className="Actions">
+                    { successfullUploaded ?
+                        <button onClick={handleClear}>Clear</button>
+                        :
+                        <button onClick={handleSubmit}>Upload</button>
+                    }
                 </div>
             </div>
+        </div>
 
-        );
-    }
-}
+    );
+};
 
 export default Upload;

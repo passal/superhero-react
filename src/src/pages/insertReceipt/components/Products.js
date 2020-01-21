@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { styled } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -22,6 +21,7 @@ const MyButton = styled(Button)({
     borderColor: "#20639B",
     marginRight: '10px'
 });
+
 const styles = theme => ({
     root: {
         margin: 0,
@@ -91,16 +91,15 @@ class Products extends React.Component {
         }
     }
 
-
     handleRowDel(product) {
-        var index = this.state.products.indexOf(product);
+        const index = this.state.products.indexOf(product);
         this.state.products.splice(index, 1);
         this.setState(this.state.products);
     };
 
     handleAddEvent(evt) {
-        var id = (+ new Date() + Math.floor(Math.random() * 999999)).toString(36);
-        var product = this.props.withPrice == true?
+        const id = (+ new Date() + Math.floor(Math.random() * 999999)).toString(36);
+        const product = this.props.withPrice === true?
             {
                 id: id,
                 name: "",
@@ -116,18 +115,17 @@ class Products extends React.Component {
         ;
         this.state.products.push(product);
         this.setState(this.state.products);
-        console.log("products",this.state.products)
     }
 
     handleProductTable(evt) {
-        var item = {
+        const item = {
             id: evt.target.id,
             name: evt.target.name,
             value: evt.target.value
         };
 
-        var products = this.state.products.slice();
-        var newProducts = products.map(function(product) {
+        const products = this.state.products.slice();
+        const newProducts = products.map(function(product) {
 
             for (var key in product) {
                 if (key == item.name && product.id == item.id) {
@@ -138,16 +136,17 @@ class Products extends React.Component {
         });
         this.setState({products:newProducts});
     };
+
     handleProductTableName(evt,value) {
         const id = evt.target.id.split('-')[0]
 
-        var item = {
+        const item = {
             id: id,
             value: value,
         };
 
-        var products = this.state.products.slice();
-        var newProducts = products.map(function(product) {
+        const products = this.state.products.slice();
+        const newProducts = products.map(function(product) {
             if ( product.id == item.id) {
                 product['name'] = item.value;
             }
@@ -159,7 +158,14 @@ class Products extends React.Component {
     render() {
         return (
             <div>
-                <ProductTable  withPrice ={this.props.withPrice} onProductTableUpdate={this.handleProductTable.bind(this)} onProductTableUpdateName={this.handleProductTableName.bind(this)} onRowAdd={this.handleAddEvent.bind(this)} onRowDel={this.handleRowDel.bind(this)} products={this.state.products} handleSubmit={this.props.handleSubmit} filterText={this.state.filterText}/>
+                <ProductTable withPrice={this.props.withPrice}
+                              onProductTableUpdate={this.handleProductTable.bind(this)}
+                              onProductTableUpdateName={this.handleProductTableName.bind(this)}
+                              onRowAdd={this.handleAddEvent.bind(this)}
+                              onRowDel={this.handleRowDel.bind(this)}
+                              products={this.state.products}
+                              handleSubmit={this.props.handleSubmit}
+                              filterText={this.state.filterText}/>
             </div>
         );
     }
@@ -172,7 +178,6 @@ class ProductTable extends React.Component {
 
     handleClickOpen = () => {
         if(this.props.withPrice == true){
-            console.log('submit products',this.props.products)
             // if(checkTotalPrice()){
             //call server with product table (this.props.product)
             //     this.setState({
@@ -189,9 +194,6 @@ class ProductTable extends React.Component {
 
             // }
             this.setState( {isOpen: true});
-        }
-        else{
-            console.log('submit products',this.props.products)
         }
     };
     handleClose = () => {
@@ -239,7 +241,7 @@ class ProductTable extends React.Component {
                 </div>
                 <div>
                     <MyButton type="button" onClick={this.props.onRowAdd} >Add Product </MyButton>
-                    <MyButton type="button"  onClick={this.props.handleSubmit(this.props.products)} >Submit</MyButton>
+                    <MyButton type="button" onClick={() => this.props.handleSubmit(this.props.products)} >Submit</MyButton>
                     <Dialog onClose={this.handleClose} aria-labelledby="customized-dialog-title" open={this.state.isOpen}>
                         <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
                             {this.state.popTitle}

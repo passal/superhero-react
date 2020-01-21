@@ -16,9 +16,8 @@ import {NavigationBar} from './components/NavigationBar';
 import {Jumbotron} from './components/Jumbotron';
 
 const App = () => {
-
     const [result, setResult] = useState({});
-    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser')));
+    const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser')) || {});
     const isConnected = !!currentUser.id;
 
     const logOut = () => {
@@ -28,6 +27,11 @@ const App = () => {
 
     const updateResult = (result) => {
         setResult(result);
+    };
+
+    const updateUser = (newUser) => {
+        setCurrentUser(newUser);
+        localStorage.setItem('currentUser', JSON.stringify(newUser));
     };
 
     return (
@@ -41,13 +45,13 @@ const App = () => {
                             <Route path="/signIn">
                                 <Jumbotron currentUser={currentUser}/>
                                 <Layout>
-                                    <SignIn setCurrentUser={setCurrentUser}/>
+                                    <SignIn setCurrentUser={updateUser}/>
                                 </Layout>
                             </Route>
                             <Route path="/signUp">
                                 <Jumbotron currentUser={currentUser}/>
                                 <Layout>
-                                    <SignUp setCurrentUser={setCurrentUser}/>
+                                    <SignUp setCurrentUser={updateUser}/>
                                 </Layout>
                             </Route>
                             <Route exact path="/">
@@ -63,30 +67,26 @@ const App = () => {
                 <NavigationBar currentUser={currentUser} logOut={logOut}/>
                 <Jumbotron currentUser={currentUser}/>
                 <Layout>
-                    <div>
-                        <Switch>
-                            <Fragment>
-                                <Route path="/upload">
-                                    <div>
-                                        <div className="App">
-                                            <div className="Card">
-                                                <Upload currentUser={currentUser}/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Route>
-                                <Route path="/userMenu"><UserMenu/></Route>
-                                <Route path="/insert-receipt">
-                                    <InsertReceipt withPrice={true} currentUser={currentUser}/>
-                                </Route>
-                                <Route path="/create-shopping-cart">
-                                    <CreateShoppingCart updateResult={updateResult} currentUser={currentUser}/>
-                                </Route>
-                                <Route path="/cartResult"><CartResult Result={result}/></Route>
-                                <Redirect to="/userMenu" />
-                            </Fragment>
-                        </Switch>
-                    </div>
+                    <Switch>
+                        <Fragment>
+                            <Route path="/upload">
+                                <Upload currentUser={currentUser} setCurrentUser={updateUser}/>
+                            </Route>
+                            <Route path="/userMenu">
+                                <UserMenu/>
+                            </Route>
+                            <Route path="/insert-receipt">
+                                <InsertReceipt withPrice={true} currentUser={currentUser} setCurrentUser={updateUser}/>
+                            </Route>
+                            <Route path="/create-shopping-cart">
+                                <CreateShoppingCart updateResult={updateResult} currentUser={currentUser}/>
+                            </Route>
+                            <Route path="/cartResult">
+                                <CartResult Result={result}/>
+                            </Route>
+                            <Redirect to="/userMenu" />
+                        </Fragment>
+                    </Switch>
                 </Layout>
             </HashRouter>
             }

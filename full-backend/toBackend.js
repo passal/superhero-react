@@ -1,3 +1,5 @@
+import { SHOP_TO_ID } from '../src/src/constants';
+
 const axios = require("axios");
 const urlBase = "http://localhost:5000";
 
@@ -124,12 +126,13 @@ const uploadImage = (file) => {
 };
 
 //upload receipt information, like the shop and the price (not the file itself)
-const uploadReceipt = (shop,sum,uid) => {
-    let shopId = shopToId[shop];
-    axios.post(urlBase + "/uploadReceipt", {
-        sid:shopId,
-        sum:sum,
-        id:uid
+const uploadReceipt = (shop, sum, uid) => {
+    const shopId = shopToId[shop];
+
+    axios.post("https://localhost:5000/uploadReceipt", {
+        sid: shopId,
+        sum: sum,
+        id: uid
     } , {
         headers:{
             "Accept": "application/json",
@@ -147,13 +150,11 @@ const uploadReceipt = (shop,sum,uid) => {
 
 //get random unfilled receipt data (not file!)
 const getUnfilledRec = () => {
-    let fullUrl = urlBase +  "/OCR";
-    axios.get(fullUrl).then((response) =>{
-        response.data[0]["shop"] = Object.keys(shopToId).find(key => shopToId[key] == response.data[0]["sid"]);
+    axios.get("http://localhost:5000/OCR").then((response) => {
+        response.data[0]["shop"] = Object.keys(shopToId).find(key => shopToId[key] === response.data[0]["sid"]);
         delete response.data[0]["sid"];
-        console.log(response.data[0]);
+
         if((response.data).length===0){
-            //error
             console.log("All out receipts are filled");
         }
     });
@@ -161,9 +162,13 @@ const getUnfilledRec = () => {
 
 //fill a receipt (OCR) - send prices and shit
 const fillReceipt = (receipt, uid) => {
-    let receiptIds = {};
+    const receiptIds = {
+        sid: SHOP_TO_ID[receipt.shop],
+        products: {}
+    };
     receiptIds["sid"] = shopToId[receipt["shop"]];
     receiptIds["products"] = {};
+
     mapProductToId(receipt["products"], receiptIds["products"]);
     console.log(receiptIds);
     axios.post(urlBase + "/OCR", receiptIds, {

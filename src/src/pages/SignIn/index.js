@@ -42,7 +42,6 @@ const SignIn = ({ classes, setCurrentUser }) => {
     const handleSubmit = async() => {
         const user = await signIn(username, password);
 
-        localStorage.setItem('currentUser', JSON.stringify(user));
         setCurrentUser(user);
         history.push('/userMenu');
     };

@@ -13,7 +13,8 @@ let basketResult;
 
 server.use(express.static('public'));
 server.use( bodyParser.json() );
-server.use(bodyParser.urlencoded({extended:false}))
+server.use(bodyParser.urlencoded({ extended: false }));
+server.use(cors());
 
 /* code for image handling, not tested
 //for image upload and save
@@ -45,9 +46,6 @@ server.post("postOCRProducts", (req, res) =>{
 
    */
 
-
-
-
 //sign in (query for name\password, return result)
 server.post("/signIn", (req,res) => {
     let sql = "SELECT * FROM User WHERE User.username = ? AND User.password = ?;";
@@ -59,7 +57,6 @@ server.post("/signIn", (req,res) => {
         res.status(200).send(rows);
     });
 });
-
 
 //register new user, returns status 400 if already exists or 200 if registering correctly
 server.post("/register", (req, res) => {
@@ -151,12 +148,14 @@ server.post("/uploadReceipt", (req, res) => {
     sqlConnection.query(sql, params, (err, rows) => {
         if (err) {
             console.log(err);
+            return res.status(400).send(err)
         }
         let maxId = 0;
         let sql1 = "SELECT MAX(id) FROM Receipt;";
         sqlConnection.query(sql1, (err1, ans) => {
             if(err1){
                 console.log(err1);
+                return res.status(400).send(err1)
             }
             maxId = (JSON.parse(JSON.stringify(ans)))[0]["MAX(id)"];
             let newPath = FOLDER_PATH+maxId+'.jpg';
@@ -165,6 +164,7 @@ server.post("/uploadReceipt", (req, res) => {
             sqlConnection.query(sql2, params2, (err2, rows2) => {
                 if (err2) {
                     console.log(err2);
+                    return res.status(400).send(err2)
                 }
                 let sql3 = "UPDATE User SET credits = credits+1 WHERE id = ?;";
                 let params3 = [req.body.id];
