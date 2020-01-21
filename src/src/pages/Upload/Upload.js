@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Dropzone from "../dropzone/Dropzone";
+import Dropzone from "./dropzone/Dropzone";
 import "./Upload.css";
-import Progress from "../progress/Progress";
+import Progress from "./progress/Progress";
 import {SplitButton, Row, Form, Col} from 'react-bootstrap';
 import classes from "../SignIn";
 

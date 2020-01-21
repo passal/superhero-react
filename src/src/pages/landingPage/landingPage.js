@@ -61,7 +61,7 @@ export const LandingPage = () => (
                         Upload receipts, and fill their information to earn credits</h3>
                 </Container>
                 <br/>
-                <Button variant="contained" href="/signUp" className="button">
+                <Button variant="contained" href="/#signUp" className="button">
                     Sign up for free
                 </Button>
             </Container>

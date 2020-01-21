@@ -47,7 +47,7 @@ const registerUser = (username, password, email, area) => {
       username: username,
       password: password,
       email: email,
-      did:did
+      did: area
   }, {
       headers:{
           "Accept": "application/json",

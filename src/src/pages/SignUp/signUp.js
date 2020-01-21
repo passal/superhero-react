@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,14 +16,14 @@ import Select from '@material-ui/core/Select';
 import Copyright from "../../components/Copyright";
 import { createMuiTheme } from '@material-ui/core/styles';
 import ThemeProvider from "@material-ui/styles/ThemeProvider";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-const registerUser = (username, password, email) => {
-
-    axios.post("http://localhost:5000/register", {
+const registerUser = (username, password, email, area) => {
+    return axios.post("http://localhost:5000/register", {
         username: username,
         password: password,
-        email: email
+        email: email,
+        did: area
     }, {
         headers:{
             "Accept": "application/json",
@@ -32,8 +32,19 @@ const registerUser = (username, password, email) => {
     }).then((response) => {
         console.log(response.status);
     }).catch((error) => {
-        console.log((error.response.data)); //this will return a message from the server on the error
+        console.log(error.response.data);
     })
+};
+
+const signIn = (username, password) => {
+    return axios.post("http://localhost:5000/signIn", { username, password })
+        .then((response) => {
+            if((response.data).length===0){
+                alert("Wrong username or password");
+            } else {
+                return response.data[0];
+            }
+        });
 };
 
 const theme = createMuiTheme({
@@ -77,17 +88,18 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function SignUp() {
-    const history = useHistory();
+const SignUp = ({ setCurrentUser }) => {
     const classes = useStyles();
-    const [area, setArea] = React.useState('');
-    const inputLabel = React.useRef(null);
-    const [labelWidth, setLabelWidth] = React.useState(0);
+    const history = useHistory();
+    const [area, setArea] = useState('');
+    const inputLabel = useRef(null);
+    const [labelWidth, setLabelWidth] = useState(0);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
-    React.useEffect(() => {
+
+    useEffect(() => {
         setLabelWidth(inputLabel.current.offsetWidth);
     }, []);
 
@@ -95,31 +107,18 @@ export default function SignUp() {
         setArea(event.target.value);
     };
 
-    const urlBase = "http://localhost:5000";
+    const handleSubmit = async() => {
+        try {
+            await registerUser(username, password, email, area);
 
-    const signIn = () => {
-        let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;
-        console.log("full path",fullUrl);
-        axios.post(fullUrl, {username, password}).then((response) =>{
-            console.log(response.data);
+            const user = await signIn(username, password);
 
-            if((response.data).length===0){
-                //wrong username\pass
-                alert("wrong username or password dudes!");
-            } else {
-                localStorage.setItem('currentUser', JSON.stringify(response.data[0]));
-                window.location = '/userMenu';
-            }
-        });
-    };
-
-    const handleSubmit = () => {
-        registerUser(username, password, email);
-        setTimeout(function(){
-            signIn();
-        },2000);
-        history.push('/userMenu');
-
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            setCurrentUser(user);
+            history.push('/userMenu');
+        } catch (e) {
+            alert("Something went wrong")
+        }
     };
 
     const areas = ["Tel Aviv Center", "Tel Aviv Old North", "Florentin", "Givataim"];
@@ -136,84 +135,80 @@ export default function SignUp() {
                         </Typography>
                     </Grid>
                 </Grid>
-                <form className={classes.form} noValidate>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="username"
-                                label="User Name"
-                                name="useName"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                autoComplete="username"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                name="email"
-                                autoComplete="email"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                autoComplete="current-password"
-                            />
-                        </Grid>
-                        <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel ref={inputLabel} id="select-area-label">
-                                Area *
-                            </InputLabel>
-                            <Select
-                                labelId="select-area-label"
-                                id="select-area"
-                                value={area}
-                                onChange={handleChange}
-                                labelWidth={labelWidth}
-                                autoWidth
-                            >
-                                {areas.map(function(area, index){
-                                    return <MenuItem value={ index }>{area}</MenuItem>;
-                                })}
-                            </Select>
-                        </FormControl>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                            id="username"
+                            label="User Name"
+                            name="useName"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            autoComplete="username"
+                        />
                     </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        onClick={handleSubmit}
-                    >
-                        Sign Up
-                    </Button>
-                    <Grid container justify="flex-end">
-                        <Grid item>
-                            <Link href="/signIn" variant="body2">
-                                Already have an account? Sign in
-                            </Link>
-                        </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Email Address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            name="email"
+                            autoComplete="email"
+                        />
                     </Grid>
-                </form>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="current-password"
+                        />
+                    </Grid>
+                    <FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel ref={inputLabel} id="select-area-label">
+                            Area *
+                        </InputLabel>
+                        <Select
+                            labelId="select-area-label"
+                            id="select-area"
+                            value={area}
+                            onChange={handleChange}
+                            labelWidth={labelWidth}
+                            autoWidth
+                        >
+                            {areas.map((area, index) => <MenuItem value={index + 1}>{area}</MenuItem>)}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={handleSubmit}
+                >
+                    Sign Up
+                </Button>
+                <Grid container justify="flex-end">
+                    <Grid item>
+                        <Link href="/signIn" variant="body2">
+                            Already have an account? Sign in
+                        </Link>
+                    </Grid>
+                </Grid>
             </div>
             <Box mt={5}>
                 <Copyright />
@@ -222,3 +217,5 @@ export default function SignUp() {
         </ThemeProvider>
     );
 }
+
+export default SignUp;
