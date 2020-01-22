@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
@@ -15,6 +15,7 @@ import ThemeProvider from "@material-ui/styles/ThemeProvider";
 import shoppingCartPhoto from "../../images/shoppingCart.jpg";
 import {useState } from 'react';
 import axios from 'axios';
+import { PRODUCT_TO_ID, SHOP_TO_ID } from '../../constants';
 
 const theme = createMuiTheme({
     palette: {
@@ -26,7 +27,6 @@ const theme = createMuiTheme({
         danger: 'red',
     },
 });
-
 
 const useStyles = makeStyles(theme => ({
     cardGrid: {
@@ -88,22 +88,70 @@ const getAllPrices = (shops, products) => {
 };
 */
 
-export default function CartResult(props) {
+const mapBasketResultToName = (idObj) => {
+    const result = [];
+    const stores = Object.keys(idObj["basket"]);
+    let storeName, prodId, prodName;
+
+    for (let i = 0; i < stores.length; i++) {
+        if (idObj["shopPrice"][stores[i]] === 0) {
+            continue;
+        }
+        let shopObj = {
+            "store": "",
+            "price": 0,
+            "products": []
+        };
+        storeName = Object.keys(SHOP_TO_ID).find(key => SHOP_TO_ID[key] === stores[i]);
+        shopObj["store"] = storeName;
+        shopObj["price"] = idObj["shopPrice"][stores[i]];
+        for (let j=0; j<(idObj["basket"][stores[i]]).length; j++) {
+            prodId = idObj["basket"][stores[i]][j];
+            prodName = Object.keys(PRODUCT_TO_ID).find(key => PRODUCT_TO_ID[key] === prodId);
+            shopObj["products"].push(prodName);
+        }
+        result.push(shopObj);
+    }
+
+    return result;
+};
+
+const getBasketResult = (uid) =>{
+    return axios.get("http://localhost:5000/getBasket")
+        .then((response) => {
+            return mapBasketResultToName(response.data);
+        });
+};
+
+export default function CartResult({ currentUser }) {
     const classes = useStyles();
     const [seeFullCart, changeCartState] = useState(false);
+    const [basketResult, setBasketResult] = useState([]);
+
     const handleClick = () => {
         changeCartState(!seeFullCart)
-    }
+    };
     let overallPrice = 0;
     let shops = [];
     let products = [];
-    for (var i=0; i<props.Result.length; i++){
-        overallPrice+=props.Result[i].price;
-        shops.push(props.Result[i].store);
-        for (var j=0; j<props.Result[i].products; j++){
-            products.push(props.Result[i].products[j]);
+    for (let i = 0; i < basketResult.length; i++) {
+        overallPrice += basketResult[i].price;
+
+        shops.push(basketResult[i].store);
+
+        for (let j = 0; j < basketResult[i].products; j++){
+            products.push( basketResult[i].products[j]);
         }
     }
+
+    useEffect(() => {
+        (async() => {
+            const basketResult = await getBasketResult(currentUser.id);
+
+            setBasketResult(basketResult);
+        })();
+    }, []);
+
 /*    const fullCart = getAllPrices(shops, products);
 
     const sumStoreGroceries = (store) => {
@@ -113,8 +161,8 @@ export default function CartResult(props) {
         }
         return fullCartPrice;
     }*/
-    var buttonOpen = "See full carts";
-    var buttonClose = "Close";
+    const buttonOpen = "See full carts";
+    const buttonClose = "Close";
 
     return (
         <ThemeProvider theme={theme}>
@@ -129,7 +177,7 @@ export default function CartResult(props) {
                     </Typography>
                 </Container>
                 <Container className={classes.cardGrid} maxWidth="md">
-                    {!seeFullCart && props.Result.map(function(store, index){
+                    {!seeFullCart && basketResult.map(function(store, index){
                         return(
                             <Grid item value={index} xs={10} sm={4} md={3}>
                                 <Card className={classes.card}>

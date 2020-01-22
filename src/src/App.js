@@ -16,17 +16,12 @@ import {NavigationBar} from './components/NavigationBar';
 import {Jumbotron} from './components/Jumbotron';
 
 const App = () => {
-    const [result, setResult] = useState({});
     const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser')) || {});
     const isConnected = !!currentUser.id;
 
     const logOut = () => {
         localStorage.setItem('currentUser', JSON.stringify({}));
         setCurrentUser({});
-    };
-
-    const updateResult = (result) => {
-        setResult(result);
     };
 
     const updateUser = (newUser) => {
@@ -73,16 +68,16 @@ const App = () => {
                                 <Upload currentUser={currentUser} setCurrentUser={updateUser}/>
                             </Route>
                             <Route path="/userMenu">
-                                <UserMenu/>
+                                <UserMenu currentUser={currentUser}/>
                             </Route>
                             <Route path="/insert-receipt">
                                 <InsertReceipt withPrice={true} currentUser={currentUser} setCurrentUser={updateUser}/>
                             </Route>
                             <Route path="/create-shopping-cart">
-                                <CreateShoppingCart updateResult={updateResult} currentUser={currentUser}/>
+                                <CreateShoppingCart setCurrentUser={updateUser} currentUser={currentUser}/>
                             </Route>
                             <Route path="/cartResult">
-                                <CartResult Result={result}/>
+                                <CartResult currentUser={currentUser}/>
                             </Route>
                             <Redirect to="/userMenu" />
                         </Fragment>

@@ -26,3 +26,40 @@ export const PRODUCT_TO_ID = {
     "Bamba (70 Grams pack)": 15,
     "Bamba (200 Grams pack)": 16
 };
+
+export const ZONE_TO_ID = {
+    "Tel-Aviv North": 1,
+    "Tel-Aviv East": 2,
+    "Tel-Aviv South": 3,
+    "Tel-Aviv West": 4,
+    "Tel-Aviv Center": 5,
+    "Ramat-Gan": 6
+};
+
+export const ZONE_TO_STORES = {
+    "Tel-Aviv North": [
+        "Shufersal Ramat Aviv",
+        "SuperYoda East Tel-Aviv"
+    ],
+    "Tel-Aviv East": [
+        "SuperYoda East Tel-Aviv",
+        "Shufersal Ramat-Gan",
+        "Rami Levy TLV Center"
+    ],
+    "Tel-Aviv South": [
+        "SuperYoda Tel-Aviv",
+        "Shufersal Ramat-Gan"
+    ],
+    "Tel-Aviv West": [
+        "Rami Levy TLV Center",
+        "Shufersal Ramat Aviv"
+    ],
+    "Tel-Aviv Center": [
+        "SuperYoda Tel-Aviv",
+        "Rami Levy TLV Center"
+    ],
+    "Ramat-Gan":[
+        "SuperYoda Tel-Aviv",
+        "Shufersal Ramat-Gan"
+    ]
+};

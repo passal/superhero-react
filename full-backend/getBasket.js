@@ -27,18 +27,19 @@ const sqlConnection = require("./database");
 //Create a matrix where a row is a shop and a col is a product
 //the value in cell (i,j) will be the price of product j in shop i
 function createPriceMatrix(shops, products, cb){
-    let getPriceQuery = "SELECT price FROM prices WHERE pid = ? AND sid = ? AND upvotes = (SELECT max(upvotes) FROM prices WHERE pid = ? AND sid = ?);";
+    let getPriceQuery = "SELECT price FROM Prices WHERE pid = ? AND sid = ? AND upvotes = (SELECT max(upvotes) FROM Prices WHERE pid = ? AND sid = ?);";
     //create Price Matrix
     const priceMatrix = new Array(products.length);
     for (let i=0; i<products.length; i++){
         priceMatrix[i] = new Array(shops.length)
     }
     //insert prices
-    for (let row=0; row<products.length; row++){
-        for (let col=0; col<shops.length; col++){
+    for (let row=0; row < products.length; row++){
+        for (let col=0; col < shops.length; col++){
             sqlConnection.query(getPriceQuery, [products[row], shops[col], products[row], shops[col]], (err, rows) =>{
                 if (err) {
                     console.log(err);
+                    throw err
                 } else if(!rows.length) {
                     //price not found
                     priceMatrix[row][col] = -1;

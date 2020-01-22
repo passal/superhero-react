@@ -38,13 +38,12 @@ const useStyles = makeStyles(theme => ({
         height: '200px',
         width: '260px',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'column'
     },
     cardMedia: {
         height: '80%',
         display: 'flex',
         justifyContent: 'center',
-
     },
     cardContent: {
         paddingTop: theme.spacing(16),
@@ -62,7 +61,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function UserMenu() {
+export default function UserMenu({ currentUser }) {
     const classes = useStyles();
 
     return (
@@ -75,7 +74,7 @@ export default function UserMenu() {
                     </Typography>
                 </Container>
                 <Container className={classes.cardGrid} maxWidth="md">
-                    <Grid>
+
                         <Link component={RouterLink} to='/upload'>
                             <Card className={classes.card}>
                                 <CardMedia className={classes.cardMedia} image={uploadReceiptPhoto}
@@ -93,8 +92,7 @@ export default function UserMenu() {
                                 </CardContent>
                             </Card>
                         </Link>
-                    </Grid>
-                    <Grid>
+
                         <Link underline='none' component={RouterLink} to='/insert-receipt'>
                             <Card className={classes.card}>
                                 <CardMedia className={classes.cardMedia} image={translateReceiptPhoto}
@@ -112,8 +110,8 @@ export default function UserMenu() {
                                 </CardContent>
                             </Card>
                         </Link>
-                    </Grid>
-                    <Grid>
+
+                    {currentUser.credits >= 2 &&
                         <Link underline='none' component={RouterLink} to='/create-shopping-cart'>
                             <Card className={classes.card}>
                                 <CardMedia className={classes.cardMedia} image={shoppingCartPhoto}
@@ -131,7 +129,24 @@ export default function UserMenu() {
                                 </CardContent>
                             </Card>
                         </Link>
-                    </Grid>
+                    }
+                    {currentUser.credits < 2 &&
+                        <Card className={classes.card}>
+                            <CardMedia className={classes.cardMedia} image={shoppingCartPhoto}
+                                       title="createShoppingCart">
+                                <Grid className={classes.cardContent}>
+                                    <Typography variant="body1" color="secondary" style={{fontWeight: 900, textShadow: "1px 1px 1px #000000"}}>
+                                        You must have 2 credits to do that
+                                    </Typography>
+                                </Grid>
+                            </CardMedia>
+                            <CardContent className={classes.cardFooter}>
+                                <Typography variant="h5" color="secondary">
+                                    Create Shopping Cart
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    }
                 </Container>
                 <Box mt={8}>
                     <Copyright/>

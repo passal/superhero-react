@@ -7,139 +7,16 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
-import InputGroup from "react-bootstrap/InputGroup";
 import MultipleSelect from "./MultipleSelect";
 import Select from "@material-ui/core/Select";
 import Input from "@material-ui/core/Input";
 import MenuItem from "@material-ui/core/MenuItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import FormControl from "@material-ui/core/FormControl";
-import Typography from "@material-ui/core/Typography";
-import Dialog from "@material-ui/core/Dialog";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import MuiDialogContent from "@material-ui/core/DialogContent";
-import MuiDialogActions from "@material-ui/core/DialogActions";
 import axios from 'axios';
+import { PRODUCT_TO_ID, SHOP_TO_ID, ZONE_TO_ID, ZONE_TO_STORES } from '../../constants';
 const urlBase = "http://localhost:5000";
 
-const styles = theme => ({
-    root: {
-        margin: 0,
-        padding: theme.spacing(2),
-        minWidth:'400px',
-    },
-    closeButton: {
-        position: 'absolute',
-        right: theme.spacing(1),
-        top: theme.spacing(1),
-        color: theme.palette.grey[500],
-    },
-    popRoot:{
-        minWidth: '400px',
-    },
-});
-
-const DialogTitle = withStyles(styles)(props => {
-    const { children, classes, onClose, ...other } = props;
-    return (
-        <MuiDialogTitle disableTypography className={classes.root} {...other}>
-            <Typography variant="h6">{children}</Typography>
-            {onClose ? (
-                <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
-                    <CloseIcon />
-                </IconButton>
-            ) : null}
-        </MuiDialogTitle>
-    );
-});
-
-const DialogContent = withStyles(theme => ({
-    root: {
-        padding: theme.spacing(2),
-    },
-}))(MuiDialogContent);
-
-const DialogActions = withStyles(theme => ({
-    root: {
-        margin: 0,
-        padding: theme.spacing(1),
-    },
-}))(MuiDialogActions);
-
-function mapShopsToId(shopsName, shopsId){
-    let id;
-    shopsName.forEach(name => {
-        id = shopToId[name];
-        shopsId.push(id);
-    })
-}
-
-let shopToId = {
-    "SuperYoda": 1,
-    "Shufersal Ramat Aviv": 2,
-    "SuperYoda Tel-Aviv": 3,
-    "SuperYoda East Tel-Aviv": 4,
-    "Shufersal Ramat-Gan": 5,
-    "SuperYoda South": 6,
-    "Rami Levy TLV Center": 7
-};
-
-let zoneToId = {
-    "Tel-Aviv North": 1,
-    "Tel-Aviv East": 2,
-    "Tel-Aviv South": 3,
-    "Tel-Aviv West": 4,
-    "Tel-Aviv Center": 5,
-    "Ramat-Gan": 6
-};
-
-let productToId = {
-    "Milk (1 Liter bottle)": 1,
-    "Eggs": 2,
-    "Ground Beef (Kilograms)": 3,
-    "Water (1.5 Liter bottle)": 4,
-    "Cream Cheese (250 Grams cup)": 5,
-    "Bread (1 Loaf)": 6,
-    "Potatoes (Kilograms)": 7,
-    "Tomatoes (Kilograms)": 8,
-    "Pasta (500 Grams pack)": 9,
-    "Rice (400 Grams pack)": 10,
-    "Apples (Kilograms)": 11,
-    "Canned Tuna (4 pack)": 12,
-    "Soy milk (1 Liter bottle)": 13,
-    "Pringles (600 Grams can)": 14,
-    "Bamba (70 Grams pack)": 15,
-    "Bamba (200 Grams pack)": 16
-};
-
-function mapProductToId(products, productsId){
-    let id;
-    for(let prod in products){
-        if(products.hasOwnProperty(prod)){
-            id = productToId[prod];
-            productsId[id] = products[prod];
-        }
-    }
-}
-
-function mapBasketResultToName(idObj, nameObj){
-    nameObj["price"] = idObj["price"];
-    let temp = Object.keys(idObj["basket"]);
-    let shopName,  prodId, prodName;
-    for(let i=0; i<temp.length; i++){
-        if(idObj["shopPrice"][temp[i]]===0) continue;
-        shopName = Object.keys(shopToId).find(key => shopToId[key] == temp[i]);
-        nameObj["basket"][shopName] = idObj["basket"][temp[i]];
-        nameObj["shopPrice"][shopName] = idObj["shopPrice"][temp[i]];
-        for(let j=0; j<(nameObj["basket"][shopName]).length; j++){
-            prodId = nameObj["basket"][shopName][j];
-            prodName = Object.keys(productToId).find(key => productToId[key] == prodId);
-            nameObj["basket"][shopName][j] = prodName;
-        }
-    }
-}
 const payCreds = (id) => {
     axios.post(urlBase + "/payCredits", {
         id: id
@@ -155,20 +32,14 @@ const payCreds = (id) => {
     })
 };
 
-const getBestBasket = (shops, products, maxSplits, uid,updateResult) => {
-    let result = {
-        "basket": {},
-        "shopPrice": {},
-        "price": 0
-    };
-    let shopsId = [];
-    mapShopsToId(shops, shopsId);
-    let productsId = {};
-    mapProductToId(products, productsId);
-    axios.post(urlBase + "/getBasket", {
-        "maxSplits": maxSplits,
-        "shops": shopsId,
-        "products": productsId
+const getBestBasket = (shops = [], products, maxSplits, uid) => {
+    const shopsId = shops.map((shop) => SHOP_TO_ID[shop]);
+    const productsId = products.map(({ name }) => PRODUCT_TO_ID[name]);
+
+    return axios.post(urlBase + "/getBasket", {
+        maxSplits: maxSplits,
+        shops: shopsId,
+        products: productsId
     },{
         headers:{
             "Accept": "application/json",
@@ -176,11 +47,6 @@ const getBestBasket = (shops, products, maxSplits, uid,updateResult) => {
         }
     }).then( (response) => {
         payCreds(uid);
-        mapBasketResultToName(response.data, result);
-        console.log(result);
-        console.log(response.data);
-        localStorage.setItem('cartResult', JSON.stringify(result));
-        window.location = '#/cartResult';
     });
 };
 
@@ -188,15 +54,16 @@ class CreateShoppingCart extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log("constructor")
+
         this.state = {
             maxSplitAmount: 0,
-            maximalDistanceFromLocation: 0,
             area:"",
             StoreName:[],
             isOpen: false,
             products:[],
+            shops: []
         };
+
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeStores = this.handleChangeStores.bind(this);
         this.findCart = this.findCart.bind(this);
@@ -214,18 +81,14 @@ class CreateShoppingCart extends React.Component {
     }
 
     handleSubmit(products) {
-        return (e) => {
-            console.log(this.serializeProducts(products))
-            this.setState({
-                products: this.serializeProducts(products),
-            })
-        }
+        console.log(products);
+        this.setState({
+            products
+        })
     }
 
-
     handleChangeStores = (event)=> {
-        this.setState({StoreName: event.target.value,});
-        console.log("storeName",this.state.StoreName)
+        this.setState({ shops: event.target.value });
     };
 
     serializeProducts(products) {
@@ -235,17 +98,23 @@ class CreateShoppingCart extends React.Component {
         }), {})
     }
 
-    findCart = (e) => {
-        e.preventDefault();
-        //check for points - if not enough change state, if enough - submit
-        // this.setState( {isOpen: true});
-        console.log(this.state.products)
-        getBestBasket(this.state.StoreName,this.state.products,this.state.maxSplitAmount,this.props.currentUser.id,this.props.updateResult);
-        window.location.pathname = '/cartResult';
+    async findCart() {
+        const { currentUser, setCurrentUser } = this.props;
+        const { maxSplitAmount, products, shops } = this.state;
+
+        await getBestBasket(shops, products, maxSplitAmount, currentUser.id);
+        setCurrentUser({
+            ...currentUser,
+            credits: currentUser.credits - 2
+        });
+
+        window.location = '/#cartResult';
     };
+
     handleClose = () => {
         //this.setState( {isOpen: false});
     };
+
     render() {
         const { classes } = this.props;
         const ITEM_HEIGHT = 48;
@@ -258,24 +127,6 @@ class CreateShoppingCart extends React.Component {
                 }
             }
         };
-        const names = [
-            "SuperYoda",
-            "Shufersal Ramat Aviv",
-            "SuperYoda Tel-Aviv",
-            "SuperYoda East Tel-Aviv",
-            "Shufersal Ramat-Gan",
-            "SuperYoda South",
-            "Rami Levy TLV Center",
-        ];
-
-        let zoneToId = [
-            "Tel-Aviv North",
-            "Tel-Aviv East",
-            "Tel-Aviv South",
-            "Tel-Aviv West",
-            "Tel-Aviv Center",
-            "Ramat-Gan",
-        ];
 
         return (
             <Container component="main" >
@@ -293,23 +144,6 @@ class CreateShoppingCart extends React.Component {
                                         <Form.Control onChange={this.handleChange('maxSplitAmount') } />
                                     </Col>
                                 </Form.Group>
-                                <Form.Group as={Row} className={classes.input} controlId="formHorizontalPassword">
-                                    <Form.Label column sm={5} className={classes.font}>
-                                        Maximal Distance From Location
-                                    </Form.Label>
-                                    <Col sm={6}>
-                                        <InputGroup>
-                                            <InputGroup.Prepend>
-                                                <InputGroup.Text id="inputGroupPrepend">Km</InputGroup.Text>
-                                            </InputGroup.Prepend>
-                                            <Form.Control
-                                                type="text"
-                                                aria-describedby="inputGroupPrepend"
-                                                onChange={this.handleChange("maximalDistanceFromLocation") }
-                                            />
-                                        </InputGroup>
-                                    </Col>
-                                </Form.Group>
                                 <Form.Group as={Row} controlId="formGridState">
                                     <Form.Label as="legend" column sm={5} className={classes.font}>Select Area</Form.Label>
                                 </Form.Group>
@@ -324,7 +158,7 @@ class CreateShoppingCart extends React.Component {
                                                 input={<Input />}
                                                 MenuProps={MenuProps}
                                             >
-                                                {zoneToId.map(name => (
+                                                {Object.keys(ZONE_TO_ID).map(name => (
                                                     <MenuItem key={name} value={name}>
                                                         <ListItemText primary={name} />
                                                     </MenuItem>
@@ -338,7 +172,7 @@ class CreateShoppingCart extends React.Component {
                                 </Form.Group>
                                 <Form.Group as={Row} controlId="formGridState">
                                     <Col sm={6}>
-                                        <MultipleSelect  names={names} handleChangeStores={this.handleChangeStores} StoreName={this.state.StoreName}/>
+                                        <MultipleSelect names={ZONE_TO_STORES[this.state.area] || []} handleChangeStores={this.handleChangeStores} StoreName={this.state.shops}/>
                                     </Col>
                                 </Form.Group>
                                 <Form.Group as={Row}>
@@ -347,21 +181,6 @@ class CreateShoppingCart extends React.Component {
                                     </Col>
                                 </Form.Group>
                             </Form>
-                            {/*<Dialog onClose={this.handleClose} aria-labelledby="customized-dialog-title" open={this.state.isOpen}>*/}
-                            {/*    <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>*/}
-                            {/*        You dont have enough points*/}
-                            {/*    </DialogTitle>*/}
-                            {/*    <DialogContent dividers>*/}
-                            {/*        <Typography gutterBottom>*/}
-                            {/*            Please earn more points and try again*/}
-                            {/*        </Typography>*/}
-                            {/*    </DialogContent>*/}
-                            {/*    <DialogActions>*/}
-                            {/*        <Button autoFocus onClick={this.handleClose} color="primary">*/}
-                            {/*            Ok Thanks!*/}
-                            {/*        </Button>*/}
-                            {/*    </DialogActions>*/}
-                            {/*</Dialog>*/}
                         </div>
                         <div className={classes.form}>
                             <Products withPrice ={false} handleSubmit={this.handleSubmit}/>

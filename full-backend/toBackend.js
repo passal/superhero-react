@@ -263,7 +263,6 @@ const payCreds = (id) => {
     })
 };
 
-
 //increase 1 credit to user for building uploading or filling a receipt
 const earnCreds = (id) => {
     axios.post(urlBase + "/earnCredits", {
@@ -346,10 +345,3 @@ const getAllPrices = (shops, products) => {
         //console.log(console.log(JSON.stringify(response.data, null, 4)));
     });
 };
-
-
-
-
-
-
-
