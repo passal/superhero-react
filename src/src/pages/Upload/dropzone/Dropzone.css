@@ -1,7 +1,7 @@
 .Dropzone {
     height: 300px;
     width: 300px;
-    background: linear-gradient(to right, rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%);
+    background-color: rgb(188, 185, 236);
     border: 2px dashed rgb(187, 186, 186);
     border-radius: 50%;
     display: flex;
@@ -11,10 +11,11 @@
     font-size: 16px;
     font-family: "Roboto medium", sans-serif;
     color: #222;
+    transition: .3s all;
 }
 
 .Highlight {
-    background-color: rgb(188, 185, 236);
+    background-color: rgb(153, 147, 236);
 }
 
 .Icon {

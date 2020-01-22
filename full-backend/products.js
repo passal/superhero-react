@@ -16,23 +16,31 @@ function postOCRProducts(currentReceipt){
     let shopid = currentReceipt.sid;
     let query = "SELECT * FROM Prices WHERE Prices.sid = ? AND Prices.pid = ? AND price= ?;";
     Object.keys(currentReceipt.products).forEach(pid => {
-        pid = parseInt(pid);
         let price = currentReceipt.products[pid];
         sqlConnection.query(query, [shopid, pid,  price] ,  (err, rows) => {
-            if (err) console.log(err);
+            if (err) {
+                console.log(err);
+                throw err;
+            }
             else if (!rows.length) {
                 //price doesn't match, add new price
                 let insertNewProduct = "INSERT INTO Prices (sid,pid,price,upvotes) VALUES(?,?,?,1);";
                 let params = [shopid, pid, price];
                 sqlConnection.query(insertNewProduct, params, (err) => {
-                    if (err) console.log(err);
+                    if (err) {
+                        console.log(err);
+                        throw err;
+                    }
                 });
             } else {
                 //found price, add one upvote
                 let increaseUpvoate = "UPDATE Prices SET upvotes = upvotes+1 WHERE sid = ? AND pid = ? AND  price = ?;";
                 let params = [shopid, pid, price];
                 sqlConnection.query(increaseUpvoate, params, (err) => {
-                    if (err) console.log(err);
+                    if (err) {
+                        console.log(err);
+                        throw err;
+                    }
                 });
             }
         });

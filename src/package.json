@@ -24,6 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-mac": "react-scripts build && rm -rf ../full-backend/public  && cp -R build ../full-backend/public",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -54,5 +55,4 @@
   "keywords": [],
   "author": "",
   "license": "ISC"
-
 }

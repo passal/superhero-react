@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /full-backend/node_modules
+/full-backend/public
 /src/node_modules
 /.pnp
 .pnp.js
@@ -13,7 +14,7 @@
 # production
 /build
 /src/build
-/full-backend/public
+#/full-backend/public
 # misc
 .DS_Store
 .env.local

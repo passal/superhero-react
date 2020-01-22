@@ -6,7 +6,6 @@ import Container from "@material-ui/core/Container";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
 import Box from "@material-ui/core/Box";
 import {withStyles} from "@material-ui/core/styles";
 import Copyright from "../../components/Copyright";
@@ -23,45 +22,30 @@ const theme = createMuiTheme({
     },
 });
 
+const signIn = (username, password) => {
+    return axios.post("http://localhost:5000/signIn", { username, password })
+        .then((response) => {
+            if (response.data.length===0){
+                alert("Wrong username or password");
+            } else {
+                return response.data[0];
+            }
+        });
+};
+
 const SignIn = ({ classes, setCurrentUser }) => {
+    const history = useHistory();
+
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
 
-    const urlBase = "http://localhost:5000";
+    const handleSubmit = async() => {
+        const user = await signIn(username, password);
 
-    const signIn = (event) => {
-        event.preventDefault();
-        var self = this;
-        let fullUrl = urlBase +  "/signin"
-        // let fullUrl = urlBase +  "/signin?username=" + username + "&password=" + password;
-        console.log("full path",fullUrl);
-        axios.post(fullUrl, {username, password}).then((response) =>{
-            console.log(response.data);
-
-            if((response.data).length===0){
-                //wrong username\pass
-                alert("wrong username or password dudes!");
-            } else {
-                localStorage.setItem('currentUser', JSON.stringify(response.data[0]));
-                window.location = '#/userMenu';
-            }
-        });
+        setCurrentUser(user);
+        history.push('/userMenu');
     };
 
-    // const signIn = () => {
-    //     const fullUrl = `http://localhost:3000/signin`;
-    //
-    //     axios.post(fullUrl, { username, password }).then((response) =>{
-    //         const user = response.data[0];
-    //         console.log("user:",user);
-    //         if(!user){
-    //             return alert('Wrong Credentials!')
-    //         }
-    //         console.log("Connected succesfully");
-    //         setCurrentUser(user);
-    //         history.push('/upload');
-    //     });
-    // };
     return (
         <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
@@ -74,49 +58,47 @@ const SignIn = ({ classes, setCurrentUser }) => {
                         </Typography>
                     </Grid>
                 </Grid>
-                <form className={classes.form} noValidate>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="username"
-                        label="Username"
-                        name="username"
-                        autoComplete="username"
-                        autoFocus
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        onClick={signIn}
-                    >
-                        Sign In
-                    </Button>
-                    <Grid container>
-                        <Grid container justify="flex-end">
-                            <Link href="/signUp" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
-                        </Grid>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
+                    autoFocus
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={handleSubmit}
+                >
+                    Sign In
+                </Button>
+                <Grid container>
+                    <Grid container justify="flex-end">
+                        <a href="/#signUp">
+                            Don't have an account? Sign Up
+                        </a>
                     </Grid>
-                </form>
+                </Grid>
             </div>
             <Box mt={8}>
                 <Copyright/>

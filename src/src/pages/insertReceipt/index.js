@@ -1,56 +1,43 @@
 import React from 'react';
 import Products from "./components/Products";
 import {withStyles} from "@material-ui/core/styles";
-// import  logo from "../SignIn/big-logo.png";
-// import receipt from "../SignIn/reciptm_example.jpg"
+import receipt from "../../images/1.jpg"
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import axios from 'axios';
+import { PRODUCT_TO_ID, SHOP_TO_ID } from '../../constants';
 const urlBase = "http://localhost:5000";
 
 const earnCreds = (id) => {
-    axios.post(urlBase + "/earnCredits", {
+    return axios.post(urlBase + "/earnCredits", {
         id: id
     }, {
         headers:{
             "Accept": "application/json",
             "Content-Type": "application/json"
         }
-    }).then((response) => {
-        console.log(response.status);
-    }).catch((error) => {
-        console.log((error.response.data)); //this will return a message from the server on the error
     })
+};
+
+const getUnfilledRec = () => {
+    return axios.get("http://localhost:5000/OCR")
+        .then((response) => {
+            response.data[0]["shop"] = Object.keys(SHOP_TO_ID).find(key => SHOP_TO_ID[key] === response.data[0]["sid"]);
+
+            if (response.data.length === 0){
+                console.log("All out receipts are filled");
+            }
+
+            return response.data[0];
+    });
 };
 
 const fillReceipt = (receipt, uid) => {
-
-    axios.post(urlBase + "/OCR", receipt, {
+    return axios.post(urlBase + "/OCR", receipt, {
         headers:{
             "Accept": "application/json",
             "Content-Type": "application/json"
         }
-    }).then((response) => {
-        earnCreds(uid);
-        markRec(receipt.rid);
-        console.log(response.status);
-    }).catch((error) => {
-        console.log((error.response.data)); //this will return a message from the server on the error
-    })
-};
-
-const markRec = (id) => {
-    axios.post(urlBase + "/markRec", {
-        id: id
-    }, {
-        headers:{
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    }).then((response) => {
-        console.log(response.status);
-    }).catch((error) => {
-        console.log((error.response.data)); //this will return a message from the server on the error
     })
 };
 
@@ -58,12 +45,27 @@ class InsertReceipt extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            products:[],
+            loading: true,
+            products: [],
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    async componentDidMount() {
+        try {
+            const { sum, shop } = await getUnfilledRec();
+
+            this.setState({
+                sum,
+                shop,
+                loading: false
+            })
+        } catch (e) {
+            console.log(e);
+            alert("Something went wrong");
+        }
+    }
 
     handleChange(arg) {
         return (e) => {
@@ -73,30 +75,53 @@ class InsertReceipt extends React.Component {
         }
     }
 
-    handleSubmit(products) {
-        //console.log(this.serializeProducts(products))
-        return (e) => {
-            this.setState({
-                products: this.serializeProducts(products),
-            });
-            const receipt = {
-                "shop":"SuperYuda",
-                "products": this.serializeProducts(products),
-            };
-            fillReceipt(receipt,this.props.currentUser.id);
+    validateSum(products) {
+        const sum = products.reduce((sum, product) => {
+            return sum + parseInt(product.price) * parseInt(product.qty)
+        }, 0);
 
+        return sum === this.state.sum;
+    }
+
+    async handleSubmit(products) {
+        const { currentUser } = this.props;
+
+        if (!this.validateSum(products)) {
+            alert('Sum of products doesnt match recepit');
+            return;
         }
+
+        const receipt = {
+            sid: SHOP_TO_ID[this.state.shop],
+            products: this.serializeProducts(products),
+        };
+
+        await fillReceipt(receipt, currentUser.id);
+        await earnCreds(currentUser.id);
+
+        this.props.setCurrentUser({
+            ...currentUser,
+            credits: currentUser.credits + 1
+        });
+
+        window.location = "/#userMenu";
     }
 
     serializeProducts(products) {
-        return products.reduce((acc, product) => ({
+        return products.reduce((acc, { name, price }) => ({
             ...acc,
-            [product.name]: parseInt(product.qty)*parseInt(product.price)
+            [PRODUCT_TO_ID[name]]: parseInt(price)
         }), {})
     }
 
     render() {
         const { classes } = this.props;
+        const { loading } = this.state;
+
+        if (loading) {
+            return <h2>Loading</h2>;
+        }
+
         return (
             <Container component="main" >
                 <CssBaseline/>
@@ -104,10 +129,10 @@ class InsertReceipt extends React.Component {
                     <h1 className={classes.headline}>Insert Receipt</h1>
                     <div className={classes.body}>
                         <div className={classes.img}>
-                            {/*<img src={receipt} alt="logo" className={classes.avatar}/>*/}
+                            <img src={receipt} alt="logo" className={classes.avatar}/>
                         </div>
                         <div className={classes.form}>
-                            <Products withPrice ={true} handleSubmit={this.handleSubmit} />
+                            <Products withPrice={true} handleSubmit={this.handleSubmit} />
                         </div>
                     </div>
                 </div>
@@ -153,7 +178,5 @@ export default withStyles(theme => ({
     headline:{
         color:'#20639B',
         paddingBottom:'30px'
-    },
-
-
+    }
 }))(InsertReceipt);

@@ -13,8 +13,9 @@ let basketResult;
 
 server.use(express.static('public'));
 server.use( bodyParser.json() );
-server.use(bodyParser.urlencoded({extended:false}))
-server.get("/", (req, res) => {  res.sendFile(__dirname + "/public/index.html"); });
+server.use(bodyParser.urlencoded({ extended: false }));
+server.use(cors());
+
 /* code for image handling, not tested
 //for image upload and save
 const storage = multer.diskStorage({
@@ -30,7 +31,7 @@ const upload = multer({
 }).single("myImage");
 */
 
-server.listen(port, () => console.log("Server listening to port 3000"));
+
 /*
 server.post("postOCRProducts", (req, res) =>{
     upload(req, res, (err) => {
@@ -45,9 +46,6 @@ server.post("postOCRProducts", (req, res) =>{
 
    */
 
-
-
-
 //sign in (query for name\password, return result)
 server.post("/signIn", (req,res) => {
     let sql = "SELECT * FROM User WHERE User.username = ? AND User.password = ?;";
@@ -60,9 +58,8 @@ server.post("/signIn", (req,res) => {
     });
 });
 
-
 //register new user, returns status 400 if already exists or 200 if registering correctly
-server.post("/signUp", (req, res) => {
+server.post("/register", (req, res) => {
     let checkIfExists = "SELECT * FROM User WHERE User.email = ?;";
     let post = req.body.email;
     sqlConnection.query(checkIfExists, post, (err, rows) => {
@@ -72,7 +69,7 @@ server.post("/signUp", (req, res) => {
             res.status(400).send("That email address is already registered");
         } else { //register user
             let sql = "INSERT INTO User (username,password,email,credits,did) VALUES(?,?,?,2,?);";
-            let params = [req.body.username, req.body.password, req.body.email,req.body.did];
+            let params = [req.body.username, req.body.password, req.body.email, req.body.did];
             sqlConnection.query(sql, params, (err) => {
                 if (err) {
                     console.log(err);
@@ -151,12 +148,14 @@ server.post("/uploadReceipt", (req, res) => {
     sqlConnection.query(sql, params, (err, rows) => {
         if (err) {
             console.log(err);
+            return res.status(400).send(err)
         }
         let maxId = 0;
         let sql1 = "SELECT MAX(id) FROM Receipt;";
         sqlConnection.query(sql1, (err1, ans) => {
             if(err1){
                 console.log(err1);
+                return res.status(400).send(err1)
             }
             maxId = (JSON.parse(JSON.stringify(ans)))[0]["MAX(id)"];
             let newPath = FOLDER_PATH+maxId+'.jpg';
@@ -165,6 +164,7 @@ server.post("/uploadReceipt", (req, res) => {
             sqlConnection.query(sql2, params2, (err2, rows2) => {
                 if (err2) {
                     console.log(err2);
+                    return res.status(400).send(err2)
                 }
                 let sql3 = "UPDATE User SET credits = credits+1 WHERE id = ?;";
                 let params3 = [req.body.id];
@@ -293,3 +293,6 @@ server.post("/allPrices", (req, res) => {
     })
 });
 
+server.get("/", (req, res) => {  res.sendFile(__dirname + "/public/index.html"); });
+
+server.listen(port, () => console.log(`Server listening to port ${port}`));
