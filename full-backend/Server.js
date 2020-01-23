@@ -143,38 +143,21 @@ server.get("/getBasket", (req, res) => {
 
 //insert new receipt to the DB
 server.post("/uploadReceipt", (req, res) => {
-    let sql = "INSERT INTO Receipt (sid,sum,filled) VALUES(?,?,FALSE);";
-    let params = [req.body.sid, req.body.sum];
+    let sql = "INSERT INTO Receipt (sid,sum, img, filled) VALUES(?,?,?,FALSE);";
+    let params = [req.body.sid, req.body.sum, req.body.base64];
     sqlConnection.query(sql, params, (err, rows) => {
         if (err) {
             console.log(err);
             return res.status(400).send(err)
         }
-        let maxId = 0;
-        let sql1 = "SELECT MAX(id) FROM Receipt;";
-        sqlConnection.query(sql1, (err1, ans) => {
-            if(err1){
-                console.log(err1);
-                return res.status(400).send(err1)
-            }
-            maxId = (JSON.parse(JSON.stringify(ans)))[0]["MAX(id)"];
-            let newPath = FOLDER_PATH+maxId+'.jpg';
-            let sql2 = "UPDATE Receipt SET img = ? WHERE id = ?;";
-            let params2 = [newPath, maxId];
-            sqlConnection.query(sql2, params2, (err2, rows2) => {
-                if (err2) {
-                    console.log(err2);
-                    return res.status(400).send(err2)
-                }
-                let sql3 = "UPDATE User SET credits = credits+1 WHERE id = ?;";
-                let params3 = [req.body.id];
-                sqlConnection.query(sql3, params3, (err, rows3) => {
-                    res.sendStatus(200);
-                });
-            });
+        let sql3 = "UPDATE User SET credits = credits+1 WHERE id = ?;";
+        let params3 = [req.body.id];
+        sqlConnection.query(sql3, params3, (err, rows3) => {
+            res.sendStatus(200);
         });
     });
 });
+
 
 //get a random unfilled receipt from db, pass to client
 server.get("/OCR", (req,res) => {

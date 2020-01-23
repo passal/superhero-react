@@ -9,10 +9,11 @@ import classes from "../SignIn";
 import "./Upload.css";
 import { SHOP_TO_ID } from '../../constants';
 
-const uploadReceipt = (sid, sum, uid) => {
+const uploadReceipt = (sid, sum, uid, img) => {
     return axios.post("http://localhost:5000/uploadReceipt", {
         sid,
         sum,
+        img,
         id: uid
     } , {
         headers:{
@@ -32,15 +33,16 @@ const uploadReceipt = (sid, sum, uid) => {
 const Upload = ({currentUser, setCurrentUser}) => {
     const history = useHistory();
 
-    const [files, setFiles] = useState([]);
+    const [file, setFile] = useState(undefined);
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState({});
     const [successfullUploaded, setSuccessfullUploaded] = useState(false);
     const [sid, setSid] = useState(1);
     const [sum, setSum] = useState(0);
 
-    const onFilesAdded = (newFiles) => {
-        setFiles([...files, ...newFiles]);
+    const onFilesAdded = (newFile) => {
+        console.log(newFile);
+        setFile(newFile);
     };
 
     const handleSubmit = async() => {
@@ -97,14 +99,12 @@ const Upload = ({currentUser, setCurrentUser}) => {
                         />
                     </div>
                     <div className="Files">
-                        {files.map(file => {
-                            return (
-                                <div key={file.name} className="Row">
-                                    <span className="Filename">{file.name}</span>
-                                    {/*{this.renderProgress(file)}*/}
-                                </div>
-                            );
-                        })}
+                        {file && file[0] !== undefined ? (
+                            <div key={file[0].name} className="Row">
+                                <span className="Filename">{file[0].name}</span>
+                                {/*{this.renderProgress(file)}*/}
+                            </div>
+                        ) : ''}
                     </div>
                 </div>
                 <div className="Actions">
