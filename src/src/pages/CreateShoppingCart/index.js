@@ -17,6 +17,17 @@ import axios from 'axios';
 import { PRODUCT_TO_ID, SHOP_TO_ID, ZONE_TO_ID, ZONE_TO_STORES } from '../../constants';
 const urlBase = "http://localhost:5000";
 
+
+function mapProductToId(products, productsId){
+    let id;
+    for(let prod in products){
+        if(products.hasOwnProperty(prod)){
+            id = PRODUCT_TO_ID[prod];
+            productsId[id] = products[prod];
+        }
+    }
+}
+
 const payCreds = (id) => {
     axios.post(urlBase + "/payCredits", {
         id: id
@@ -34,8 +45,9 @@ const payCreds = (id) => {
 
 const getBestBasket = (shops = [], products, maxSplits, uid) => {
     const shopsId = shops.map((shop) => SHOP_TO_ID[shop]);
-    const productsId = products.map(({ name }) => PRODUCT_TO_ID[name]);
-
+    //const productsId = products.map(({ name }) => PRODUCT_TO_ID[name]);
+    let productsId = {};
+    mapProductToId(products, productsId);
     return axios.post(urlBase + "/getBasket", {
         maxSplits: maxSplits,
         shops: shopsId,
@@ -80,12 +92,10 @@ class CreateShoppingCart extends React.Component {
         }
     }
 
-    handleSubmit(products) {
-        console.log(products);
+     handleSubmit = async (products) =>
         this.setState({
-            products
-        })
-    }
+            products,
+        }, async () => this.findCart());
 
     handleChangeStores = (event)=> {
         this.setState({ shops: event.target.value });
@@ -94,21 +104,34 @@ class CreateShoppingCart extends React.Component {
     serializeProducts(products) {
         return products.reduce((acc, product) => ({
             ...acc,
-            [product.name]: parseInt(product.qty)
+            [product.name]: product.qty
         }), {})
+    }
+
+    validateBasket = () => {
+        const { products, shops } = this.state;
+        return (
+            products.reduce((val, item) => {
+                return val || item.name === null || item.qty === null
+            }, false) || shops.length === 0
+        );
     }
 
     async findCart() {
         const { currentUser, setCurrentUser } = this.props;
         const { maxSplitAmount, products, shops } = this.state;
+        const validationErr = this.validateBasket();
+        if (validationErr) {
+            window.alert('Missing fields, make sure you choose shops and have no empty products')
+        } else {
+            await getBestBasket(shops, this.serializeProducts(products), maxSplitAmount, currentUser.id);
+            setCurrentUser({
+                ...currentUser,
+                credits: currentUser.credits - 2
+            });
 
-        await getBestBasket(shops, products, maxSplitAmount, currentUser.id);
-        setCurrentUser({
-            ...currentUser,
-            credits: currentUser.credits - 2
-        });
-
-        window.location = '/#cartResult';
+            window.location = '/#cartResult';
+        }
     };
 
     handleClose = () => {
@@ -177,7 +200,7 @@ class CreateShoppingCart extends React.Component {
                                 </Form.Group>
                                 <Form.Group as={Row}>
                                     <Col sm={{ span: 10, offset: 0}} className={classes.buttonDiv}>
-                                        <Button className={classes.button} onClick ={this.findCart} >Find The Cheapest Shopping Cart</Button>
+                                        {/*<Button className={classes.button} onClick ={this.findCart} >Find The Cheapest Shopping Cart</Button>*/}
                                     </Col>
                                 </Form.Group>
                             </Form>
