@@ -10,6 +10,6 @@ after it finished: Copy all files from the "build" folder in src
 
 paste (replace) it in "public" folder inside full-backend
 
-Move to full-backend (cd .. ; cd full-backend) and “npm run”
+Move to full-backend (cd .. ; cd full-backend) and “npm start”
 
 go to http://localhost:5000/
