@@ -54,11 +54,12 @@ class InsertReceipt extends React.Component {
 
     async componentDidMount() {
         try {
-            const { sum, shop } = await getUnfilledRec();
+            const { sum, shop, img } = await getUnfilledRec();
 
             this.setState({
                 sum,
                 shop,
+                img,
                 loading: false
             })
         } catch (e) {
@@ -129,7 +130,7 @@ class InsertReceipt extends React.Component {
                     <h1 className={classes.headline}>Insert Receipt</h1>
                     <div className={classes.body}>
                         <div className={classes.img}>
-                            <img src={receipt} alt="logo" className={classes.avatar}/>
+                            <img src={this.state.img} alt="logo" className={classes.avatar}/>
                         </div>
                         <div className={classes.form}>
                             <Products withPrice={true} handleSubmit={this.handleSubmit} />

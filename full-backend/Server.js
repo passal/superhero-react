@@ -144,7 +144,7 @@ server.get("/getBasket", (req, res) => {
 //insert new receipt to the DB
 server.post("/uploadReceipt", (req, res) => {
     let sql = "INSERT INTO Receipt (sid,sum, img, filled) VALUES(?,?,?,FALSE);";
-    let params = [req.body.sid, req.body.sum, req.body.base64];
+    let params = [req.body.sid, req.body.sum, req.body.img];
     sqlConnection.query(sql, params, (err, rows) => {
         if (err) {
             console.log(err);
