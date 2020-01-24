@@ -29,6 +29,27 @@ const uploadReceipt = (sid, sum, uid, img) => {
 };
 
 
+//const form = document.getElementById("form");
+//const fileUpload = document.getElementById("fileUpload");
+/*
+form.onsubmit = async function(e) {
+  e.preventDefault();
+
+  const file = fileUpload.files[0];
+  console.log(file);
+
+  const base64File = await toBase64(file);
+  console.log(base64File);
+};
+*/
+const toBase64 = file =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+
 
 const Upload = ({currentUser, setCurrentUser}) => {
     const history = useHistory();
@@ -45,9 +66,13 @@ const Upload = ({currentUser, setCurrentUser}) => {
         setFile(newFile);
     };
 
-    const handleSubmit = async() => {
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+
+        const base64File = await toBase64(file[0]);
+        console.log(base64File);
         try {
-            await uploadReceipt(sid, sum, currentUser.id);
+            await uploadReceipt(sid, sum, currentUser.id, base64File);
 
             setCurrentUser({
                 ...currentUser,
