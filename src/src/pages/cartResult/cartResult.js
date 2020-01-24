@@ -60,14 +60,21 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-/*
+function mapProductToId(products, productsId){
+    let id;
+    for(let prod in products){
+        if(products.hasOwnProperty(prod)){
+            id = PRODUCT_TO_ID[prod];
+            productsId[id] = products[prod];
+        }
+    }
+}
 //get all prices for given shops and products
 const getAllPrices = (shops, products) => {
-    let shopsId = [];
-    mapShopsToId(shops, shopsId);
+    const shopsId = shops.map((shop) => SHOP_TO_ID[shop]);
     let productsId = {};
     mapProductToId(products, productsId);
-    axios.post(urlBase + "/allPrices", {
+    return axios.post("http://localhost:5000/allPrices", {
         "shops": shopsId,
         "products": productsId
     },{
@@ -77,16 +84,15 @@ const getAllPrices = (shops, products) => {
         }
     }).then( (response) => {
         for(let i=0; i<(response.data).length; i++){
-            response.data[i]["store"] = Object.keys(shopToId).find(key => shopToId[key] == response.data[i]["store"]);
+            response.data[i]["store"] = Object.keys(SHOP_TO_ID).find(key => SHOP_TO_ID[key] == response.data[i]["store"]);
             for(let j=0; j<(response.data[i]["prods"]).length; j++){
-                response.data[i]["prods"][j]["product"] = Object.keys(productToId).find(key => productToId[key] == response.data[i]["prods"][j]["product"]);
+                response.data[i]["prods"][j]["product"] = Object.keys(PRODUCT_TO_ID).find(key => PRODUCT_TO_ID[key] == response.data[i]["prods"][j]["product"]);
             }
         }
-        //the object is response.data, but js can't print nested objects so for printing use the below line:
-        //console.log(console.log(JSON.stringify(response.data, null, 4)));
+        console.log(response.data)
+        return response.data;
     });
 };
-*/
 
 const mapBasketResultToName = (idObj) => {
     const result = [];
@@ -102,7 +108,7 @@ const mapBasketResultToName = (idObj) => {
             "price": 0,
             "products": []
         };
-        storeName = Object.keys(SHOP_TO_ID).find(key => SHOP_TO_ID[key] === stores[i]);
+        storeName = Object.keys(SHOP_TO_ID).find(key => SHOP_TO_ID[key] == stores[i]);
         shopObj["store"] = storeName;
         shopObj["price"] = idObj["shopPrice"][stores[i]];
         for (let j=0; j<(idObj["basket"][stores[i]]).length; j++) {
@@ -127,40 +133,64 @@ export default function CartResult({ currentUser }) {
     const classes = useStyles();
     const [seeFullCart, changeCartState] = useState(false);
     const [basketResult, setBasketResult] = useState([]);
-
+    const [fullCart, setFullCart] = useState([]);
     const handleClick = () => {
+        /*(async() => {
+            const fullCart = await getAllPrices(shops, products);
+            setFullCart(fullCart);
+            changeCartState(!seeFullCart)
+        })();*/
         changeCartState(!seeFullCart)
     };
-    let overallPrice = 0;
+/*    let overallPrice = 0;
     let shops = [];
-    let products = [];
+    let products = {};
     for (let i = 0; i < basketResult.length; i++) {
         overallPrice += basketResult[i].price;
-
         shops.push(basketResult[i].store);
-
-        for (let j = 0; j < basketResult[i].products; j++){
-            products.push( basketResult[i].products[j]);
+        for (let j = 0; j < basketResult[i].products.length; j++){
+            products[basketResult[i].products[j]]=1;
         }
+    }*/
+    let overallPrice = 0;
+    for (let i = 0; i < basketResult.length; i++) {
+        overallPrice += basketResult[i].price;
     }
 
     useEffect(() => {
         (async() => {
             const basketResult = await getBasketResult(currentUser.id);
-
             setBasketResult(basketResult);
+            let shops = [];
+            let products = {};
+            for (let i = 0; i < basketResult.length; i++) {
+                shops.push(basketResult[i].store);
+                for (let j = 0; j < basketResult[i].products.length; j++){
+                    products[basketResult[i].products[j]]=1;
+                }
+            }
+            const fullCart = await getAllPrices(shops, products);
+            setFullCart(fullCart);
         })();
     }, []);
 
-/*    const fullCart = getAllPrices(shops, products);
+/*    useEffect(() => {
+        (async() => {
+            const fullCart = await getAllPrices(shops, products);
+            setFullCart(fullCart);
+        })();
+    }, []);*/
+
+    //const fullCart = await getAllPrices(shops, products);
+    console.log(fullCart)
 
     const sumStoreGroceries = (store) => {
         var fullCartPrice = 0;
-        for (var i=0; i<store.groceries.length; i++){
-            fullCartPrice+=store.groceries[i].price;
+        for (var i=0; i<store.prods.length; i++){
+            fullCartPrice+=store.prods[i].price;
         }
         return fullCartPrice;
-    }*/
+    }
     const buttonOpen = "See full carts";
     const buttonClose = "Close";
 
@@ -207,7 +237,7 @@ export default function CartResult({ currentUser }) {
                             </Grid>
                         );
                     })}
-                    {/*                    {seeFullCart && fullCart.map(function(store, index){
+                    {seeFullCart && fullCart.map(function(store, index){
                         return(
                             <Grid item value={index} xs={10} sm={4} md={3}>
                                 <Card className={classes.card}>
@@ -219,10 +249,10 @@ export default function CartResult({ currentUser }) {
                                         </Grid>
                                     </CardMedia>
                                     <CardContent className={classes.cardContent}>
-                                        {store.groceries.map(function(product, index){
+                                        {store.prods.map(function(product, index){
                                             return(
                                                 <Typography value={index} color="Primary">
-                                                    {product.grocery}: {product.price} ₪
+                                                    {product.product}: {product.price} $
                                                 </Typography>
                                             );
                                         })}
@@ -236,7 +266,7 @@ export default function CartResult({ currentUser }) {
                                 </Card>
                             </Grid>
                         );
-                    })}*/}
+                    })}
                 </Container>
                 <Box align='center'>
                     <Button size="medium" variant="contained" color="primary" onClick={() => changeCartState(handleClick)}>
