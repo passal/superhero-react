@@ -1,32 +1,32 @@
 {
-    "files": {
-        "main.css": "/static/css/main.e03e3d6c.chunk.css",
-        "main.js": "/static/js/main.2a3e38bb.chunk.js",
-        "main.js.map": "/static/js/main.2a3e38bb.chunk.js.map",
-        "runtime-main.js": "/static/js/runtime-main.e1704217.js",
-        "runtime-main.js.map": "/static/js/runtime-main.e1704217.js.map",
-        "static/css/2.17e5ed98.chunk.css": "/static/css/2.17e5ed98.chunk.css",
-        "static/js/2.4c9f94ca.chunk.js": "/static/js/2.4c9f94ca.chunk.js",
-        "static/js/2.4c9f94ca.chunk.js.map": "/static/js/2.4c9f94ca.chunk.js.map",
-        "index.html": "/index.html",
-        "precache-manifest.ab34df78b6c0a0662f6b6c97c534a5a1.js": "/precache-manifest.ab34df78b6c0a0662f6b6c97c534a5a1.js",
-        "service-worker.js": "/service-worker.js",
-        "static/css/2.17e5ed98.chunk.css.map": "/static/css/2.17e5ed98.chunk.css.map",
-        "static/css/main.e03e3d6c.chunk.css.map": "/static/css/main.e03e3d6c.chunk.css.map",
-        "static/js/2.4c9f94ca.chunk.js.LICENSE": "/static/js/2.4c9f94ca.chunk.js.LICENSE",
-        "static/media/1.jpg": "/static/media/1.3e1b6315.jpg",
-        "static/media/darkenedbg.jpg": "/static/media/darkenedbg.3455302b.jpg",
-        "static/media/foldedReceipt.jpg": "/static/media/foldedReceipt.74851893.jpg",
-        "static/media/receiptPhoto.jpg": "/static/media/receiptPhoto.a36910a9.jpg",
-        "static/media/shoppingCart.jpg": "/static/media/shoppingCart.b9179ea6.jpg",
-        "static/media/super-hero-logo.png": "/static/media/super-hero-logo.defad421.png",
-        "static/media/vegetables-stall-868110.jpg": "/static/media/vegetables-stall-868110.aed51470.jpg"
-    },
-    "entrypoints": [
-        "static/js/runtime-main.e1704217.js",
-        "static/css/2.17e5ed98.chunk.css",
-        "static/js/2.4c9f94ca.chunk.js",
-        "static/css/main.e03e3d6c.chunk.css",
-        "static/js/main.2a3e38bb.chunk.js"
-    ]
+  "files": {
+    "main.css": "/static/css/main.ceab44bd.chunk.css",
+    "main.js": "/static/js/main.47bfbbc1.chunk.js",
+    "main.js.map": "/static/js/main.47bfbbc1.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.e1704217.js",
+    "runtime-main.js.map": "/static/js/runtime-main.e1704217.js.map",
+    "static/css/2.17e5ed98.chunk.css": "/static/css/2.17e5ed98.chunk.css",
+    "static/js/2.cba0fb3f.chunk.js": "/static/js/2.cba0fb3f.chunk.js",
+    "static/js/2.cba0fb3f.chunk.js.map": "/static/js/2.cba0fb3f.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.abd20241feac785fba38f40095ebe5b8.js": "/precache-manifest.abd20241feac785fba38f40095ebe5b8.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.17e5ed98.chunk.css.map": "/static/css/2.17e5ed98.chunk.css.map",
+    "static/css/main.ceab44bd.chunk.css.map": "/static/css/main.ceab44bd.chunk.css.map",
+    "static/js/2.cba0fb3f.chunk.js.LICENSE": "/static/js/2.cba0fb3f.chunk.js.LICENSE",
+    "static/media/1.jpg": "/static/media/1.3e1b6315.jpg",
+    "static/media/darkenedbg.jpg": "/static/media/darkenedbg.3455302b.jpg",
+    "static/media/foldedReceipt.jpg": "/static/media/foldedReceipt.74851893.jpg",
+    "static/media/receiptPhoto.jpg": "/static/media/receiptPhoto.a36910a9.jpg",
+    "static/media/shoppingCart.jpg": "/static/media/shoppingCart.b9179ea6.jpg",
+    "static/media/super-hero-logo.png": "/static/media/super-hero-logo.defad421.png",
+    "static/media/vegetables-stall-868110.jpg": "/static/media/vegetables-stall-868110.aed51470.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e1704217.js",
+    "static/css/2.17e5ed98.chunk.css",
+    "static/js/2.cba0fb3f.chunk.js",
+    "static/css/main.ceab44bd.chunk.css",
+    "static/js/main.47bfbbc1.chunk.js"
+  ]
 }

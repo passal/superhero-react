@@ -106,7 +106,8 @@ server.post("/getBasket", (req, res) => {
             for (let basketIndex = 0; basketIndex < bestBasket.length; basketIndex++) {
                 pid = products[basketIndex]; //get product pid
                 index = shops[bestBasket[basketIndex]].toString();
-                resultObject["basket"][index].push(pid); //insert pid to the relevant shop
+                let midItem = {"product":pid, "quantity":req.body.products[pid]};
+                resultObject["basket"][index].push(midItem); //insert product and quantity to the relevant shop
             }
             //now lets sum the price in each shop (not including amounts)
             resultObject["shopPrice"] = {};
@@ -253,7 +254,6 @@ server.get("/allZones", (req,res) => {
 //get all prices for given products and shops
 server.post("/allPrices", (req, res) => {
     let products = Object.keys(req.body.products);
-    let pid, sid, index, sidIndex;
     products = products.map(v => parseInt(v)); //parse to ints
     let shops = req.body.shops;
     getBasket.createPriceMatrix(shops, products, (priceMatrix) => {
@@ -263,7 +263,8 @@ server.post("/allPrices", (req, res) => {
             for(let j = 0; j < products.length;j++){
                 let midItem = {
                     "product":products[j],
-                    "price":priceMatrix[j][i]
+                    "price":priceMatrix[j][i],
+                    "quantity": req.body.products[products[j]]
                 };
                 prods[j] = midItem;
             }

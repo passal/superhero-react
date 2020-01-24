@@ -89,7 +89,6 @@ const getAllPrices = (shops, products) => {
                 response.data[i]["prods"][j]["product"] = Object.keys(PRODUCT_TO_ID).find(key => PRODUCT_TO_ID[key] == response.data[i]["prods"][j]["product"]);
             }
         }
-        console.log(response.data)
         return response.data;
     });
 };
@@ -97,7 +96,7 @@ const getAllPrices = (shops, products) => {
 const mapBasketResultToName = (idObj) => {
     const result = [];
     const stores = Object.keys(idObj["basket"]);
-    let storeName, prodId, prodName;
+    let storeName, prodId, prodName, prodCnt;
 
     for (let i = 0; i < stores.length; i++) {
         if (idObj["shopPrice"][stores[i]] === 0) {
@@ -112,9 +111,11 @@ const mapBasketResultToName = (idObj) => {
         shopObj["store"] = storeName;
         shopObj["price"] = idObj["shopPrice"][stores[i]];
         for (let j=0; j<(idObj["basket"][stores[i]]).length; j++) {
-            prodId = idObj["basket"][stores[i]][j];
+            prodId = idObj["basket"][stores[i]][j].product;
             prodName = Object.keys(PRODUCT_TO_ID).find(key => PRODUCT_TO_ID[key] === prodId);
-            shopObj["products"].push(prodName);
+            prodCnt = idObj["basket"][stores[i]][j].quantity;
+            let productItem = {product: prodName, quantity: prodCnt};
+            shopObj["products"].push(productItem);
         }
         result.push(shopObj);
     }
@@ -135,23 +136,9 @@ export default function CartResult({ currentUser }) {
     const [basketResult, setBasketResult] = useState([]);
     const [fullCart, setFullCart] = useState([]);
     const handleClick = () => {
-        /*(async() => {
-            const fullCart = await getAllPrices(shops, products);
-            setFullCart(fullCart);
-            changeCartState(!seeFullCart)
-        })();*/
         changeCartState(!seeFullCart)
     };
-/*    let overallPrice = 0;
-    let shops = [];
-    let products = {};
-    for (let i = 0; i < basketResult.length; i++) {
-        overallPrice += basketResult[i].price;
-        shops.push(basketResult[i].store);
-        for (let j = 0; j < basketResult[i].products.length; j++){
-            products[basketResult[i].products[j]]=1;
-        }
-    }*/
+
     let overallPrice = 0;
     for (let i = 0; i < basketResult.length; i++) {
         overallPrice += basketResult[i].price;
@@ -166,7 +153,7 @@ export default function CartResult({ currentUser }) {
             for (let i = 0; i < basketResult.length; i++) {
                 shops.push(basketResult[i].store);
                 for (let j = 0; j < basketResult[i].products.length; j++){
-                    products[basketResult[i].products[j]]=1;
+                    products[basketResult[i].products[j].product] = basketResult[i].products[j].quantity;
                 }
             }
             const fullCart = await getAllPrices(shops, products);
@@ -174,20 +161,10 @@ export default function CartResult({ currentUser }) {
         })();
     }, []);
 
-/*    useEffect(() => {
-        (async() => {
-            const fullCart = await getAllPrices(shops, products);
-            setFullCart(fullCart);
-        })();
-    }, []);*/
-
-    //const fullCart = await getAllPrices(shops, products);
-    console.log(fullCart)
-
     const sumStoreGroceries = (store) => {
         var fullCartPrice = 0;
         for (var i=0; i<store.prods.length; i++){
-            fullCartPrice+=store.prods[i].price;
+            fullCartPrice+=(store.prods[i].price*store.prods[i].quantity);
         }
         return fullCartPrice;
     }
@@ -222,7 +199,7 @@ export default function CartResult({ currentUser }) {
                                         {store.products.map(function(product, index){
                                             return(
                                                 <Typography value={index} color="Primary">
-                                                    {product}
+                                                    {product.product} X {product.quantity}
                                                 </Typography>
                                             );
                                         })}
@@ -252,7 +229,7 @@ export default function CartResult({ currentUser }) {
                                         {store.prods.map(function(product, index){
                                             return(
                                                 <Typography value={index} color="Primary">
-                                                    {product.product}: {product.price} $
+                                                    {product.product} X {product.quantity}: <b>{product.price*product.quantity} $</b>
                                                 </Typography>
                                             );
                                         })}
