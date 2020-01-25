@@ -1,15 +1,27 @@
-How to code:
+Front: React
 
-go the the correct directory
+Backend: Nodejs + express
 
-cd src
+DB: MySQL
 
-Run “npm run build”
+There may be some required installations (for modules).
 
-after it finished: Copy all files from the "build" folder in src
+Also, need to download MySQL to  connect to the DB (it's not local, so it's already set up)
 
-paste (replace) it in "public" folder inside full-backend
+In addition, please follow the instructions below:
 
-Move to full-backend (cd .. ; cd full-backend) and “npm start”
+* go the the directory the project is in
 
-go to http://localhost:5000/
+* cd src
+
+* Run “npm run build”
+
+* after it finished: Copy all files from the "build" folder in src
+
+* paste (replace) it in "public" folder inside full-backend folder (if not present, create on inside full-backend)
+
+* Move to full-backend (cd .. ; cd full-backend) 
+
+* Enter the command “npm start” 
+
+* go to http://localhost:5000/
