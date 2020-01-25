@@ -1,17 +1,18 @@
 .Dropzone {
-    height: 300px;
-    width: 300px;
-    background-color: rgb(188, 185, 236);
+    height: 177px;
+    width: 100%;
+    background-color: rgba(188, 185, 236, 0.2);
     border: 2px dashed rgb(187, 186, 186);
-    border-radius: 50%;
+    border-radius: 7px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
+    /* flex-direction: column; */
     font-size: 16px;
     font-family: "Roboto medium", sans-serif;
     color: #222;
-    transition: .3s all;
+    /* transition: .3s all; */
+    margin-top: 10px;
 }
 
 .Highlight {

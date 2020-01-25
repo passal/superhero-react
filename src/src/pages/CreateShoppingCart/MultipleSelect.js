@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     },
     font:{
         fontWeight: 'bold',
-        color:'#20639B',
+        color:'#313746',
         lineHeight: 'normal',
         paddingTop: '0px'
     },

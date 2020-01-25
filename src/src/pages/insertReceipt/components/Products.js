@@ -17,8 +17,8 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const MyButton = styled(Button)({
     color: '#fff',
-    backgroundColor: '#20639B',
-    borderColor: "#20639B",
+    backgroundColor: '#313746',
+    borderColor: "#313746",
     marginRight: '10px'
 });
 

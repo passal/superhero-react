@@ -14,8 +14,8 @@ code {
 
 .button {
     color: #fff;
-    backgroundColor: #20639B;
-    borderColor: #20639B;
+    backgroundColor: #313746;
+    borderColor: #313746;
     marginRight: 10px;
 }
 #delete{
@@ -24,11 +24,11 @@ code {
 
 #table {
     width: auto;
-    border: 1px solid #20639B;
+    border: 1px solid #313746;
 }
 .insertTable{
     display: inline-block;
 }
 .text{
-    color:#20639B;
+    color:#313746;
 }

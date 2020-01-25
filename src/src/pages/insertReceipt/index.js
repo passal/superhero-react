@@ -6,6 +6,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import axios from 'axios';
 import { PRODUCT_TO_ID, SHOP_TO_ID } from '../../constants';
+import Copyright from "../../components/Copyright";
+import Box from "@material-ui/core/Box";
 const urlBase = "http://localhost:5000";
 
 const earnCreds = (id) => {
@@ -127,7 +129,7 @@ class InsertReceipt extends React.Component {
             <Container component="main" >
                 <CssBaseline/>
                 <div className={classes.paper}>
-                    <h1 className={classes.headline}>Insert Receipt</h1>
+                    <h1 className={classes.headline}>Fill Receipt</h1>
                     <div className={classes.body}>
                         <div className={classes.img}>
                             <img src={this.state.img} alt="logo" className={classes.avatar}/>
@@ -137,6 +139,9 @@ class InsertReceipt extends React.Component {
                         </div>
                     </div>
                 </div>
+                <Box pt={4} >
+                    <Copyright />
+                </Box>
             </Container>
         );
     }
@@ -156,7 +161,7 @@ export default withStyles(theme => ({
         height:'550px',
         padding:'10px',
         overflow:'scroll',
-        border: '1px solid #20639B'
+        border: '1px solid #313746'
     },
     img:{
         width: 'auto',
@@ -164,7 +169,7 @@ export default withStyles(theme => ({
         height:'550px',
         padding:'10px',
         marginRight:'10px',
-        border: '1px solid #20639B'
+        border: '1px solid #313746'
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
@@ -177,7 +182,7 @@ export default withStyles(theme => ({
         display:'flex',
     },
     headline:{
-        color:'#20639B',
+        color:'#313746',
         paddingBottom:'30px'
     }
 }))(InsertReceipt);

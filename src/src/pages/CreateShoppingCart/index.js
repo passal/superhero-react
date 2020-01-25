@@ -15,6 +15,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import FormControl from "@material-ui/core/FormControl";
 import axios from 'axios';
 import { PRODUCT_TO_ID, SHOP_TO_ID, ZONE_TO_ID, ZONE_TO_STORES } from '../../constants';
+import Copyright from "../../components/Copyright";
+import Box from "@material-ui/core/Box";
 const urlBase = "http://localhost:5000";
 
 
@@ -210,6 +212,9 @@ class CreateShoppingCart extends React.Component {
                         </div>
                     </div>
                 </div>
+                <Box pt={4} >
+                    <Copyright />
+                </Box>
             </Container>
         );
     }
@@ -230,7 +235,7 @@ export default withStyles(theme => ({
         height:'550px',
         padding:'10px',
         overflow:'scroll',
-        border: '1px solid #20639B'
+        border: '1px solid #313746'
     },
     img:{
         width: 'auto',
@@ -252,11 +257,11 @@ export default withStyles(theme => ({
         paddingTop: '100px',
     },
     button:{
-        backgroundColor: '#20639B'
+        backgroundColor: '#313746'
     },
     font:{
         fontWeight: 'bold',
-        color:'#20639B',
+        color:'#313746',
         lineHeight: 'normal',
         paddingTop: '0px'
     },
@@ -268,7 +273,7 @@ export default withStyles(theme => ({
         flexDirection:'column'
     },
     headline:{
-        color:'red',
+        color:'#313746',
         paddingBottom:'30px'
     },
     input:{

@@ -8,6 +8,8 @@ import Dropzone from "./dropzone/Dropzone";
 import classes from "../SignIn";
 import "./Upload.css";
 import { SHOP_TO_ID } from '../../constants';
+import Copyright from "../../components/Copyright";
+import Box from "@material-ui/core/Box";
 
 const uploadReceipt = (sid, sum, uid, img) => {
     return axios.post("http://localhost:5000/uploadReceipt", {
@@ -43,12 +45,12 @@ form.onsubmit = async function(e) {
 };
 */
 const toBase64 = file =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
 
 
 const Upload = ({currentUser, setCurrentUser}) => {
@@ -85,12 +87,17 @@ const Upload = ({currentUser, setCurrentUser}) => {
         }
     };
 
+    const onRemoveFile = () => {
+        setFile({});
+    }
+
     const handleClear = () => {
 
     };
 
     return (
         <div className="Botton" >
+            <h1 className="Headline">Upload Receipt</h1>
             <div className="TopSpace">
                 <Form>
                     <Form.Group as={Row} controlId="formHorizontalEmail">
@@ -103,7 +110,7 @@ const Upload = ({currentUser, setCurrentUser}) => {
                     </Form.Group>
                     <Form.Group as={Row} controlId="formGridState">
                         <Form.Label as="legend" column sm={2} >Store</Form.Label>
-                        <Col sm={10} className={classes.checkBox}>
+                        <Col sm={10}>
                             <Select value={sid} onChange={(e) => setSid(e.target.value)}>
                                 {Object.keys(SHOP_TO_ID).map((supermarket) => (
                                     <MenuItem value={SHOP_TO_ID[supermarket]}>{supermarket}</MenuItem>
@@ -115,7 +122,7 @@ const Upload = ({currentUser, setCurrentUser}) => {
                 </Form>
             </div>
             <div className="Upload">
-                <span className="Title">Upload Files</span>
+                <span className="Title">Upload Receipt</span>
                 <div className="Content">
                     <div>
                         <Dropzone
@@ -127,6 +134,7 @@ const Upload = ({currentUser, setCurrentUser}) => {
                         {file && file[0] !== undefined ? (
                             <div key={file[0].name} className="Row">
                                 <span className="Filename">{file[0].name}</span>
+                                <div className='remove-file' onClick={onRemoveFile}>X</div>
                                 {/*{this.renderProgress(file)}*/}
                             </div>
                         ) : ''}
@@ -136,9 +144,12 @@ const Upload = ({currentUser, setCurrentUser}) => {
                     { successfullUploaded ?
                         <button onClick={handleClear}>Clear</button>
                         :
-                        <button onClick={handleSubmit}>Upload</button>
+                        <button className='upload' onClick={handleSubmit}>Upload</button>
                     }
                 </div>
+                <Box pt={4} >
+                    <Copyright />
+                </Box>
             </div>
         </div>
 
